@@ -10,8 +10,8 @@ export function ModeToggle() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <Button
-      variant="secondary"
+    <Button className="hover:bg-black/0"
+      variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
