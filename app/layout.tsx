@@ -3,6 +3,7 @@ import { Arimo, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/theme-provider";
 import LandingPageHeader from "./components/LandingPageHeader";
+import LandingPageFooter from "./components/LandingPageFooter";
 
 const arimo = Arimo({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({
         >
           <LandingPageHeader />
           {children}
+          <LandingPageFooter />
         </ThemeProvider>
       </body>
     </html>
