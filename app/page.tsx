@@ -6,8 +6,8 @@ const page = () => {
     <div>
       {/* Section 1 */}
       <div className="w-screen h-[660px] flex flex-col justify-center items-center overflow-hidden">
-        <div className="flex flex-row justify-center items-center gap-16">
-          <div className="w-[550px] h-64 relative">
+        <div className="flex flex-row justify-center items-center gap-20">
+          <div className="w-[600px] h-64 relative flex flex-col gap-5">
             <div className="justify-start text-foreground text-3xl font-bold italic leading-tight gap-10">
               All Your Elections In One Place.
             </div>
