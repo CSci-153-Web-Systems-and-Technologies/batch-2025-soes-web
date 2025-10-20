@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
+import { Arimo, Space_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "./components/theme-provider";
+import LandingPageHeader from "./components/LandingPageHeader";
 
+const arimo = Arimo({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
+});
 export const metadata: Metadata = {
   title: "SOES",
   description: "Student Organization Election System",
@@ -12,20 +25,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body className={`${arimo.variable} ${spaceMono.variable}`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LandingPageHeader />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
