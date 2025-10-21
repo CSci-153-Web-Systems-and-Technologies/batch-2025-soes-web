@@ -20,7 +20,7 @@ const LandingPageHeader = () => {
           <Button className="bg-green-800 font-bold text-white hover:bg-green-900">
             Get Started
           </Button>
-          <Button className="bg-green-800 font-bold text-white hover:bg-green-900">
+          <Button className="bg-background border-2 border-b font-bold text-foreground hover:bg-foreground/5">
             Log In
           </Button>
         </div>
