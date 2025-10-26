@@ -1,31 +1,60 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
 
 const LandingPageHeader = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <div className="w-full h-16 px-6 pt-4 pb-5 border-b border-border inline-flex flex-col justify-start items-start">
-      <div className="self-stretch flex justify-between items-center gap-2">
-        <div className="flex items-center gap-4">
-          {/*Change rounded-[10px] with icon*/}
-          <div className="w-8 h-8 bg-green-800 rounded-[10px]" />
-          <div className="text-foreground text-md font-bold leading-normal">
-            Student Organization Election System
-          </div>
+    <header className="w-full h-20 px-4 sm:px-8 md:px-20 py-5 border-b">
+      <div className="flex justify-between items-center h-full">
+        {/* Logo and Site Name */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          {/*First div is placeholder for icon ^__^*/}
+          <div className="w-10 h-10 bg-green-800 rounded-[10px]" />
+          <div className="text-foreground text-lg font-bold">SOES</div>
         </div>
 
-        <div className="inline-flex justify-start items-center gap-2">
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-2">
           <ModeToggle />
-          {/* Add Get Started Function Here!! */}
           <Button className="bg-green-800 font-bold text-white hover:bg-green-900">
             Get Started
           </Button>
-          <Button className="bg-background border-2 border-b font-bold text-foreground hover:bg-foreground/5">
+          <Button variant="outline" className="font-bold">
             Log In
           </Button>
         </div>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center">
+          <ModeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X /> : <Menu />}
+            <span className="sr-only">Toggle menu</span>
+          </Button>
+        </div>
       </div>
-    </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden mt-4 flex flex-col gap-4 bg-background p-4 rounded-md border">
+          <Button className="bg-green-800 font-bold text-white hover:bg-green-900 w-full">
+            Get Started
+          </Button>
+          <Button variant="outline" className="font-bold w-full">
+            Log In
+          </Button>
+        </div>
+      )}
+    </header>
   );
 };
 
