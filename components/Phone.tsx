@@ -47,8 +47,6 @@ const StateOne = () => {
   );
 };
 
-const CustomCard = () => {};
-
 const StateTwo = () => {
   return (
     <div className="self-stretch h-[456px] pt-6 pb-5 bg-green-700 rounded-[32px] inline-flex flex-col justify-start items-center gap-6">
