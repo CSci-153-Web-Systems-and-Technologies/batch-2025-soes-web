@@ -1,15 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 
 const LandingPageHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="w-full h-20 px-4 sm:px-8 md:px-20 py-5 border-b">
+    <header
+      className={`    
+        w-full h-20 px-4 sm:px-8 md:px-20 py-5 border-b sticky top-0 z-50 transition-all duration-300
+        ${scrolled ? "bg-opacity-70 backdrop-blur-md shadow-md" : "bg-background"}
+      `}
+    >
       <div className="flex justify-between items-center h-full">
         {/* Logo and Site Name */}
         <div className="flex items-center gap-2 sm:gap-4">
