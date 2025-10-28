@@ -8,7 +8,7 @@ interface PhoneProps {
 
 const StateOne = () => {
   return (
-    <div className="self-stretch h-[452px] pl-6 pt-6 pb-4 bg-border rounded-[32px] flex flex-col justify-start items-start gap-6">
+    <div className="self-stretch h-[452px] pl-6 pt-6 pb-4 bg-border rounded-[32px] flex flex-col justify-center items-start gap-6">
       <div className="w-40 h-8 inline-flex justify-between items-center">
         <div className="w-8 h-8 bg-green-800 rounded-[10px]" />
         <div className="w-8 h-8 relative bg-foreground/20 rounded-full" />
