@@ -4,7 +4,8 @@ import React, { use } from "react";
 import Phone from "@/components/Phone";
 import BlurText from "@/components/BlurText";
 import { Button } from "@/components/ui/button";
-import { Shield, Vote, Eye } from "lucide-react";
+import { Shield, Vote, Eye, Zap, Bell, Globe } from "lucide-react";
+import LandingCard from "@/components/LandingCard";
 
 const page = () => {
   const handleAnimationComplete = () => {
@@ -13,7 +14,7 @@ const page = () => {
   return (
     <div className="min-h-screen">
       {/* Section 1 */}
-      <section className="py-20 px-4 overflow-hidden">
+      <section className="px-4 pb-30 pt-15">
         <div className="container mx-auto max-w-8xl">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             {/* Left */}
@@ -72,10 +73,52 @@ const page = () => {
             {/* Right */}
             <div className="relative">
               <div className="w-full aspect-square max-w-md mx-auto flex justify-center">
-                <Phone phoneState={true}/>
+                <Phone phoneState={true} />
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Section 2 */}
+      <section className="py-20 px-4 bg-muted/25">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="mb-4 font-bold text-lg">
+              <BlurText
+                text="Why SOES?"
+                delay={150}
+                animateBy="words"
+                direction="top"
+                onAnimationComplete={handleAnimationComplete}
+                className="flex justify-center"
+              />
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Built specifically for student organizations with everything you
+              need
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <LandingCard
+              Icon={Zap}
+              title="Eeasy To Use"
+              description="Intuitive interface that makes managing elections simple for administrators and voting effortless for students."
+              type="one"
+            />
+            <LandingCard 
+              Icon={Bell}
+              title="Real-Time Updates"
+              description="Live notifications and instant updates on election progress, vote counts, and participation rates."
+              type="one"
+            />
+            <LandingCard 
+              Icon={Globe}
+              title="Multi-Session Support"
+              description="Manage multiple elections simultaneously with session-specific candidates, voters, and configurations."
+              type="one"
+            />
           </div>
         </div>
       </section>
