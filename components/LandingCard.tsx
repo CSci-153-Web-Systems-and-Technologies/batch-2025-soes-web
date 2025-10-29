@@ -30,7 +30,19 @@ const LandingCardOne = ({ Icon, title, description }: LandingCardProps) => {
 };
 
 const LandingCardTwo = ({ Icon, title, description }: LandingCardProps) => {
-  return <section></section>;
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+            <Icon className="w-8 h-8 text-green-800" />
+          </div>
+          <CardTitle className="text-base">{title}</CardTitle>
+        </div>
+        <CardDescription className="mt-2">{description}</CardDescription>
+      </CardHeader>
+    </Card>
+  );
 };
 
 const LandingCard = ({ Icon, title, description, type }: LandingCardProps) => {
