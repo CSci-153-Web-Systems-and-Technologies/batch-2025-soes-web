@@ -81,7 +81,7 @@ const page = () => {
       </section>
 
       {/* Section 2 */}
-      <section className="py-10 px-4 md:pb-20 h-auto bg-muted/25">
+      <section className="py-10 px-4 md:pb-20 h-auto">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h1 className="mb-4 font-bold sm:text-xl md:text-3xl">
