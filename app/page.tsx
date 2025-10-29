@@ -14,7 +14,7 @@ const page = () => {
   return (
     <div className="min-h-screen">
       {/* Section 1 */}
-      <section className="px-4 pb-30 pt-15">
+      <section className="px-4 pb-36 pt-16">
         <div className="container mx-auto max-w-8xl">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             {/* Left */}
@@ -81,10 +81,10 @@ const page = () => {
       </section>
 
       {/* Section 2 */}
-      <section className="py-20 px-4 bg-muted/25">
+      <section className="py-10 px-4 md:pb-20 h-auto bg-muted/25">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="mb-4 font-bold text-lg">
+            <h1 className="mb-4 font-bold sm:text-xl md:text-3xl">
               <BlurText
                 text="Why SOES?"
                 delay={150}
@@ -93,7 +93,7 @@ const page = () => {
                 onAnimationComplete={handleAnimationComplete}
                 className="flex justify-center"
               />
-            </h2>
+            </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Built specifically for student organizations with everything you
               need
@@ -107,13 +107,13 @@ const page = () => {
               description="Intuitive interface that makes managing elections simple for administrators and voting effortless for students."
               type="one"
             />
-            <LandingCard 
+            <LandingCard
               Icon={Bell}
               title="Real-Time Updates"
               description="Live notifications and instant updates on election progress, vote counts, and participation rates."
               type="one"
             />
-            <LandingCard 
+            <LandingCard
               Icon={Globe}
               title="Multi-Session Support"
               description="Manage multiple elections simultaneously with session-specific candidates, voters, and configurations."
@@ -122,6 +122,99 @@ const page = () => {
           </div>
         </div>
       </section>
+
+      {/* Section 3 */}
+      <section className="py-10 px-4 sm:pb-20 md:pb-40 h-auto">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h1 className="mb-4 font-bold sm:text-xl md:text-3xl">
+              <BlurText
+                text="Get Started in Minutes"
+                delay={150}
+                animateBy="words"
+                direction="top"
+                onAnimationComplete={handleAnimationComplete}
+                className="flex justify-center"
+              />
+            </h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Simple steps to launch your first election
+            </p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left */}
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
+                  1
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">
+                    Set up your organization
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Configure your organization details, create position
+                    templates, and add your branding.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
+                  2
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">
+                    Create an election session
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Set election dates, add candidates with photos, and upload
+                    your voter list for the specific election.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
+                  3
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">Share voting links</h3>
+                  <p className="text-muted-foreground">
+                    Generate unique voting links and distribute them to your
+                    registered voters securely.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
+                  4
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">
+                    Monitor & publish results
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Track votes in real-time and publish transparent results for
+                    everyone to see.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right */}
+            <div className="relative">
+              <div className="w-full aspect-square max-w-md mx-auto flex justify-center">
+                <Phone phoneState={false} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4 */}
+      
     </div>
   );
 };
