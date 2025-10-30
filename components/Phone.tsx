@@ -49,7 +49,7 @@ const StateOne = () => {
 
 const StateTwo = () => {
   return (
-    <div className="self-stretch h-[456px] pt-6 pb-5 bg-green-700 rounded-[32px] inline-flex flex-col justify-start items-center gap-6">
+    <div className="self-stretch h-[456px] pt-6 pb-5 bg-green-800 rounded-[32px] inline-flex flex-col justify-start items-center gap-6">
       <div className="w-40 h-12 relative">
         <div className="w-32 h-12 left-0 top-0 absolute">
           <div className="w-20 left-0 top-[-2.50px] absolute justify-start text-white text-base font-bold  leading-6">
