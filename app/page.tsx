@@ -7,10 +7,31 @@ import { Button } from "@/components/ui/button";
 import { Shield, Vote, Eye, Zap, Bell, Globe } from "lucide-react";
 import LandingCard from "@/components/LandingCard";
 
+interface informationProps {
+  number: string;
+  title: string;
+  description: string;
+}
+
+const handleAnimationComplete = () => {
+  console.log("Animation completed!");
+};
+
+const Information = ({ number, title, description }: informationProps) => {
+  return (
+    <div className="flex gap-4">
+      <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
+        {number}
+      </div>
+      <div>
+        <h3 className="font-semibold mb-2">{title}</h3>
+        <p className="text-muted-foreground">{description}</p>
+      </div>
+    </div>
+  );
+};
+
 const page = () => {
-  const handleAnimationComplete = () => {
-    console.log("Animation completed!");
-  };
   return (
     <div className="min-h-screen">
       {/* Section 1 */}
@@ -144,63 +165,30 @@ const page = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left */}
             <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
-                  1
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-2">
-                    Set up your organization
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Configure your organization details, create position
-                    templates, and add your branding.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
-                  2
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-2">
-                    Create an election session
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Set election dates, add candidates with photos, and upload
-                    your voter list for the specific election.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
-                  3
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-2">Share voting links</h3>
-                  <p className="text-muted-foreground">
-                    Generate unique voting links and distribute them to your
-                    registered voters securely.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
-                  4
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-2">
-                    Monitor & publish results
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Track votes in real-time and publish transparent results for
-                    everyone to see.
-                  </p>
-                </div>
-              </div>
+              <Information
+                number="1"
+                title="Create an election session"
+                description="Configure your organization details, create position
+                    templates, and add your branding."
+              />
+              <Information
+                number="2"
+                title="Set up your organization"
+                description="Set election dates, add candidates with photos, and upload
+                    your voter list for the specific election."
+              />
+              <Information
+                number="3"
+                title="Share voting links"
+                description="Generate unique voting links and distribute them to your
+                    registered voters securely."
+              />
+              <Information
+                number="4"
+                title="Monitor & publish results"
+                description="Track votes in real-time and publish transparent results for
+                    everyone to see."
+              />
             </div>
 
             {/* Right */}
@@ -214,7 +202,6 @@ const page = () => {
       </section>
 
       {/* Section 4 */}
-      
     </div>
   );
 };
