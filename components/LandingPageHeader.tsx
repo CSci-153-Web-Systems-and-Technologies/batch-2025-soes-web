@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import logo from "@/public/logo.png";
 
 const LandingPageHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,14 +26,17 @@ const LandingPageHeader = () => {
     <header
       className={`    
         w-full h-20 px-4 sm:px-8 md:px-20 py-5 border-b sticky top-0 z-50 transition-all duration-300
-        ${scrolled ? "bg-opacity-70 backdrop-blur-md shadow-md" : "bg-background"}
+        ${
+          scrolled
+            ? "bg-opacity-70 backdrop-blur-md shadow-md"
+            : "bg-background"
+        }
       `}
     >
       <div className="flex justify-between items-center h-full">
         {/* Logo and Site Name */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          {/*First div is placeholder for icon ^__^*/}
-          <div className="w-10 h-10 bg-green-800 rounded-[10px]" />
+        <div className="flex items-center gap-2">
+          <Image src={logo} height={50} width={50} alt="logo" />
           <div className="text-foreground text-lg font-bold">SOES</div>
         </div>
 
