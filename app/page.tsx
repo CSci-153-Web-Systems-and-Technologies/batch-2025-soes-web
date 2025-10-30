@@ -4,7 +4,18 @@ import React, { use } from "react";
 import Phone from "@/components/Phone";
 import BlurText from "@/components/BlurText";
 import { Button } from "@/components/ui/button";
-import { Shield, Vote, Eye, Zap, Bell, Globe } from "lucide-react";
+import {
+  Shield,
+  Vote,
+  Eye,
+  Zap,
+  Bell,
+  Globe,
+  Users,
+  UserCheck,
+  BarChart3,
+  Smartphone,
+} from "lucide-react";
 import LandingCard from "@/components/LandingCard";
 
 interface informationProps {
@@ -202,6 +213,64 @@ const page = () => {
       </section>
 
       {/* Section 4 */}
+      <section className="py-10 px-4 sm:pb-20 md:pb-40 h-auto">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <h1 className="mb-4 font-bold sm:text-xl md:text-3xl">
+              <BlurText
+                text="Everything You Need"
+                delay={150}
+                animateBy="words"
+                direction="top"
+                onAnimationComplete={handleAnimationComplete}
+                className="flex justify-center"
+              />
+            </h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Comprehensive features for modern student elections
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <LandingCard
+              Icon={Shield}
+              title="Secure Authentication"
+              description="One-time voting codes ensure security and anonymity"
+              type="two"
+            />
+            <LandingCard
+              Icon={Users}
+              title="Candidate Management"
+              description="Add candidates with photos, partylists, and details"
+              type="two"
+            />
+            <LandingCard
+              Icon={UserCheck}
+              title="Voter Management"
+              description="Manage voter lists per election session"
+              type="two"
+            />
+            <LandingCard
+              Icon={BarChart3}
+              title="Live Analytics"
+              description="Real-time vote tracking and participation metrics"
+              type="two"
+            />
+            <LandingCard
+              Icon={Eye}
+              title="Public Results"
+              description="Transparent results accessible to everyone"
+              type="two"
+            />
+            <LandingCard
+              Icon={Smartphone}
+              title="Mobile Responsive"
+              description="Optimized for all devices and screen sizes"
+              type="two"
+            />
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
