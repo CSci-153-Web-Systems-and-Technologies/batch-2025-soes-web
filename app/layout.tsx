@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Arimo, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
-import LandingPageHeader from "../components/LandingPageHeader";
-import LandingPageFooter from "../components/LandingPageFooter";
+import LandingPageHeader from "./_components/LandingPageHeader";
+import LandingPageFooter from "./_components/LandingPageFooter";
 
 const arimo = Arimo({
   subsets: ["latin"],
