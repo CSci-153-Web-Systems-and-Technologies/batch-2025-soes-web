@@ -113,7 +113,7 @@ const page = () => {
       </section>
 
       {/* Section 2 */}
-      <section className="py-10 px-4 md:pb-20 h-auto">
+      <section className="py-10 px-4 pt-25 sm:pt-10 sm:pb-20 md:pb-40 h-auto">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h1 className="mb-4 font-bold sm:text-xl md:text-3xl">
@@ -213,7 +213,7 @@ const page = () => {
       </section>
 
       {/* Section 4 */}
-      <section className="py-10 px-4 pt-40 sm:pt-10 sm:pb-20 md:pb-40 h-auto">
+      <section className="py-10 px-4 pt-45 sm:pt-10 sm:pb-20 md:pb-40 h-auto">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h1 className="mb-4 font-bold sm:text-xl md:text-3xl">
