@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Arimo, Space_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "./components/theme-provider";
-import LandingPageHeader from "./components/LandingPageHeader";
-import LandingPageFooter from "./components/LandingPageFooter";
+import { ThemeProvider } from "../components/theme-provider";
+import LandingPageHeader from "./_components/LandingPageHeader";
+import LandingPageFooter from "./_components/LandingPageFooter";
 
 const arimo = Arimo({
   subsets: ["latin"],
@@ -27,7 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
       <body className={`${arimo.variable} ${spaceMono.variable}`}>
         <ThemeProvider
           attribute="class"
