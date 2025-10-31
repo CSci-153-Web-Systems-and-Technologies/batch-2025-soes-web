@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ModeToggle } from "../../components/ModeToggle";
+import { ModeToggle } from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
@@ -41,7 +41,7 @@ const LandingPageHeader = () => {
 
         <div className="hidden md:flex items-center gap-2">
           <ModeToggle />
-          <Button className="bg-green-800 font-bold text-white hover:bg-green-900">
+          <Button className="bg-green-700 font-bold text-white hover:bg-green-900">
             Get Started
           </Button>
           <Button variant="outline" className="font-bold">
