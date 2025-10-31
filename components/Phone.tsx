@@ -34,12 +34,12 @@ const StateOne = () => {
           </div>
           <div className="w-20 h-2 left-[17px] top-[65px] absolute bg-green-800/20 rounded" />
         </div>
-        <div className="self-stretch h-24 relative bg-background rounded-2xl outline outline-offset-[-1px] outline-border">
+        <div className="self-stretch h-24 relative bg-background rounded-2xl outline outline-offset-[-1px] outline-border0">
           <div className="w-32 h-10 left-[17px] top-[17px] absolute inline-flex justify-start items-center gap-3">
             <div className="w-10 h-10 relative bg-foreground/20 rounded-full" />
             <div className="flex-1 h-3 relative bg-gray-200 rounded" />
           </div>
-          <div className="w-16 h-2 left-[17px] top-[65px] absolute bg-gray-200 rounded" />
+          <div className="w-24 h-2 left-[17px] top-[65px] absolute bg-gray-200 rounded" />
         </div>
       </div>
       <div className="w-40 h-11 px-8 pt-2 pb-2 bg-green-800 rounded-2xl flex flex-col justify-start items-center">
