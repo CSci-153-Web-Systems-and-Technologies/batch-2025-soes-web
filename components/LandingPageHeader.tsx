@@ -5,7 +5,7 @@ import { ModeToggle } from "./ModeToggle";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
-import logo from "@/public/logo.png";
+import logo from "@/public/logo.svg";
 
 const LandingPageHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,13 +34,11 @@ const LandingPageHeader = () => {
       `}
     >
       <div className="flex justify-between items-center h-full">
-        {/* Logo and Site Name */}
         <div className="flex items-center gap-2">
           <Image src={logo} height={50} width={50} alt="logo" />
           <div className="text-foreground text-lg font-bold">SOES</div>
         </div>
 
-        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-2">
           <ModeToggle />
           <Button className="bg-green-800 font-bold text-white hover:bg-green-900">

@@ -1,7 +1,7 @@
 import React from "react";
-import { CheckLine, ChartColumnBig, UserPen, MonitorDot } from "lucide-react";
+import { CheckLine, ChartColumnBig, Users, CheckSquare } from "lucide-react";
 import Tilt from "react-parallax-tilt";
-import logo from "@/public/logo.png";
+import logo from "@/public/logo.svg";
 import Image from "next/image";
 
 interface PhoneProps {
@@ -51,77 +51,68 @@ const StateOne = () => {
 
 const StateTwo = () => {
   return (
-    <div className="self-stretch h-[456px] pt-6 pb-5 bg-border rounded-[32px] inline-flex flex-col justify-start items-center gap-6">
-      <div className="w-40 h-12 relative">
-        <div className="w-32 h-12 left-0 top-0 absolute">
-          <div className="w-20 left-0 top-[-2.50px] absolute justify-start text-foreground text-base font-bold  leading-6">
-            Election Dashboard
-          </div>
-        </div>
-        <Image
-          src={logo}
-          height={30}
-          width={30}
-          alt="logo"
-          className="left-[131.85px] top-[8px] absolute"
-        />
+    <div className="self-stretch h-[456px] pt-6 pb-9 bg-green-800 rounded-[32px] inline-flex flex-col justify-start items-center gap-5">
+      <div className="self-stretch px-4">
+        <h2 className="text-white text-lg font-bold leading-6 pt-3">
+          Election Dashboard
+        </h2>
       </div>
-      <div className="w-40 flex-1 flex flex-col justify-start items-start gap-4">
-        <div className="self-stretch h-20 px-4 pt-4 bg-green-800/5 rounded-2xl flex flex-col justify-start items-start gap-3">
+
+      <div className="w-full px-4 flex-1 flex flex-col justify-start items-start gap-4">
+        <div className="self-stretch min-h-[5rem] px-4 py-3 bg-black/20 rounded-2xl flex flex-col justify-start items-start gap-2">
           <div className="self-stretch h-5 inline-flex justify-between items-center">
-            <div className="w-20 h-5 flex justify-start items-start">
-              <div className="justify-start text-foreground text-sm font-normal leading-5">
+            <div className="flex justify-start items-start">
+              <div className="text-green-100 text-sm font-normal leading-5">
                 Total Votes
               </div>
             </div>
             <div className="w-4 h-4 relative overflow-hidden">
-              <ChartColumnBig className="w-4 h-4 text-green-700" />
+              <ChartColumnBig className="w-4 h-4 text-green-200" />
             </div>
           </div>
-          <div className="self-stretch h-6 relative">
-            <div className="left-0 top-[-2.50px] absolute justify-start text-foreground text-base font-bold  leading-6">
-              1,247
-            </div>
+          <div className="self-stretch">
+            <div className="text-white text-xl font-bold leading-6">1,247</div>
           </div>
         </div>
-        <div className="self-stretch h-20 px-4 pt-4 bg-green-800/5 rounded-2xl flex flex-col justify-start items-start gap-3">
+
+        <div className="self-stretch min-h-[5rem] px-4 py-3 bg-black/20 rounded-2xl flex flex-col justify-start items-start gap-2">
           <div className="self-stretch h-5 inline-flex justify-between items-center">
-            <div className="w-20 h-5 flex justify-start items-start">
-              <div className="flex-1 justify-start text-foreground text-sm font-normal  leading-5">
+            <div className="flex justify-start items-start">
+              <div className="text-green-100 text-sm font-normal leading-5">
                 Participation
               </div>
             </div>
             <div className="w-4 h-4 relative overflow-hidden">
-              <UserPen className="w-4 h-4 text-green-700" />
+              <Users className="w-4 h-4 text-green-200" />
             </div>
           </div>
-          <div className="self-stretch h-6 relative">
-            <div className="left-0 top-[-2.50px] absolute justify-start text-foreground text-base font-bold  leading-6">
-              82.3%
-            </div>
+          <div className="self-stretch">
+            <div className="text-white text-xl font-bold leading-6">82.3%</div>
           </div>
         </div>
-        <div className="self-stretch h-20 px-4 pt-4 bg-green-800/5 rounded-2xl flex flex-col justify-start items-start gap-3">
+
+        <div className="self-stretch min-h-[5rem] px-4 py-3 bg-black/20 rounded-2xl flex flex-col justify-start items-start gap-2">
           <div className="self-stretch h-5 inline-flex justify-between items-center">
-            <div className="w-30 h-5 flex justify-start items-start">
-              <div className="justify-start text-foreground text-sm font-normal  leading-5">
+            <div className="flex justify-start items-start">
+              <div className="text-green-100 text-sm font-normal leading-5">
                 Active Elections
               </div>
             </div>
             <div className="w-4 h-4 relative overflow-hidden">
-              <MonitorDot className="w-4 h-4 text-green-700" />
+              <CheckSquare className="w-4 h-4 text-green-200" />
             </div>
           </div>
-          <div className="self-stretch h-6 relative">
-            <div className="left-0 top-[-2.50px] absolute justify-start text-foreground text-base font-bold  leading-6">
-              3
-            </div>
+          <div className="self-stretch">
+            <div className="text-white text-xl font-bold leading-6">3</div>
           </div>
         </div>
       </div>
-      <div className="w-36 h-6 relative bg-white rounded-2xl flex flex-col items-center">
-        <div className="top-0 absolute text-green-800 text-xs font-bold leading-6">
-          View Full Report
+
+      <div className="w-full px-7">
+        <div className="w-full py-2 bg-white rounded-full flex justify-center items-center">
+          <div className="text-green-900 text-sm font-bold leading-none">
+            View Full Report
+          </div>
         </div>
       </div>
     </div>
@@ -131,7 +122,7 @@ const StateTwo = () => {
 const Phone = ({ phoneState }: PhoneProps) => {
   return (
     <Tilt tiltReverse={true} tiltMaxAngleX={5} tiltMaxAngleY={5}>
-      <div className="w-64 h-[500px] px-6 pt-6 pb-2 bg-background rounded-[48px] shadow-foreground shadow-2xl/50 outline outline-offset-[-8px] outline-border inline-flex flex-col justify-start items-start">
+      <div className="w-64 h-[500px] px-6 pt-6 pb-2 bg-background rounded-[48px] shadow-foreground shadow-2xl/30 outline outline-offset-[-8px] outline-border inline-flex flex-col justify-start items-start">
         {phoneState ? <StateOne /> : <StateTwo />}
       </div>
     </Tilt>
