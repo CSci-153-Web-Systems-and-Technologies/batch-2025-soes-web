@@ -15,6 +15,7 @@ import {
   UserCheck,
   BarChart3,
   Smartphone,
+  ArrowRight,
 } from "lucide-react";
 import LandingCard from "@/app/_components/LandingCard";
 
@@ -31,7 +32,7 @@ const handleAnimationComplete = () => {
 const Information = ({ number, title, description }: informationProps) => {
   return (
     <div className="flex gap-4">
-      <div className="flex-shrink-0 w-10 h-10 bg-green-900/80 rounded-full flex items-center justify-center text-white font-semibold">
+      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-800 to-green-600 rounded-full flex items-center justify-center text-white font-semibold">
         {number}
       </div>
       <div>
@@ -68,7 +69,7 @@ const page = () => {
                   voters, and public transparency
                 </p>
 
-                <Button className="w-44 h-9 bg-green-800 font-bold text-base text-white hover:bg-green-900">
+                <Button className="w-44 h-9 bg-green-700 font-bold text-base text-white hover:bg-green-900">
                   Get Started
                 </Button>
 
@@ -213,7 +214,7 @@ const page = () => {
       </section>
 
       {/* Section 4 */}
-      <section className="py-10 px-4 pt-45 sm:pt-10 sm:pb-20 md:pb-40 h-auto">
+      <section className="py-10 px-4 pt-45 sm:pt-10 pb-5 h-auto">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h1 className="mb-4 font-bold sm:text-xl md:text-3xl">
@@ -268,6 +269,30 @@ const page = () => {
               description="Optimized for all devices and screen sizes"
               type="two"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Section 5 */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-4xl text-center">
+          <div className="bg-gradient-to-br from-green-600 to-green-800 rounded-3xl p-12 text-primary-foreground">
+            <h2 className="mb-5 text-xl font-bold">
+              Ready to modernize your elections?
+            </h2>
+            <p className="mb-8 opacity-90 max-w-2xl mx-auto">
+              Join student organizations using SOES for secure, transparent, and
+              efficient elections.
+            </p>
+
+            <div className="flex items-center justify-center gap-10 flex-wrap">
+              <Button className="bg-background px-10 font-bold text-foreground hover:bg-background/70">
+                Setup Now
+              </Button>
+              <Button className="bg-background px-10 font-bold text-foreground hover:bg-background/70">
+                Vote Now
+              </Button>
+            </div>
           </div>
         </div>
       </section>
