@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./globals.css";
 import { Arimo, Space_Mono } from "next/font/google";
 import { ThemeProvider } from "../components/theme-provider";
 

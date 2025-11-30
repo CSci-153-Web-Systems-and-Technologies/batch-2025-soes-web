@@ -13,17 +13,19 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Mail, Lock } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const router = useRouter();
   return (
-    <div className="mx-auto max-w-sm">
-      <div className="w-full max-w-md space-y-10">
+    <div className="mx-auto max-w-lg">
+      <div className="w-full max-w-md space-y-5">
         {/* Header */}
-        <div className="text-center">
+        <div className="text-center w-full">
           <div>
             <h1 className="text-2xl font-bold">Welcome Back Admin!</h1>
-            <p className="text-muted-foreground">
-              Sign in to your Student Organization Election System
+            <p className="text-muted-foreground text-sm">
+              Sign in to your Student Organization Election System admin account
             </p>
           </div>
         </div>
@@ -98,7 +100,11 @@ export function LoginForm() {
               <span className="text-muted-foreground">
                 Don&apos;t have an account?{" "}
               </span>
-              <Button variant="link" className="px-0">
+              <Button
+                variant="link"
+                className="px-0"
+                onClick={() => router.push("/signup")}
+              >
                 Sign up
               </Button>
             </div>

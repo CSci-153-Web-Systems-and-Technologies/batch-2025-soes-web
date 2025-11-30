@@ -4,7 +4,7 @@ import { LoginForm } from "../_components/LoginForm";
 const LoginPage = () => {
   return (
     <>
-      <div className="flex h-svh items-center">
+      <div className="flex h-[90svh] items-center">
         <LoginForm />
       </div>
     </>
