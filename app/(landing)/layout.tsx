@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Arimo, Space_Mono } from "next/font/google";
-import { ThemeProvider } from "../components/theme-provider";
+import "../globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import LandingPageHeader from "@/app/(landing)/_components/LandingPageHeader";
+import LandingPageFooter from "@/app/(landing)/_components/LandingPageFooter";
 
 const arimo = Arimo({
   subsets: ["latin"],
@@ -34,7 +37,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <LandingPageHeader />
           {children}
+          <LandingPageFooter />
         </ThemeProvider>
       </body>
     </html>
