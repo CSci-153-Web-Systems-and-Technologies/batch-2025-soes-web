@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { signInWithGoogle } from "@/lib/auth-actions";
 import React from "react";
+import {Chromium} from "lucide-react";
 
 const SignInWithGoogleButton = () => {
   return (
@@ -13,6 +14,7 @@ const SignInWithGoogleButton = () => {
         signInWithGoogle();
       }}
     >
+      <Chromium className="w-4 h-4"/>
       Login with Google
     </Button>
   );
