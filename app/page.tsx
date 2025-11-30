@@ -1,7 +1,7 @@
 "use client";
 
 import React, { use } from "react";
-import Phone from "@/app/_components/Phone";
+import Phone from "@/components/landing/Phone";
 import BlurText from "@/components/BlurText";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,9 +15,8 @@ import {
   UserCheck,
   BarChart3,
   Smartphone,
-  ArrowRight,
 } from "lucide-react";
-import LandingCard from "@/app/_components/LandingCard";
+import LandingCard from "@/components/landing/LandingCard";
 
 interface informationProps {
   number: string;

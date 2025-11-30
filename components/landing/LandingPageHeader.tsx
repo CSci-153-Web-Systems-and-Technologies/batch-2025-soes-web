@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
+import { redirect } from "next/navigation";
 
 const LandingPageHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,15 +37,15 @@ const LandingPageHeader = () => {
       <div className="flex justify-between items-center h-full">
         <div className="flex items-center gap-2">
           <Image src={logo} height={50} width={50} alt="logo" />
-          <div className="text-foreground text-lg font-bold">SOES</div>
+          <h1 className="text-foreground text-lg font-bold" onClick={() => redirect('/')}>SOES</h1>
         </div>
 
         <div className="hidden md:flex items-center gap-2">
           <ModeToggle />
-          <Button className="bg-green-700 font-bold text-white hover:bg-green-900">
+          <Button className="bg-green-700 font-bold text-white hover:bg-green-900" onClick={() => redirect('/signup')}> 
             Get Started
           </Button>
-          <Button variant="outline" className="font-bold">
+          <Button variant="outline" className="font-bold" onClick={() => redirect('/login')}>
             Log In
           </Button>
         </div>
@@ -69,7 +70,7 @@ const LandingPageHeader = () => {
           <Button className="bg-green-800 font-bold text-white hover:bg-green-900 w-full">
             Get Started
           </Button>
-          <Button variant="outline" className="font-bold w-full">
+          <Button variant="outline" className="font-bold w-full" onClick={() => redirect('/login')}>
             Log In
           </Button>
         </div>
