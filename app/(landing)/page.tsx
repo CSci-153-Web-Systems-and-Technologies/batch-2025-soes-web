@@ -16,6 +16,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import LandingCard from "@/app/(landing)/_components/LandingCard";
+import { useRouter } from "next/navigation";
 
 interface informationProps {
   number: string;
@@ -41,7 +42,9 @@ const Information = ({ number, title, description }: informationProps) => {
   );
 };
 
-const page = () => {
+const Page = () => {
+  const router = useRouter();
+  
   return (
     <div className="min-h-screen">
       {/* Section 1 */}
@@ -67,7 +70,7 @@ const page = () => {
                   voters, and public transparency
                 </p>
 
-                <Button className="w-44 h-9 bg-green-700 font-bold text-base text-white hover:bg-green-900">
+                <Button className="w-44 h-9 bg-green-700 font-bold text-base text-white hover:bg-green-900" onClick={() => router.push('/signup')}>
                   Get Started
                 </Button>
 
@@ -298,4 +301,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
