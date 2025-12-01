@@ -3,7 +3,7 @@ import LandingPageHeader from "@/app/(landing)/_components/LandingPageHeader";
 import LandingPageFooter from "@/app/(landing)/_components/LandingPageFooter";
 
 
-export default function LaningLayout({
+export default function LandingLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

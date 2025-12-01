@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import LoginHeader from './_components/LoginHeader';
+import LoginHeader from './_components/Header';
 
 export default function AuthLayout({
   children,
