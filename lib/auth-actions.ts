@@ -2,14 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
 import { createClient } from "@/utils/supabase/server";
 
 export async function login(formData: FormData) {
-  const supabase = createClient();
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+  // Fix: Initialize client once at the top
+  const supabase = await createClient();
+  
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -26,27 +24,79 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
-  const supabase = createClient();
+  // Fix: Initialize client once at the top
+  const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+  // 1. Get Form Data
   const firstName = formData.get("first-name") as string;
   const lastName = formData.get("last-name") as string;
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const setupMode = formData.get("setup_mode") as string; 
+  const orgInput = formData.get("organization") as string; 
+
+  let organizationId: string | null = null;
+  const userRole = 'admin';
+
+  // 2. Handle Organization (Create or Join)
+  if (setupMode === 'join') {
+    const { data: org, error } = await supabase
+      .from('organizations')
+      .select('id')
+      .eq('invite_code', orgInput)
+      .single();
+
+    if (!org || error) {
+      console.error("Invalid Organization Code");
+      redirect("/error?message=Invalid Organization Code");
+    }
+    organizationId = org.id;
+
+  } else {
+    // Create new Organization
+    const { data: newOrg, error } = await supabase
+      .from('organizations')
+      .insert({ 
+        name: orgInput,
+        invite_code: Math.random().toString(36).substring(7).toUpperCase()
+      })
+      .select('id')
+      .single();
+
+    if (error) {
+      console.error("Failed to create organization", error);
+      redirect("/error?message=Failed to create organization");
+    }
+    organizationId = newOrg.id;
+  }
+
+  // 3. Sign Up User
+  // We use supabase.auth directly now since we awaited createClient at the top
+  const { error: authError } = await supabase.auth.signUp({
+    email,
+    password,
     options: {
       data: {
-        full_name: `${firstName + " " + lastName}`,
-        email: formData.get("email") as string,
+        first_name: firstName,
+        last_name: lastName,
+        organization_id: organizationId,
+        role: userRole,
       },
     },
-  };
+  });
 
-  const { error } = await supabase.auth.signUp(data);
+  // 4. CRITICAL: Handle Errors & Rollback
+  if (authError) {
+    console.error("Auth Error:", authError.message);
 
-  if (error) {
-    redirect("/error");
+    // IF we just created an organization but the user failed to sign up,
+    // DELETE the organization so we don't leave a "Zombie" row.
+    if (setupMode === 'create' && organizationId) {
+      await supabase.from('organizations').delete().eq('id', organizationId);
+    }
+
+    // Redirect to error page with the specific message
+    redirect(`/error?message=${encodeURIComponent(authError.message)}`);
   }
 
   revalidatePath("/", "layout");
@@ -54,7 +104,7 @@ export async function signup(formData: FormData) {
 }
 
 export async function signout() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.auth.signOut();
   if (error) {
     console.log(error);
@@ -65,7 +115,7 @@ export async function signout() {
 }
 
 export async function signInWithGoogle() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
@@ -73,6 +123,7 @@ export async function signInWithGoogle() {
         access_type: "offline",
         prompt: "consent",
       },
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
     },
   });
 
@@ -81,5 +132,7 @@ export async function signInWithGoogle() {
     redirect("/error");
   }
 
-  redirect(data.url);
+  if (data.url) {
+    redirect(data.url);
+  }
 }
