@@ -1,6 +1,5 @@
 "use client";
 
-import React, { use } from "react";
 import Phone from "@/app/(landing)/_components/Phone";
 import BlurText from "@/components/BlurText";
 import { Button } from "@/components/ui/button";
