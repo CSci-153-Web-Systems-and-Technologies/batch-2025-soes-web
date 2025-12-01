@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import SignInWithGoogleButton from "./SignInWithGoogleButton";
+import { login } from "@/lib/auth-actions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,11 +13,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useFormStatus } from "react-dom";
 
 export function LoginForm() {
   const router = useRouter();
+  const { pending } = useFormStatus();
+
   return (
     <div className="mx-auto max-w-lg">
       <div className="w-full max-w-md space-y-5">
@@ -53,13 +57,14 @@ export function LoginForm() {
             </div>
 
             {/* Email/Password Form */}
-            <form className="space-y-4">
+            <form action={login} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="Enter you email address"
                     className="pl-9"
@@ -74,6 +79,7 @@ export function LoginForm() {
                   <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
+                    name="password"
                     type="password"
                     placeholder="Enter your password"
                     className="pl-9"
@@ -91,8 +97,16 @@ export function LoginForm() {
               <Button
                 type="submit"
                 className="w-full bg-green-700 hover:bg-green-800"
+                disabled={pending}
               >
-                Sign in
+                {pending ? (
+                  <>
+                    <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />{" "}
+                    Signing In...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
             </form>
 
