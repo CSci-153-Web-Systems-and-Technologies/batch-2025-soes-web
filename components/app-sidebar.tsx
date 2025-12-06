@@ -34,33 +34,33 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const items = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/admin/dashboard",
     icon: LayoutDashboard,
   },
   {
     title: "Elections",
-    url: "#",
+    url: "/admin/elections",
     icon: Vote,
   },
   {
     title: "Candidates and Partylists",
-    url: "#",
+    url: "/admin/candidates",
     icon: Users,
   },
   {
     title: "Position Templates",
-    url: "#",
+    url: "/admin/position",
     icon: Flag,
   },
   {
     title: "Reports and Results",
-    url: "#",
+    url: "/admin/reports",
     icon: ChartColumn,
   },
 ];
 const systemitem = {
   title: "Settings",
-  url: "#",
+  url: "/admin/settings",
   icon: Settings,
 }; // Settings
 
@@ -77,7 +77,7 @@ export function AppSidebar() {
               </h1>
             </div>
             <div className="self-stretch h-4 relative">
-              <h2 className="justify-start text-gray-600 text-[10px] leading-4 font-normal">
+              <h2 className="justify-start text-primary/60 text-[10px] leading-4 font-normal">
                 Student Organization Election System
               </h2>
             </div>
