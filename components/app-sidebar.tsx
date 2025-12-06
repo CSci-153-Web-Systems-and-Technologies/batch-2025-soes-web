@@ -68,7 +68,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="pb-2 h-20 w-full inline-flex justify-start items-center gap-2 border-b-1 border-primary/60">
+        <div className="pb-2 h-20 w-full inline-flex justify-start items-center gap-2 border-b-1 border-primary/20">
           <Image src={logo} height={45} width={45} alt="logo" />
           <div className="inline-flex flex-col justify-start items-start">
             <div className="self-stretch h-6 relative">
