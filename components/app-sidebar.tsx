@@ -1,4 +1,12 @@
-import { LayoutDashboard, Vote, Users, Flag, ChartColumn, Settings } from "lucide-react";
+import {
+  LayoutDashboard,
+  Vote,
+  Users,
+  Flag,
+  ChartColumn,
+  Settings,
+  ChevronsUpDown,
+} from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
 import React from "react";
@@ -12,8 +20,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarGroupLabel,
-  SidebarFooter
+  SidebarFooter,
 } from "@/components/ui/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Menu items.
 const items = [
@@ -43,34 +58,35 @@ const items = [
     icon: ChartColumn,
   },
 ];
-const systemitem =   {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  }; // Settings 
+const systemitem = {
+  title: "Settings",
+  url: "#",
+  icon: Settings,
+}; // Settings
 
 export function AppSidebar() {
   return (
     <Sidebar>
+      <SidebarHeader>
+        <div className="pb-2 h-20 w-full inline-flex justify-start items-center gap-2 border-b-1 border-neutral-200">
+          <Image src={logo} height={45} width={45} alt="logo" />
+          <div className="inline-flex flex-col justify-start items-start">
+            <div className="self-stretch h-6 relative">
+              <h1 className="absolute justify-start font-bold leading-6 text-2xl">
+                SOES
+              </h1>
+            </div>
+            <div className="self-stretch h-4 relative">
+              <h2 className="justify-start text-gray-600 text-[10px] leading-4 font-normal">
+                Student Organization Election System
+              </h2>
+            </div>
+          </div>
+        </div>
+      </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
-          <SidebarHeader>
-            <div className="pb-2 h-20 w-[16rem] inline-flex justify-start items-center gap-2 border-b-1 border-neutral-200">
-              <Image src={logo} height={45} width={45} alt="logo" />
-              <div className="inline-flex flex-col justify-start items-start">
-                <div className="self-stretch h-6 relative">
-                  <h1 className="absolute justify-start font-bold leading-6 text-2xl">
-                    SOES
-                  </h1>
-                </div>
-                <div className="self-stretch h-4 relative">
-                  <h2 className="justify-start text-gray-600 text-[10px] leading-4 font-normal">
-                    Student Organization Election System
-                  </h2>
-                </div>
-              </div>
-            </div>
-          </SidebarHeader>
           <SidebarGroupContent>
             <SidebarMenu className="flex gap-1">
               <div className="mb-10">
@@ -88,17 +104,50 @@ export function AppSidebar() {
               </div>
               <SidebarGroupLabel>System</SidebarGroupLabel>
               <SidebarMenuItem key={systemitem.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={systemitem.url}>
-                      <systemitem.icon />
-                      <span>{systemitem.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href={systemitem.url}>
+                    <systemitem.icon />
+                    <span>{systemitem.title}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                >
+                  <Avatar className="h-8 w-8 rounded-lg">
+                    {/* <AvatarImage src={data.user.avatar} alt={data.user.name} /> */}
+                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  </Avatar>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    {/* <span className="truncate font-semibold">{data.user.name}</span>
+                    <span className="truncate text-xs">{data.user.email}</span> */}
+                  </div>
+                  <ChevronsUpDown className="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                side="top"
+                align="start"
+                sideOffset={10}
+              >
+                <DropdownMenuItem>Log out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
