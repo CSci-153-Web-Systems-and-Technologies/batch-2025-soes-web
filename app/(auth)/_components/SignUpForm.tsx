@@ -93,7 +93,7 @@ export default function SignUpForm() {
   return (
     <div className="mx-auto max-w-lg min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-5">
-        {/* Header - Matching LoginForm style */}
+        {/* Header */}
         <div className="text-center w-full">
           <h1 className="text-2xl font-bold">Create an Account</h1>
           <p className="text-muted-foreground text-sm">
@@ -117,7 +117,7 @@ export default function SignUpForm() {
           />
         </div>
 
-        <Card>
+        <Card className="w-100">
           {currentStep === 1 ? (
             <>
               <CardHeader className="space-y-1">

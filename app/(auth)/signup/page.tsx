@@ -3,7 +3,7 @@ import SignUpForm from "../_components/SignUpForm";
 
 const SignUpPage = () => {
   return (
-    <div className="flex h-svh items-center">
+    <div className="flex h-[90svh] items-center">
       <SignUpForm />
     </div>
   );
