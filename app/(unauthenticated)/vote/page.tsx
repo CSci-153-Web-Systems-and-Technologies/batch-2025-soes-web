@@ -1,11 +1,11 @@
-import { OTPForm } from "@/components/otp-form";
+import { OTPForm } from "@/components/otp-form"
 
-export default function Vote() {
+export default function OTPPage() {
   return (
-    <div className="flex h-[90svh] flex-col items-center justify-center gap-6 p-6 md:p-10">
-      <div className="flex w-full max-w-xs flex-col gap-6">
+    <div className="bg-background flex h-[90svh] flex-col items-center justify-center gap-6 p-6 md:p-10">
+      <div className="w-full max-w-sm">
         <OTPForm />
       </div>
     </div>
-  );
+  )
 }
