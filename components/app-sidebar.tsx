@@ -49,7 +49,7 @@ const items = [
   },
   {
     title: "Position Templates",
-    url: "/admin/position",
+    url: "/admin/positions",
     icon: Flag,
   },
   {
@@ -62,7 +62,7 @@ const systemitem = {
   title: "Settings",
   url: "/admin/settings",
   icon: Settings,
-}; 
+};
 
 export function AppSidebar() {
   return (
@@ -130,8 +130,12 @@ export function AppSidebar() {
                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                     <span className="truncate font-semibold">Username PlaceHolder</span>
-                     <span className="truncate text-xs text-primary/60">email placeholder</span>
+                    <span className="truncate font-semibold">
+                      Username PlaceHolder
+                    </span>
+                    <span className="truncate text-xs text-primary/60">
+                      email placeholder
+                    </span>
                     {/* <span className="truncate font-semibold">{data.user.name}</span> change later
                     <span className="truncate text-xs">{data.user.email}</span> change later*/}
                   </div>

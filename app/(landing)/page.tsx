@@ -44,7 +44,7 @@ const Information = ({ number, title, description }: informationProps) => {
 
 const Page = () => {
   const router = useRouter();
-  
+
   return (
     <div className="min-h-screen">
       {/* Section 1 */}
@@ -70,7 +70,10 @@ const Page = () => {
                   voters, and public transparency
                 </p>
 
-                <Button className="w-44 h-9 bg-green-700 font-bold text-base text-white hover:bg-green-900" onClick={() => router.push('/signup')}>
+                <Button
+                  className="w-44 h-9 bg-green-700 font-bold text-base text-white hover:bg-green-900"
+                  onClick={() => router.push("/signup")}
+                >
                   Get Started
                 </Button>
 
@@ -287,10 +290,16 @@ const Page = () => {
             </p>
 
             <div className="flex items-center justify-center gap-10 flex-wrap">
-              <Button className="bg-background px-10 font-bold text-foreground hover:bg-background/70">
+              <Button
+                className="bg-background px-10 font-bold text-foreground hover:bg-background/70"
+                onClick={() => router.push("/signup")}
+              >
                 Setup Now
               </Button>
-              <Button className="bg-background px-10 font-bold text-foreground hover:bg-background/70">
+              <Button
+                className="bg-background px-10 font-bold text-foreground hover:bg-background/70"
+                onClick={() => router.push("/vote")}
+              >
                 Vote Now
               </Button>
             </div>

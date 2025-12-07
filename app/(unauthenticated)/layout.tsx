@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import LoginHeader from '@/components/Header';
+import VoterHeader from '@/components/Header';
 
 export default function AuthLayout({
   children,
@@ -10,7 +10,7 @@ export default function AuthLayout({
 }>) {
   return (
     <div>
-      <LoginHeader />
+      <VoterHeader />
       {children}
     </div>
   );
