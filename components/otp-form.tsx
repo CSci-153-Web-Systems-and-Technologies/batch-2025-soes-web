@@ -30,7 +30,9 @@ export function OTPForm({ className, ...props }: React.ComponentProps<"div">) {
               </div>
               <span className="sr-only">Acme Inc.</span>
             </a>
-            <h1 className="text-xl font-bold">Enter verification code</h1>
+            <h1 className="text-xl font-bold">Election Name Placeholder
+              {/* Change Later */}
+            </h1>
             <FieldDescription>
               Enter your unique voting code to cast your ballot securely
             </FieldDescription>
