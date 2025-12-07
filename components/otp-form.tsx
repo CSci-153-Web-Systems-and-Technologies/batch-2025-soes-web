@@ -28,7 +28,6 @@ export function OTPForm({ className, ...props }: React.ComponentProps<"div">) {
               <div className="flex size-8 items-center justify-center rounded-md">
                 <KeySquare className="size-6" />
               </div>
-              <span className="sr-only">Acme Inc.</span>
             </a>
             <h1 className="text-xl font-bold">Election Name Placeholder
               {/* Change Later */}
@@ -62,7 +61,7 @@ export function OTPForm({ className, ...props }: React.ComponentProps<"div">) {
             </InputOTP>
           </Field>
           <Field>
-            <Button type="submit" className="bg-green-700 hover:bg-green-900">Verify</Button>
+            <Button type="submit" className="bg-green-700 hover:bg-green-900 text-white">Verify</Button>
           </Field>
         </FieldGroup>
       </form>
