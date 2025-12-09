@@ -8,6 +8,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/ModeToggle";
 import { DynamicBreadcrumbs } from "./_components/DynamicBreadcrumbs";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function AdminLayout({
   children,
@@ -32,6 +33,8 @@ export default function AdminLayout({
 
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
       </SidebarInset>
+
+      <Toaster richColors position="top-center" />
     </SidebarProvider>
   );
 }

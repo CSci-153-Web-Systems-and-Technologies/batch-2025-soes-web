@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import TabNavigation from "../_components/TabNavigation"; 
-import { ArrowLeft } from "lucide-react"; // Optional: looks better with an icon
+import { ArrowLeft } from "lucide-react"; 
 
 export default async function SingleElectionLayout({
   children,
@@ -25,7 +25,7 @@ export default async function SingleElectionLayout({
   if (!election) return notFound();
 
   return (
-    <div className="flex flex-col h-full pt-6 px-8 max-w-7xl mx-auto">
+    <div className="flex flex-col h-full pt-6 px-8 max-w-8xl mx-full">
       
       {/* Back Button - Fixed URL */}
       <div className="mb-4">

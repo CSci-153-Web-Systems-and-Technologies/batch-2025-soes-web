@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 export default function TabNavigation({ electionId }: { electionId: string }) {
   const pathname = usePathname();
 
-  const baseUrl = `/elections/${electionId}`;
+  const baseUrl = `/admin/elections/${electionId}`;
 
   const tabs = [
     { name: "Overview", href: baseUrl, exact: true },

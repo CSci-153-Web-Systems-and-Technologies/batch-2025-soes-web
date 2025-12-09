@@ -31,8 +31,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton"; // Make sure you have this, or use a div
+import { Skeleton } from "@/components/ui/skeleton"; 
 import { createClient } from "@/utils/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 // Menu items.
 const items = [
@@ -63,6 +64,11 @@ const items = [
   },
 ];
 
+interface Profile {
+  full_name: string | null;
+  avatar_url: string | null;
+}
+
 const systemitem = {
   title: "Settings",
   url: "/admin/settings",
@@ -72,8 +78,8 @@ const systemitem = {
 export function AppSidebar() {
   // Initialize loading to true to prevent hydration mismatch
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<unknown>(null);
-  const [profile, setProfile] = useState<unknown>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -188,7 +194,7 @@ export function AppSidebar() {
                   >
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage
-                        src={profile?.avatar_url}
+                        src={profile?.avatar_url || undefined}
                         alt={profile?.full_name || "User"}
                       />
                       <AvatarFallback className="rounded-lg">

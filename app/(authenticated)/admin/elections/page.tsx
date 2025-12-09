@@ -28,8 +28,7 @@ export default async function ElectionsListPage() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      {/* Header */}
+    <div className="p-8 max-w-8xl mx-full">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
