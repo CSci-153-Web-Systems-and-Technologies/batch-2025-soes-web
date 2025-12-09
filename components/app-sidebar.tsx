@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   Vote,
@@ -9,7 +12,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
-import React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -28,7 +30,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton"; // Make sure you have this, or use a div
+import { createClient } from "@/utils/supabase/client";
 
 // Menu items.
 const items = [
@@ -58,6 +62,7 @@ const items = [
     icon: ChartColumn,
   },
 ];
+
 const systemitem = {
   title: "Settings",
   url: "/admin/settings",
@@ -65,6 +70,52 @@ const systemitem = {
 };
 
 export function AppSidebar() {
+  // Initialize loading to true to prevent hydration mismatch
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<unknown>(null);
+  const [profile, setProfile] = useState<unknown>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const {
+          data: { user: authUser },
+        } = await supabase.auth.getUser();
+
+        if (authUser) {
+          setUser(authUser);
+          const { data: profileData } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", authUser.id)
+            .single();
+
+          if (profileData) {
+            setProfile(profileData);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      } finally {
+        // Only set loading to false after fetch attempts are done
+        setIsLoading(false);
+      }
+    };
+
+    getUserData();
+  }, [supabase]);
+
+  const getInitials = (name: string) => {
+    if (!name) return "CN";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -119,38 +170,59 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            {/* CONDITIONAL RENDERING TO FIX HYDRATION ERROR */}
+            {isLoading ? (
+              <div className="flex items-center gap-2 p-2">
+                <Skeleton className="h-8 w-8 rounded-lg" />
+                <div className="space-y-2">
+                  <Skeleton className="h-3 w-[80px]" />
+                  <Skeleton className="h-2 w-[100px]" />
+                </div>
+              </div>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton
+                    size="lg"
+                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  >
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage
+                        src={profile?.avatar_url}
+                        alt={profile?.full_name || "User"}
+                      />
+                      <AvatarFallback className="rounded-lg">
+                        {getInitials(profile?.full_name || "User")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">
+                        {profile?.full_name || "Unknown User"}
+                      </span>
+                      <span className="truncate text-xs text-primary/60">
+                        {user?.email || "No Email"}
+                      </span>
+                    </div>
+                    <ChevronsUpDown className="ml-auto size-4" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                  side="top"
+                  align="start"
+                  sideOffset={10}
                 >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    {/* <AvatarImage src={data.user.avatar} alt={data.user.name} /> */}
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      Username PlaceHolder
-                    </span>
-                    <span className="truncate text-xs text-primary/60">
-                      email placeholder
-                    </span>
-                    {/* <span className="truncate font-semibold">{data.user.name}</span> change later
-                    <span className="truncate text-xs">{data.user.email}</span> change later*/}
-                  </div>
-                  <ChevronsUpDown className="ml-auto size-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                side="top"
-                align="start"
-                sideOffset={10}
-              >
-                <DropdownMenuItem>Log out</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      window.location.href = "/";
+                    }}
+                  >
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
