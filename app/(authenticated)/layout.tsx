@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/ModeToggle";
-// Import the new component
 import { DynamicBreadcrumbs } from "./_components/DynamicBreadcrumbs";
 
 export default function AdminLayout({
