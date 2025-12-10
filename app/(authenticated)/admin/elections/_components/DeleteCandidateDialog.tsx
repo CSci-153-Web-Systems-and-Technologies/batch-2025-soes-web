@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,10 +12,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 interface DeleteCandidateDialogProps {
@@ -26,13 +26,13 @@ export default function DeleteCandidateDialog({
   candidateId,
   candidateName,
 }: DeleteCandidateDialogProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
-  const handleDeleteCandidate = async () => {
-    setIsDeleting(true);
+  const handleDelete = async () => {
+    setIsLoading(true);
     try {
       const { error } = await supabase
         .from("candidates")
@@ -40,30 +40,28 @@ export default function DeleteCandidateDialog({
         .eq("id", candidateId);
 
       if (error) {
-        console.error("Delete error:", error);
-        throw new Error(error.message || "Failed to delete candidate");
+        toast.error("Failed to delete candidate: " + error.message);
+        return;
       }
 
-      toast.success("Candidate deleted successfully");
-      setIsOpen(false);
+      toast.success(`${candidateName} has been removed`);
+      setOpen(false);
       router.refresh();
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to delete candidate";
-      console.error("Error deleting candidate:", errorMessage);
-      toast.error(errorMessage);
+      toast.error("An error occurred while deleting the candidate");
+      console.error("Delete error:", error);
     } finally {
-      setIsDeleting(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button
           size="sm"
           variant="ghost"
-          className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 h-auto disabled:opacity-50"
+          className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 h-auto"
           title="Delete candidate"
         >
           <Trash2 size={16} />
@@ -73,18 +71,18 @@ export default function DeleteCandidateDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Candidate</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete &quot;{candidateName}&quot;? This
-            action cannot be undone.
+            Are you sure you want to remove <strong>{candidateName}</strong> as
+            a candidate? This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="flex justify-end gap-2">
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <div className="flex gap-3">
+          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={handleDeleteCandidate}
-            disabled={isDeleting}
-            className="bg-red-600 hover:bg-red-700 focus:ring-red-500"
+            onClick={handleDelete}
+            disabled={isLoading}
+            className="bg-red-600 hover:bg-red-700"
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isLoading ? "Deleting..." : "Delete"}
           </AlertDialogAction>
         </div>
       </AlertDialogContent>
