@@ -81,7 +81,10 @@ export default function CandidateSearch({
           <tbody className="divide-y divide-gray-100">
             {filteredCandidates.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
+                <td
+                  colSpan={4}
+                  className="px-6 py-12 text-center text-gray-500"
+                >
                   {allCandidatesCount === 0
                     ? 'No candidates found. Click "Add Candidate" to get started.'
                     : "No candidates match your search."}

@@ -13,14 +13,16 @@ import { toast } from "sonner"; // Import toast for feedback
 export default function PositionsPage() {
   const [templates, setTemplates] = useState<PositionTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingTemplate, setEditingTemplate] = useState<PositionTemplate | null>(null);
+  const [editingTemplate, setEditingTemplate] =
+    useState<PositionTemplate | null>(null);
 
   const supabase = createClient();
 
   useEffect(() => {
     fetchTemplates();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchTemplates = async () => {
@@ -48,45 +50,53 @@ export default function PositionsPage() {
 
   // --- NEW FUNCTION: Handle Status Toggle ---
   const handleToggleStatus = async (id: string, currentStatus: string) => {
-    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    const newStatus = currentStatus === "active" ? "inactive" : "active";
 
     // 1. Optimistic Update (Update UI immediately)
-    setTemplates(prev => prev.map(t => 
-        t.id === id ? { ...t, status: newStatus } : t
-    ));
+    setTemplates((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, status: newStatus } : t))
+    );
 
     // 2. Update Supabase
     const { error } = await supabase
-        .from('position_templates')
-        .update({ status: newStatus })
-        .eq('id', id);
+      .from("position_templates")
+      .update({ status: newStatus })
+      .eq("id", id);
 
     if (error) {
-        toast.error("Failed to update status");
-        fetchTemplates(); // Revert on error
+      toast.error("Failed to update status");
+      fetchTemplates(); // Revert on error
     } else {
-        toast.success(`Template marked as ${newStatus}`);
+      toast.success(`Template marked as ${newStatus}`);
     }
   };
 
   // Stats Logic
   const totalTemplates = templates.length;
   // strict check for 'active'
-  const activeTemplates = templates.filter((t) => t.status === 'active').length; 
-  const totalPositions = templates.reduce((acc, curr) => acc + (curr.template_definitions?.length || 0), 0);
-  const timesUsed = templates.reduce((acc, curr) => acc + (curr.usage_count || 0), 0); 
+  const activeTemplates = templates.filter((t) => t.status === "active").length;
+  const totalPositions = templates.reduce(
+    (acc, curr) => acc + (curr.template_definitions?.length || 0),
+    0
+  );
+  const timesUsed = templates.reduce(
+    (acc, curr) => acc + (curr.usage_count || 0),
+    0
+  );
 
   return (
     <div className="p-8 space-y-8 bg-gray-50/50 min-h-screen">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Position Templates</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+            Position Templates
+          </h1>
           <p className="text-muted-foreground text-sm mt-1">
             Create and manage reusable position templates for elections
           </p>
         </div>
-        <Button 
-          onClick={handleCreate} 
+        <Button
+          onClick={handleCreate}
           className="bg-green-700 hover:bg-green-800 text-white shadow-sm"
         >
           <Plus className="mr-2 h-4 w-4" /> Create Template
@@ -102,7 +112,9 @@ export default function PositionsPage() {
 
       <Card className="border-gray-200 shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold text-gray-900">All Position Templates</CardTitle>
+          <CardTitle className="text-base font-semibold text-gray-900">
+            All Position Templates
+          </CardTitle>
           <p className="text-sm text-muted-foreground">
             Manage your position templates and their configurations
           </p>
@@ -113,12 +125,12 @@ export default function PositionsPage() {
               <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
             </div>
           ) : (
-            <PositionsTable 
-              data={templates} 
-              onEdit={handleEdit} 
+            <PositionsTable
+              data={templates}
+              onEdit={handleEdit}
               refreshData={fetchTemplates}
               // Pass the new function down
-              onToggleStatus={handleToggleStatus} 
+              onToggleStatus={handleToggleStatus}
             />
           )}
         </CardContent>

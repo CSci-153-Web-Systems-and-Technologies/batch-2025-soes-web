@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, Edit2 } from "lucide-react";
-import { toast } from "sonner";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import DeleteCandidateDialog from "./DeleteCandidateDialog";
 
 interface Candidate {
@@ -24,11 +22,6 @@ export default function PositionCandidates({
   candidates,
 }: PositionCandidatesProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleEditCandidate = () => {
-    // TODO: Implement edit modal
-    toast.info("Edit feature coming soon");
-  };
 
   return (
     <div className="space-y-2">
@@ -73,15 +66,6 @@ export default function PositionCandidates({
                     )}
                   </div>
                   <div className="flex items-center gap-1 ml-4 flex-shrink-0">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleEditCandidate()}
-                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 p-2 h-auto"
-                      title="Edit candidate"
-                    >
-                      <Edit2 size={16} />
-                    </Button>
                     <DeleteCandidateDialog
                       candidateId={candidate.id}
                       candidateName={candidate.full_name}
