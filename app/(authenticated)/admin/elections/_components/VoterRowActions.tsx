@@ -22,7 +22,10 @@ interface VoterRowActionsProps {
   hasVoted: boolean;
 }
 
-export default function VoterRowActions({ voterId, hasVoted }: VoterRowActionsProps) {
+export default function VoterRowActions({
+  voterId,
+  hasVoted,
+}: VoterRowActionsProps) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
@@ -54,7 +57,7 @@ export default function VoterRowActions({ voterId, hasVoted }: VoterRowActionsPr
   const handleToggleStatus = async () => {
     setIsToggling(true);
     const supabase = createClient();
-    
+
     // We toggle the status to the opposite of what it is now
     const newStatus = !hasVoted;
 
@@ -67,8 +70,8 @@ export default function VoterRowActions({ voterId, hasVoted }: VoterRowActionsPr
       if (error) throw error;
 
       toast.success(
-        newStatus 
-          ? "Voter marked as 'Voted'." 
+        newStatus
+          ? "Voter marked as 'Voted'."
           : "Vote status reset. User can vote again."
       );
       router.refresh();
@@ -82,17 +85,15 @@ export default function VoterRowActions({ voterId, hasVoted }: VoterRowActionsPr
 
   return (
     <div className="flex justify-end gap-2">
-      
-      {/* --- BUTTON 1: TOGGLE VOTE STATUS --- */}
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <button 
+          <button
             disabled={isToggling}
             title={hasVoted ? "Reset Vote Status" : "Mark as Voted (Manual)"}
             className={`p-1.5 rounded-md transition-colors disabled:opacity-50 ${
-              hasVoted 
+              hasVoted
                 ? "text-gray-400 hover:text-orange-600 hover:bg-orange-50" // Style for Reset
-                : "text-gray-300 hover:text-green-600 hover:bg-green-50"   // Style for Mark Done
+                : "text-gray-300 hover:text-green-600 hover:bg-green-50" // Style for Mark Done
             }`}
           >
             {isToggling ? (
@@ -104,7 +105,7 @@ export default function VoterRowActions({ voterId, hasVoted }: VoterRowActionsPr
             )}
           </button>
         </AlertDialogTrigger>
-        
+
         <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
             <AlertDialogTitle>
@@ -114,23 +115,30 @@ export default function VoterRowActions({ voterId, hasVoted }: VoterRowActionsPr
               {hasVoted ? (
                 // Message if resetting
                 <span>
-                  This will change the status to <strong className="text-orange-600">Not Voted</strong>. 
-                  The student will be able to log in and cast a vote again.
+                  This will change the status to{" "}
+                  <strong className="text-orange-600">Not Voted</strong>. The
+                  student will be able to log in and cast a vote again.
                 </span>
               ) : (
                 // Message if marking as voted
                 <span>
-                  This will change the status to <strong className="text-green-600">Voted</strong>. 
-                  The student will be blocked from casting a vote. Use this if they voted manually/offline.
+                  This will change the status to{" "}
+                  <strong className="text-green-600">Voted</strong>. The student
+                  will be blocked from casting a vote. Use this if they voted
+                  manually/offline.
                 </span>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
+            <AlertDialogAction
               onClick={handleToggleStatus}
-              className={hasVoted ? "bg-orange-600 hover:bg-orange-700" : "bg-green-600 hover:bg-green-700"}
+              className={
+                hasVoted
+                  ? "bg-orange-600 hover:bg-orange-700"
+                  : "bg-green-600 hover:bg-green-700"
+              }
             >
               {hasVoted ? "Confirm Reset" : "Confirm Mark Voted"}
             </AlertDialogAction>
@@ -138,30 +146,32 @@ export default function VoterRowActions({ voterId, hasVoted }: VoterRowActionsPr
         </AlertDialogContent>
       </AlertDialog>
 
-
-      {/* --- BUTTON 2: DELETE VOTER (Unchanged) --- */}
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <button 
+          <button
             disabled={isDeleting}
             title="Remove Voter"
             className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50"
           >
-            {isDeleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+            {isDeleting ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Trash2 size={16} />
+            )}
           </button>
         </AlertDialogTrigger>
-        
+
         <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this voter?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently remove the voter 
-              from the eligible list and revoke their access code.
+              This action cannot be undone. This will permanently remove the
+              voter from the eligible list and revoke their access code.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
+            <AlertDialogAction
               onClick={handleDelete}
               className="bg-red-600 hover:bg-red-700 text-white border-0"
             >
