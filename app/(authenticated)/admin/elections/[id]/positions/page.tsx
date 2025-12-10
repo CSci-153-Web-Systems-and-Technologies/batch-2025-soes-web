@@ -3,9 +3,9 @@ import { Users, Plus, LayoutTemplate } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import ImportTemplateModalWrapper from "../../_components/ImportTemplateModalWrapper";
-import PositionCandidates from "../_components/PositionCandidates";
-import PositionActions from "../_components/PositionActions";
-import ClearPositionsButton from "../_components/ClearPositionsButton";
+import PositionCandidates from "../../_components/PositionCandidates";
+import PositionActions from "../../_components/PositionActions";
+import ClearPositionsButton from "../../_components/ClearPositionsButton";
 
 interface PositionRule {
   vote_limit?: number;
@@ -96,10 +96,7 @@ export default async function ElectionPositionsPage({
             Add Manually
           </Button>
 
-          <ClearPositionsButton
-            electionId={electionId}
-            positionCount={positions.length}
-          />
+          <ClearPositionsButton electionId={electionId} />
         </div>
       </div>
 
