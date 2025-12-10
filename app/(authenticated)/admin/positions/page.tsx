@@ -7,13 +7,13 @@ import { Plus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import PositionsTable from "./_components/PositionsTable";
-import ManageTemplateModal from "./_components/ManageTemplateModal"; // The modal we fixed previously
+import ManageTemplateModal from "./_components/ManageTemplateModal";
+import { toast } from "sonner"; // Import toast for feedback
 
 export default function PositionsPage() {
   const [templates, setTemplates] = useState<PositionTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<PositionTemplate | null>(null);
 
@@ -25,7 +25,6 @@ export default function PositionsPage() {
 
   const fetchTemplates = async () => {
     setIsLoading(true);
-    // Fetch templates with their definitions to count positions
     const { data, error } = await supabase
       .from("position_templates")
       .select("*, template_definitions(*)")
@@ -47,17 +46,38 @@ export default function PositionsPage() {
     setIsModalOpen(true);
   };
 
-  // Calculate Stats based on real data
+  // --- NEW FUNCTION: Handle Status Toggle ---
+  const handleToggleStatus = async (id: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+
+    // 1. Optimistic Update (Update UI immediately)
+    setTemplates(prev => prev.map(t => 
+        t.id === id ? { ...t, status: newStatus } : t
+    ));
+
+    // 2. Update Supabase
+    const { error } = await supabase
+        .from('position_templates')
+        .update({ status: newStatus })
+        .eq('id', id);
+
+    if (error) {
+        toast.error("Failed to update status");
+        fetchTemplates(); // Revert on error
+    } else {
+        toast.success(`Template marked as ${newStatus}`);
+    }
+  };
+
+  // Stats Logic
   const totalTemplates = templates.length;
-  // Assuming you might add an 'is_active' column later, defaulting to active for now
-  const activeTemplates = templates.filter((t) => t.status !== 'inactive').length; 
+  // strict check for 'active'
+  const activeTemplates = templates.filter((t) => t.status === 'active').length; 
   const totalPositions = templates.reduce((acc, curr) => acc + (curr.template_definitions?.length || 0), 0);
-  // Mock usage data until you have a 'usage_count' in your DB
   const timesUsed = templates.reduce((acc, curr) => acc + (curr.usage_count || 0), 0); 
 
   return (
     <div className="p-8 space-y-8 bg-gray-50/50 min-h-screen">
-      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">Position Templates</h1>
@@ -73,7 +93,6 @@ export default function PositionsPage() {
         </Button>
       </div>
 
-      {/* Stats Cards Section */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard title="Total Templates" value={totalTemplates} />
         <StatCard title="Active Templates" value={activeTemplates} />
@@ -81,7 +100,6 @@ export default function PositionsPage() {
         <StatCard title="Times Used" value={timesUsed} />
       </div>
 
-      {/* Main Table Section */}
       <Card className="border-gray-200 shadow-sm">
         <CardHeader className="pb-2">
           <CardTitle className="text-base font-semibold text-gray-900">All Position Templates</CardTitle>
@@ -98,18 +116,19 @@ export default function PositionsPage() {
             <PositionsTable 
               data={templates} 
               onEdit={handleEdit} 
-              refreshData={fetchTemplates} 
+              refreshData={fetchTemplates}
+              // Pass the new function down
+              onToggleStatus={handleToggleStatus} 
             />
           )}
         </CardContent>
       </Card>
 
-      {/* Modal */}
       <ManageTemplateModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          fetchTemplates(); // Refresh list after close
+          fetchTemplates();
         }}
         templateToEdit={editingTemplate}
       />
@@ -117,7 +136,6 @@ export default function PositionsPage() {
   );
 }
 
-// Simple Helper Component for Stats
 function StatCard({ title, value }: { title: string; value: number | string }) {
   return (
     <Card className="shadow-sm border-gray-200">

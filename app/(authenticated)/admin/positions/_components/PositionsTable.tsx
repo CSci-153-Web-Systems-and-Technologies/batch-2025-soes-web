@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
+import { Switch } from "@/components/ui/switch"; // Ensure you have this component
 import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu, 
@@ -27,9 +27,16 @@ interface PositionsTableProps {
   data: PositionTemplate[];
   onEdit: (template: PositionTemplate) => void;
   refreshData: () => void;
+  // Add the new prop type
+  onToggleStatus: (id: string, currentStatus: string) => void;
 }
 
-export default function PositionsTable({ data, onEdit, refreshData }: PositionsTableProps) {
+export default function PositionsTable({ 
+    data, 
+    onEdit, 
+    refreshData, 
+    onToggleStatus // Destructure it here
+}: PositionsTableProps) {
   
   const handleDelete = async (id: string) => {
     if(!confirm("Are you sure? This cannot be undone.")) return;
@@ -78,8 +85,7 @@ export default function PositionsTable({ data, onEdit, refreshData }: PositionsT
               </TableCell>
             </TableRow>
           ) : (
-            // Changed: Replaced 'any' with 'PositionTemplate'
-            data.map((template: PositionTemplate) => (
+            data.map((template) => (
               <TableRow key={template.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                 <TableCell className="py-4">
                   <div className="flex flex-col">
@@ -102,19 +108,22 @@ export default function PositionsTable({ data, onEdit, refreshData }: PositionsT
                 <TableCell>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Users size={16} className="text-gray-400" />
-                    {/* Updated to check for undefined array */}
                     <span>{template.template_definitions?.length || 0} positions</span>
                   </div>
                 </TableCell>
 
+                {/* --- UPDATE: Status Switch --- */}
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Switch 
-                        checked={template.status !== 'inactive'} 
+                        // Checked if status is active (handles null case safely)
+                        checked={template.status === 'active'} 
+                        // Call the function when clicked
+                        onCheckedChange={() => onToggleStatus(template.id, template.status || 'inactive')}
                         className="data-[state=checked]:bg-green-700 scale-90"
                     />
                     <span className="text-sm text-gray-700">
-                        {template.status === 'inactive' ? 'Inactive' : 'Active'}
+                        {template.status === 'active' ? 'Active' : 'Inactive'}
                     </span>
                   </div>
                 </TableCell>
