@@ -75,7 +75,7 @@ export default function ClearPositionsDialog({
         <Button
           variant="destructive"
           size="sm"
-          className="gap-2"
+          className="gap-2 bg-green-700 hover:bg-green-900"
           title="Clear all positions and candidates"
         >
           <Trash2 size={16} />
@@ -95,7 +95,7 @@ export default function ClearPositionsDialog({
           <AlertDialogAction
             onClick={handleClearAll}
             disabled={isLoading}
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-green-700 hover:bg-green-900"
           >
             {isLoading ? "Clearing..." : "Clear All"}
           </AlertDialogAction>

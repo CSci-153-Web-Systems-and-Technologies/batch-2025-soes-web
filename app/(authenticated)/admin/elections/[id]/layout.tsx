@@ -27,7 +27,6 @@ export default async function SingleElectionLayout({
   return (
     <div className="flex flex-col h-full pt-6 px-8 max-w-8xl mx-full">
       
-      {/* Back Button - Fixed URL */}
       <div className="mb-4">
         <Link 
           href="/admin/elections" 
@@ -51,7 +50,6 @@ export default async function SingleElectionLayout({
       </div>
 
       {/* Tabs */}
-      {/* Ensure TabNavigation uses `/elections/${id}/...` internally too! */}
       <TabNavigation electionId={id} />
 
       {/* The Tab Content */}

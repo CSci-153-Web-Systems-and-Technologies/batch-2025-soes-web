@@ -61,7 +61,7 @@ export default function DeleteCandidateDialog({
         <Button
           size="sm"
           variant="ghost"
-          className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 h-auto"
+          className="text-green-700 hover:text-green-900 hover:bg-green-50 p-2 h-auto"
           title="Delete candidate"
         >
           <Trash2 size={16} />
@@ -80,7 +80,7 @@ export default function DeleteCandidateDialog({
           <AlertDialogAction
             onClick={handleDelete}
             disabled={isLoading}
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-green-700 hover:bg-green-900"
           >
             {isLoading ? "Deleting..." : "Delete"}
           </AlertDialogAction>
