@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { format } from "date-fns";
-import { Plus, MoreHorizontal, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import CreateElectionModal from "./_components/CreateElectionModal";
 
 export default async function ElectionsListPage() {
