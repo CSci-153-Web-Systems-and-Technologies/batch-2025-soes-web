@@ -1,11 +1,23 @@
 import { createClient } from "@/utils/supabase/server";
 import { Users, Plus, LayoutTemplate } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import ImportTemplateModalWrapper from "../../_components/ImportTemplateModalWrapper";
+import PositionCandidates from "../_components/PositionCandidates";
+import PositionActions from "../_components/PositionActions";
+import ClearPositionsButton from "../_components/ClearPositionsButton";
 
 interface PositionRule {
   vote_limit?: number;
   allow_abstain?: boolean;
+}
+
+interface Candidate {
+  id: string;
+  student_id: string;
+  full_name: string;
+  description: string | null;
+  avatar_url: string | null;
 }
 
 interface Position {
@@ -13,6 +25,7 @@ interface Position {
   rank: number;
   title: string;
   rules: PositionRule | null; // JSONB can be null
+  candidates?: Candidate[];
 }
 
 export default async function ElectionPositionsPage({
@@ -23,10 +36,10 @@ export default async function ElectionPositionsPage({
   const { id: electionId } = await params;
   const supabase = await createClient();
 
-  // 1. Fetch Current Positions for this Election
+  // 1. Fetch Current Positions for this Election (with candidates)
   const { data: positionsData } = await supabase
     .from("positions")
-    .select("*")
+    .select("*, candidates(id, student_id, full_name, description, avatar_url)")
     .eq("election_id", electionId)
     .order("rank", { ascending: true });
 
@@ -61,83 +74,94 @@ export default async function ElectionPositionsPage({
             Manage the positions candidates can run for.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {/* Wrapper handles the client-side modal state */}
           <ImportTemplateModalWrapper
             electionId={electionId}
             templates={templates}
+            disabled={positions.length > 0}
           />
 
-          <Button variant="outline" className="gap-2">
+          <Button
+            variant="outline"
+            className="gap-2"
+            disabled={positions.length > 0}
+            title={
+              positions.length > 0
+                ? "Cannot add positions after template import"
+                : ""
+            }
+          >
             <Plus size={16} />
             Add Manually
           </Button>
+
+          <ClearPositionsButton
+            electionId={electionId}
+            positionCount={positions.length}
+          />
         </div>
       </div>
 
       {/* Positions List */}
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-gray-50 border-b border-gray-100 text-gray-500 font-medium">
-            <tr>
-              <th className="px-6 py-3 w-16 text-center">Rank</th>
-              <th className="px-6 py-3">Position Title</th>
-              <th className="px-6 py-3">Configuration</th>
-              <th className="px-6 py-3 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-            {positions.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="px-6 py-12 text-center">
-                  <div className="flex flex-col items-center justify-center space-y-3">
-                    <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
-                      <LayoutTemplate className="h-6 w-6 text-gray-400" />
+      {positions.length === 0 ? (
+        <Card className="bg-white border border-gray-200">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <div className="flex flex-col items-center justify-center space-y-3">
+              <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
+                <LayoutTemplate className="h-6 w-6 text-gray-400" />
+              </div>
+              <div className="text-center">
+                <p className="font-medium text-gray-900">No positions yet</p>
+                <p className="text-gray-500 text-sm mt-1 max-w-sm mx-auto">
+                  You can manually add positions or import them from a template
+                  to get started quickly.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-3">
+          {positions.map((pos) => (
+            <Card
+              key={pos.id}
+              className="bg-white border border-gray-200 overflow-hidden"
+            >
+              <CardHeader className="pb-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-mono text-gray-400">
+                        #{pos.rank}
+                      </span>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {pos.title}
+                      </h3>
                     </div>
-                    <div className="text-center">
-                      <p className="font-medium text-gray-900">
-                        No positions yet
-                      </p>
-                      <p className="text-gray-500 text-sm mt-1 max-w-sm mx-auto">
-                        You can manually add positions or import them from a
-                        template to get started quickly.
-                      </p>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              positions.map((pos) => (
-                <tr key={pos.id} className="hover:bg-gray-50/50">
-                  <td className="px-6 py-4 text-center text-gray-400 font-mono text-xs">
-                    #{pos.rank}
-                  </td>
-                  <td className="px-6 py-4 font-medium text-gray-900">
-                    {pos.title}
-                  </td>
-                  <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
-                        <Users size={12} className="mr-1.5" />
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">
+                        <Users size={14} className="mr-1.5" />
                         {pos.rules?.vote_limit || 1} Seat(s)
                       </span>
                     </div>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-gray-500 hover:text-gray-900"
-                    >
-                      Edit
-                    </Button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+                  </div>
+                  <PositionActions
+                    positionId={pos.id}
+                    positionTitle={pos.title}
+                  />
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <PositionCandidates
+                  positionTitle={pos.title}
+                  candidates={pos.candidates || []}
+                />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
