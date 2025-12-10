@@ -102,7 +102,6 @@ export default async function VotersPage({
                     )}
                   </td>
                   
-                  {/* UPDATED: Uses the Client Component for Delete actions */}
                   <td className="px-6 py-3 text-right">
                     <VoterRowActions 
                       voterId={voter.id} 

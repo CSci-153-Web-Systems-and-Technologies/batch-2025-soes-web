@@ -39,7 +39,7 @@ export default function ImportVotersModal({
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
-  const [addedCount, setAddedCount] = useState(0);
+  const [, setAddedCount] = useState(0);
 
   const generateAccessCode = () =>
     Math.random().toString(36).slice(-8).toUpperCase();
