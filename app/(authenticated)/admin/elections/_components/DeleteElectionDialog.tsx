@@ -73,21 +73,23 @@ export default function DeleteElectionDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Election Session?</AlertDialogTitle>
+        </AlertDialogHeader>
+        <div className="space-y-3">
           <AlertDialogDescription>
             Are you sure you want to delete the election{" "}
             <strong>&quot;{electionTitle}&quot;</strong>? This will permanently
             remove:
-            <ul className="list-disc list-inside mt-3 space-y-1 text-sm">
-              <li>All positions and candidates</li>
-              <li>All registered voters</li>
-              <li>All votes cast</li>
-              <li>All election data and history</li>
-            </ul>
-            <p className="mt-3 font-medium text-red-600">
-              This action cannot be undone.
-            </p>
           </AlertDialogDescription>
-        </AlertDialogHeader>
+          <ul className="list-disc list-inside ml-1 space-y-1 text-sm text-gray-700">
+            <li>All positions and candidates</li>
+            <li>All registered voters</li>
+            <li>All votes cast</li>
+            <li>All election data and history</li>
+          </ul>
+          <div className="font-medium text-red-600 text-sm">
+            This action cannot be undone.
+          </div>
+        </div>
         <div className="flex gap-3">
           <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
           <AlertDialogAction
