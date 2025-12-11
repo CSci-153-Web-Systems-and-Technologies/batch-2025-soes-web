@@ -9,6 +9,7 @@ import { Upload, Loader2, Check } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import AvatarCropModal from "./AvatarCropModal";
 
 interface ProfileData {
   id: string;
@@ -34,6 +35,8 @@ export default function EditProfileForm({
   const [isLoading, setIsLoading] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [selectedImageSrc, setSelectedImageSrc] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const supabase = createClient();
@@ -68,18 +71,29 @@ export default function EditProfileForm({
       return;
     }
 
+    // Create a preview URL and open the crop modal
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const src = event.target?.result as string;
+      setSelectedImageSrc(src);
+      setCropModalOpen(true);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCropSave = async (croppedBlob: Blob) => {
     setIsUploadingAvatar(true);
 
     try {
       // Generate a unique filename with user ID in path
       const timestamp = Date.now();
-      const filename = `${timestamp}.${file.name.split(".").pop()}`;
+      const filename = `${timestamp}.png`;
       const filepath = `${userId}/${filename}`;
 
       // Upload to Supabase Storage
       const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .upload(filepath, file, { upsert: true });
+        .upload(filepath, croppedBlob, { upsert: true });
 
       if (uploadError) {
         toast.error("Failed to upload image: " + uploadError.message);
@@ -92,6 +106,7 @@ export default function EditProfileForm({
       const publicUrl = data.publicUrl;
 
       setAvatarUrl(publicUrl);
+      setCropModalOpen(false);
       toast.success("Avatar uploaded successfully");
     } catch (error) {
       toast.error("An error occurred while uploading the avatar");
@@ -173,12 +188,6 @@ export default function EditProfileForm({
               aria-label="Upload avatar"
             />
           </div>
-          {isUploadingAvatar && (
-            <p className="text-xs text-gray-500 mt-2">Uploading...</p>
-          )}
-          <p className="text-xs text-gray-500 mt-2">
-            Accepted formats: PNG, JPG, JPEG, GIF, WebP (Max 5MB)
-          </p>
         </div>
 
         {/* Form Fields */}
@@ -240,6 +249,14 @@ export default function EditProfileForm({
           )}
         </Button>
       </div>
+
+      <AvatarCropModal
+        isOpen={cropModalOpen}
+        onClose={() => setCropModalOpen(false)}
+        onSave={handleCropSave}
+        imageSrc={selectedImageSrc}
+        isLoading={isUploadingAvatar}
+      />
     </form>
   );
 }
