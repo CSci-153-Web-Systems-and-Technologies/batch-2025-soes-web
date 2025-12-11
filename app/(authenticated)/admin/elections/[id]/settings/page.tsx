@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, Trash2, Info } from "lucide-react";
 import DeleteElectionDialog from "../../_components/DeleteElectionDialog";
 import CopyBallotLinkButton from "../../_components/CopyBallotLinkButton";
+import ToggleElectionStatusButton from "../../_components/ToggleElectionStatusButton";
 
 interface ElectionSession {
   id: string;
@@ -133,6 +134,8 @@ export default async function ElectionSettingsPage({
                       ? "bg-green-100 text-green-700 border border-green-200"
                       : election?.status === "completed"
                       ? "bg-gray-100 text-gray-700 border border-gray-200"
+                      : election?.status === "inactive"
+                      ? "bg-red-100 text-red-700 border border-red-200"
                       : "bg-yellow-100 text-yellow-700 border border-yellow-200"
                   }`}
                 >
@@ -151,6 +154,16 @@ export default async function ElectionSettingsPage({
               </div>
             </div>
           </div>
+
+          {/* Status Toggle Button */}
+          {election?.status !== "completed" && (
+            <div className="pt-2">
+              <ToggleElectionStatusButton
+                electionId={electionId}
+                currentStatus={election?.status || "draft"}
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
 

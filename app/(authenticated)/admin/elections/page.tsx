@@ -8,12 +8,40 @@ export default async function ElectionsListPage() {
   const supabase = await createClient();
 
   // 1. Fetch Elections
-  // Note: We are mocking the "turnout" counts here for performance,
-  // but normally you'd use the helper function I gave you earlier.
   const { data: elections } = await supabase
     .from("election_sessions")
     .select("*")
     .order("created_at", { ascending: false });
+
+  // 2. Fetch turnout data for each election
+  const electionsWithTurnout = await Promise.all(
+    (elections || []).map(async (election) => {
+      const [{ count: voterCount }, { count: votesCastCount }] =
+        await Promise.all([
+          supabase
+            .from("eligible_voters")
+            .select("*", { count: "exact", head: true })
+            .eq("election_id", election.id),
+          supabase
+            .from("eligible_voters")
+            .select("*", { count: "exact", head: true })
+            .eq("election_id", election.id)
+            .eq("has_voted", true),
+        ]);
+
+      const totalVoters = voterCount || 0;
+      const votesCast = votesCastCount || 0;
+      const turnoutPercentage =
+        totalVoters > 0 ? Math.round((votesCast / totalVoters) * 100) : 0;
+
+      return {
+        ...election,
+        totalVoters,
+        votesCast,
+        turnoutPercentage,
+      };
+    })
+  );
 
   // Helper for Status Badge Color
   const getStatusColor = (status: string) => {
@@ -60,7 +88,7 @@ export default async function ElectionsListPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
-            {elections?.map((election) => (
+            {electionsWithTurnout?.map((election) => (
               <tr
                 key={election.id}
                 className="hover:bg-gray-50 transition-colors group"
@@ -97,12 +125,14 @@ export default async function ElectionsListPage() {
                   </div>
                 </td>
 
-                {/* Turnout Placeholder */}
+                {/* Turnout */}
                 <td className="px-6 py-4">
                   <div className="text-sm font-semibold text-gray-900">
-                    -- / --
+                    {election.votesCast} / {election.totalVoters}
                   </div>
-                  <div className="text-xs text-gray-500">--%</div>
+                  <div className="text-xs text-gray-500">
+                    {election.turnoutPercentage}%
+                  </div>
                 </td>
 
                 {/* Action Button: THIS ENTERS THE [ID] FOLDER */}
@@ -117,7 +147,7 @@ export default async function ElectionsListPage() {
               </tr>
             ))}
 
-            {(!elections || elections.length === 0) && (
+            {(!electionsWithTurnout || electionsWithTurnout.length === 0) && (
               <tr>
                 <td colSpan={5} className="p-8 text-center text-gray-500">
                   No elections found.
