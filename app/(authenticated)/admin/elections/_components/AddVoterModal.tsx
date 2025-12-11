@@ -3,19 +3,23 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { X, Loader2, KeyRound } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner"; // <--- 1. Import toast
 
 interface AddVoterModalProps {
   electionId: string;
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export default function AddVoterModal({ electionId, isOpen, onClose }: AddVoterModalProps) {
-  const router = useRouter();
+export default function AddVoterModal({
+  electionId,
+  isOpen,
+  onClose,
+  onSuccess,
+}: AddVoterModalProps) {
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     school_id: "",
     full_name: "",
@@ -50,8 +54,7 @@ export default function AddVoterModal({ electionId, isOpen, onClose }: AddVoterM
 
       setFormData({ school_id: "", full_name: "", email: "" });
       onClose();
-      router.refresh(); 
-      
+      onSuccess?.();
     } catch (error) {
       console.error("Error adding voter:", error);
       // 3. Error Alert
@@ -66,57 +69,72 @@ export default function AddVoterModal({ electionId, isOpen, onClose }: AddVoterM
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900">Add New Voter</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
             <X size={20} />
           </button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">School ID / Student No.</label>
+            <label className="text-sm font-medium text-gray-700">
+              School ID / Student No.
+            </label>
             <input
               required
               type="text"
               placeholder="e.g. 2021-00123"
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               value={formData.school_id}
-              onChange={(e) => setFormData({ ...formData, school_id: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, school_id: e.target.value })
+              }
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">Full Name</label>
+            <label className="text-sm font-medium text-gray-700">
+              Full Name
+            </label>
             <input
               required
               type="text"
               placeholder="e.g. Juan Dela Cruz"
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               value={formData.full_name}
-              onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, full_name: e.target.value })
+              }
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">Email Address</label>
+            <label className="text-sm font-medium text-gray-700">
+              Email Address
+            </label>
             <input
               required
               type="email"
               placeholder="student@university.edu"
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
           </div>
 
           <div className="bg-blue-50 text-blue-700 px-4 py-3 rounded-lg text-xs flex gap-2 items-start">
             <KeyRound size={14} className="mt-0.5 shrink-0" />
-            <p>An access code will be automatically generated for this voter.</p>
+            <p>
+              An access code will be automatically generated for this voter.
+            </p>
           </div>
 
           <div className="pt-2 flex gap-3">
@@ -132,7 +150,11 @@ export default function AddVoterModal({ electionId, isOpen, onClose }: AddVoterM
               disabled={isLoading}
               className="flex-1 px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-center gap-2"
             >
-              {isLoading ? <Loader2 size={16} className="animate-spin" /> : "Save Voter"}
+              {isLoading ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                "Save Voter"
+              )}
             </button>
           </div>
         </form>

@@ -3,12 +3,12 @@
 import { useState, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { X, Upload, FileSpreadsheet, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface ImportPartyleysModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
   electionId?: string;
 }
 
@@ -21,9 +21,9 @@ interface PartylistImportData {
 export default function ImportPartyleysModal({
   isOpen,
   onClose,
+  onSuccess,
   electionId,
 }: ImportPartyleysModalProps) {
-  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
@@ -94,7 +94,7 @@ export default function ImportPartyleysModal({
       toast.success(`Successfully imported ${partylists.length} partylists.`);
       reset();
       onClose();
-      router.refresh();
+      onSuccess?.();
     } catch (error: unknown) {
       console.error("Import Error:", error);
 

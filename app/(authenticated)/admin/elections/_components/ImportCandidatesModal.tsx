@@ -3,7 +3,6 @@
 import { useState, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { X, Upload, FileSpreadsheet, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { PositionOption } from "../[id]/candidates/page";
 
@@ -18,6 +17,7 @@ interface ImportCandidatesModalProps {
   partylists: PartylistOption[];
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 // 1. Strict Interface for the data we want to insert
@@ -36,8 +36,8 @@ export default function ImportCandidatesModal({
   partylists,
   isOpen,
   onClose,
+  onSuccess,
 }: ImportCandidatesModalProps) {
-  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
@@ -209,7 +209,7 @@ export default function ImportCandidatesModal({
       toast.success(`Successfully imported ${candidates.length} candidates.`);
       reset();
       onClose();
-      router.refresh();
+      onSuccess?.();
     } catch (error: unknown) {
       // 4. Use unknown + Type Narrowing
       console.error("Import Error:", error);

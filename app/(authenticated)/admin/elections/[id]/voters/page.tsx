@@ -1,5 +1,9 @@
-import { createClient } from "@/utils/supabase/server";
-import { Search } from "lucide-react"; 
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { Search, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import VoterActions from "../../_components/VoterActions";
 import VoterRowActions from "../../_components/VoterRowActions";
 
@@ -11,20 +15,49 @@ interface Voter {
   has_voted: boolean;
 }
 
-export default async function VotersPage({
+export default function VotersPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-  const supabase = await createClient();
+  const [id, setId] = useState<string>("");
+  const [voters, setVoters] = useState<Voter[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const supabase = createClient();
 
-  // Fetch real data from your table
-  const { data: voters } = await supabase
-    .from("eligible_voters")
-    .select("*")
-    .eq("election_id", id)
-    .order("full_name", { ascending: true });
+  useEffect(() => {
+    (async () => {
+      const resolvedParams = await params;
+      setId(resolvedParams.id);
+      await fetchVoters(resolvedParams.id);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchVoters = async (electionId: string) => {
+    setIsLoading(true);
+    const { data } = await supabase
+      .from("eligible_voters")
+      .select("*")
+      .eq("election_id", electionId)
+      .order("full_name", { ascending: true });
+
+    setVoters((data as Voter[]) || []);
+    setIsLoading(false);
+  };
+
+  const handleRefresh = async () => {
+    await fetchVoters(id);
+  };
+
+  const filteredVoters = voters.filter((voter) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      voter.full_name.toLowerCase().includes(term) ||
+      voter.school_id.toLowerCase().includes(term)
+    );
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -39,8 +72,19 @@ export default async function VotersPage({
           </p>
         </div>
         <div className="flex gap-2">
+          <Button
+            onClick={handleRefresh}
+            disabled={isLoading}
+            variant="outline"
+            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+          >
+            <RefreshCw
+              className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+            />
+            Refresh
+          </Button>
           {/* Add/Import Buttons */}
-          <VoterActions electionId={id} />
+          <VoterActions electionId={id} onDataChange={() => fetchVoters(id)} />
         </div>
       </div>
 
@@ -52,6 +96,8 @@ export default async function VotersPage({
         <input
           type="text"
           placeholder="Search by name or school ID..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg w-full sm:w-80 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
@@ -68,18 +114,19 @@ export default async function VotersPage({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {!voters || voters.length === 0 ? (
+            {!filteredVoters || filteredVoters.length === 0 ? (
               <tr>
                 <td
                   colSpan={4}
                   className="px-6 py-12 text-center text-gray-500"
                 >
-                  No voters found. Click &quot;Add Voter&quot; to import
-                  students.
+                  {voters.length === 0
+                    ? 'No voters found. Click "Add Voter" to import students.'
+                    : "No voters match your search."}
                 </td>
               </tr>
             ) : (
-              voters.map((voter: Voter) => (
+              filteredVoters.map((voter: Voter) => (
                 <tr
                   key={voter.id}
                   className="hover:bg-gray-50 transition-colors"
@@ -101,11 +148,11 @@ export default async function VotersPage({
                       </span>
                     )}
                   </td>
-                  
+
                   <td className="px-6 py-3 text-right">
-                    <VoterRowActions 
-                      voterId={voter.id} 
-                      hasVoted={voter.has_voted} 
+                    <VoterRowActions
+                      voterId={voter.id}
+                      hasVoted={voter.has_voted}
                     />
                   </td>
                 </tr>

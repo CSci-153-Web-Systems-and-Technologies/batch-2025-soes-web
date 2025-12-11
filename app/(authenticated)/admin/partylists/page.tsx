@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Plus, Loader2, Trash2, Edit2, Upload } from "lucide-react";
+import { Plus, Loader2, Trash2, Edit2, Upload, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -86,6 +86,11 @@ export default function PartylistsPage() {
     setIsLoading(false);
   };
 
+  const handleRefresh = async () => {
+    await fetchPartylists();
+    toast.success("Data refreshed");
+  };
+
   const handleEdit = (partylist: Partylist) => {
     setSelectedPartylist(partylist);
     setIsEditModalOpen(true);
@@ -125,6 +130,17 @@ export default function PartylistsPage() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button
+            onClick={handleRefresh}
+            disabled={isLoading}
+            variant="outline"
+            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+          >
+            <RefreshCw
+              className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+            />
+            Refresh
+          </Button>
           <Button
             onClick={() => setIsImportModalOpen(true)}
             variant="outline"
@@ -240,14 +256,17 @@ export default function PartylistsPage() {
       <CreatePartylistModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={fetchPartylists}
       />
       <ImportPartyleysModal
         isOpen={isImportModalOpen}
         onClose={() => setIsImportModalOpen(false)}
+        onSuccess={fetchPartylists}
       />
       <EditPartylistModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
+        onSuccess={fetchPartylists}
         partylist={selectedPartylist || undefined}
       />
     </div>

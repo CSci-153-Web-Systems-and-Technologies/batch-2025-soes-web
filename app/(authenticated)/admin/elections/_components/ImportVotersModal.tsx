@@ -10,7 +10,6 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 interface VoterImportData {
   election_id: string;
@@ -25,14 +24,15 @@ interface ImportVotersModalProps {
   electionId: string;
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 export default function ImportVotersModal({
   electionId,
   isOpen,
   onClose,
+  onSuccess,
 }: ImportVotersModalProps) {
-  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
@@ -121,7 +121,7 @@ export default function ImportVotersModal({
       setAddedCount(voters.length);
       setStatus("success");
       setMessage(`Successfully imported ${voters.length} voters.`);
-      router.refresh();
+      onSuccess?.();
     } catch (error: unknown) {
       console.error("Import Error:", error);
       setStatus("error");

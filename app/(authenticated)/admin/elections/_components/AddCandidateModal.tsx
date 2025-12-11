@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { X, Loader2, UserPlus } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { PositionOption } from "../[id]/candidates/page";
 
@@ -18,6 +17,7 @@ interface AddCandidateModalProps {
   partylists: PartylistOption[];
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 export default function AddCandidateModal({
@@ -26,8 +26,8 @@ export default function AddCandidateModal({
   partylists,
   isOpen,
   onClose,
+  onSuccess,
 }: AddCandidateModalProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -73,7 +73,7 @@ export default function AddCandidateModal({
         platform: "",
       });
       onClose();
-      router.refresh();
+      onSuccess?.();
     } catch (error: unknown) {
       // Use unknown
       console.error("Error adding candidate:", error);

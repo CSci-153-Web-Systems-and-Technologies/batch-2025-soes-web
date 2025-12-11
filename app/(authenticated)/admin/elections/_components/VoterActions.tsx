@@ -5,7 +5,13 @@ import { UserPlus, Upload } from "lucide-react";
 import AddVoterModal from "./AddVoterModal";
 import ImportVotersModal from "./ImportVotersModal";
 
-export default function VoterActions({ electionId }: { electionId: string }) {
+export default function VoterActions({
+  electionId,
+  onDataChange,
+}: {
+  electionId: string;
+  onDataChange?: () => void;
+}) {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
 
@@ -22,7 +28,7 @@ export default function VoterActions({ electionId }: { electionId: string }) {
         </button>
 
         {/* Add Manually Button */}
-        <button 
+        <button
           onClick={() => setIsAddOpen(true)}
           className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
         >
@@ -32,16 +38,18 @@ export default function VoterActions({ electionId }: { electionId: string }) {
       </div>
 
       {/* Modals */}
-      <AddVoterModal 
-        electionId={electionId} 
-        isOpen={isAddOpen} 
-        onClose={() => setIsAddOpen(false)} 
+      <AddVoterModal
+        electionId={electionId}
+        isOpen={isAddOpen}
+        onClose={() => setIsAddOpen(false)}
+        onSuccess={onDataChange}
       />
-      
-      <ImportVotersModal 
-        electionId={electionId} 
-        isOpen={isImportOpen} 
-        onClose={() => setIsImportOpen(false)} 
+
+      <ImportVotersModal
+        electionId={electionId}
+        isOpen={isImportOpen}
+        onClose={() => setIsImportOpen(false)}
+        onSuccess={onDataChange}
       />
     </>
   );

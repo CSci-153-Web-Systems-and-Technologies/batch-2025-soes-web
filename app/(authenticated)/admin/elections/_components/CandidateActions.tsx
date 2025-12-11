@@ -20,12 +20,14 @@ interface CandidateActionsProps {
   electionId: string;
   positions: PositionOption[];
   partylists: PartylistOption[];
+  onDataChange?: () => void;
 }
 
 export default function CandidateActions({
   electionId,
   positions,
   partylists,
+  onDataChange,
 }: CandidateActionsProps) {
   // 1. Manage state for both modals here
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -62,6 +64,7 @@ export default function CandidateActions({
         partylists={partylists}
         isOpen={isImportOpen}
         onClose={() => setIsImportOpen(false)}
+        onSuccess={onDataChange}
       />
 
       <AddCandidateModal
@@ -70,6 +73,7 @@ export default function CandidateActions({
         partylists={partylists}
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
+        onSuccess={onDataChange}
       />
     </>
   );

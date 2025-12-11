@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -19,15 +18,16 @@ import { Label } from "@/components/ui/label";
 interface CreatePartylistModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
   electionId?: string;
 }
 
 export default function CreatePartylistModal({
   isOpen,
   onClose,
+  onSuccess,
   electionId,
 }: CreatePartylistModalProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -64,7 +64,7 @@ export default function CreatePartylistModal({
       toast.success("Partylist created successfully");
       setFormData({ name: "", description: "" });
       onClose();
-      router.refresh();
+      onSuccess?.();
     } catch (error) {
       console.error("Error creating partylist:", error);
       toast.error("Failed to create partylist");

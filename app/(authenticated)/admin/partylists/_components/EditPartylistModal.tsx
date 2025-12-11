@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -19,6 +18,7 @@ import { Label } from "@/components/ui/label";
 interface EditPartylistModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
   partylist?: {
     id: string;
     name: string;
@@ -29,9 +29,9 @@ interface EditPartylistModalProps {
 export default function EditPartylistModal({
   isOpen,
   onClose,
+  onSuccess,
   partylist,
 }: EditPartylistModalProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -83,7 +83,7 @@ export default function EditPartylistModal({
 
       toast.success("Partylist updated successfully");
       onClose();
-      router.refresh();
+      onSuccess?.();
     } catch (error) {
       console.error("Error updating partylist:", error);
       toast.error("Failed to update partylist");
