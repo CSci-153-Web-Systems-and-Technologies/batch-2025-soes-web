@@ -9,10 +9,20 @@ import { format } from "date-fns";
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  // Fetch active election
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return <div>Not authenticated</div>;
+  }
+
+  // Fetch active election - filtered by current user
   const { data: activeElection } = await supabase
     .from("election_sessions")
     .select("*")
+    .eq("user_id", user.id)
     .eq("status", "active")
     .single();
 

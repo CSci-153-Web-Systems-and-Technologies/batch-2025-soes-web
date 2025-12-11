@@ -17,10 +17,18 @@ export default async function SingleElectionLayout({
 
   const supabase = await createClient(); // 3. Correct await syntax
 
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return notFound();
+
   const { data: election } = await supabase
     .from("election_sessions")
     .select("title, status")
     .eq("id", id)
+    .eq("user_id", user.id)
     .single();
 
   if (!election) return notFound();

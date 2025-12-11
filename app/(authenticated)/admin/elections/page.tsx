@@ -7,10 +7,20 @@ import CreateElectionModal from "./_components/CreateElectionModal";
 export default async function ElectionsListPage() {
   const supabase = await createClient();
 
-  // 1. Fetch Elections
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return <div>Not authenticated</div>;
+  }
+
+  // 1. Fetch Elections - explicitly filter by user_id for user isolation
   const { data: elections } = await supabase
     .from("election_sessions")
     .select("*")
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   // 2. Fetch turnout data for each election
