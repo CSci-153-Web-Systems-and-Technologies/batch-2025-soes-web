@@ -9,6 +9,8 @@ import {
   ChartColumn,
   Settings,
   ChevronsUpDown,
+  LogOut,
+  UserCircle,
 } from "lucide-react";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
@@ -213,21 +215,53 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                  className="w-56 rounded-lg shadow-lg border border-gray-200"
                   side="top"
                   align="start"
                   sideOffset={10}
                 >
-                  <DropdownMenuItem asChild>
-                    <a href="/profile">Edit Profile</a>
+                  {/* User Info Section */}
+                  <div className="px-2 py-3 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-10 w-10 rounded-lg">
+                        <AvatarImage
+                          src={profile?.avatar_url || undefined}
+                          alt={profile?.full_name || "User"}
+                        />
+                        <AvatarFallback className="rounded-lg">
+                          {getInitials(profile?.full_name || "User")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 text-left text-sm">
+                        <p className="font-semibold text-gray-900">
+                          {profile?.full_name || "User"}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
+                          {user?.email || "No Email"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Menu Items */}
+                  <DropdownMenuItem asChild className="cursor-pointer">
+                    <a href="/profile" className="flex items-center gap-2">
+                      <UserCircle size={16} />
+                      <span>My Profile</span>
+                    </a>
                   </DropdownMenuItem>
+
+                  <div className="my-1 border-t border-gray-100" />
+
                   <DropdownMenuItem
                     onClick={async () => {
                       await supabase.auth.signOut();
                       window.location.href = "/";
                     }}
+                    className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600"
                   >
-                    Log out
+                    <LogOut size={16} />
+                    <span>Log out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
