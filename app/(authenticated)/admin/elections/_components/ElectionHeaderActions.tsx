@@ -50,7 +50,7 @@ export default function ElectionHeaderActions({
   const handleToggleStatus = async () => {
     setIsToggling(true);
     try {
-      const newStatus = isActive ? "inactive" : "active";
+      const newStatus = isActive ? "draft" : "active";
       const { error } = await supabase
         .from("election_sessions")
         .update({ status: newStatus })

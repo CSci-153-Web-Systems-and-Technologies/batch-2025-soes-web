@@ -21,7 +21,7 @@ export default function ToggleElectionStatusButton({
   const supabase = createClient();
 
   const isActive = currentStatus === "active";
-  const newStatus = isActive ? "inactive" : "active";
+  const newStatus = isActive ? "draft" : "active";
 
   const handleToggleStatus = async () => {
     setIsLoading(true);
