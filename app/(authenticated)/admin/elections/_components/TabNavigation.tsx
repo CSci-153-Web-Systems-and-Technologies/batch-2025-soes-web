@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils"; 
+import { cn } from "@/lib/utils";
 
 export default function TabNavigation({ electionId }: { electionId: string }) {
   const pathname = usePathname();
@@ -15,6 +15,7 @@ export default function TabNavigation({ electionId }: { electionId: string }) {
     { name: "Partylists", href: `${baseUrl}/partylists` },
     { name: "Candidates", href: `${baseUrl}/candidates` },
     { name: "Voters", href: `${baseUrl}/voters` },
+    { name: "Results", href: `${baseUrl}/results` },
     { name: "Settings", href: `${baseUrl}/settings` },
   ];
 
@@ -24,8 +25,8 @@ export default function TabNavigation({ electionId }: { electionId: string }) {
         {tabs.map((tab) => {
           // Logic: If 'exact' is true, match perfectly.
           // Otherwise, check if the current path starts with the tab href.
-          const isActive = tab.exact 
-            ? pathname === tab.href 
+          const isActive = tab.exact
+            ? pathname === tab.href
             : pathname.startsWith(tab.href);
 
           return (
