@@ -57,33 +57,55 @@ export default function AvatarCropModal({
     ctx.clearRect(0, 0, containerSize, containerSize);
     ctx.drawImage(image, offsetX, offsetY, scaledWidth, scaledHeight);
 
-    // Draw crop circle overlay
+    // Draw crop square overlay with rounded corners
+    const borderRadius = 12;
+    const borderSize = containerSize;
     ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
     ctx.lineWidth = 2;
+
+    // Draw rounded square
     ctx.beginPath();
-    ctx.arc(
-      containerSize / 2,
-      containerSize / 2,
-      containerSize / 2 - 2,
-      0,
-      2 * Math.PI
+    ctx.moveTo(borderRadius, 0);
+    ctx.lineTo(borderSize - borderRadius, 0);
+    ctx.quadraticCurveTo(borderSize, 0, borderSize, borderRadius);
+    ctx.lineTo(borderSize, borderSize - borderRadius);
+    ctx.quadraticCurveTo(
+      borderSize,
+      borderSize,
+      borderSize - borderRadius,
+      borderSize
     );
+    ctx.lineTo(borderRadius, borderSize);
+    ctx.quadraticCurveTo(0, borderSize, 0, borderSize - borderRadius);
+    ctx.lineTo(0, borderRadius);
+    ctx.quadraticCurveTo(0, 0, borderRadius, 0);
+    ctx.closePath();
     ctx.stroke();
 
-    // Darken outside circle
+    // Darken outside square
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
     ctx.fillRect(0, 0, containerSize, containerSize);
     ctx.clearRect(0, 0, containerSize, containerSize);
     ctx.drawImage(image, offsetX, offsetY, scaledWidth, scaledHeight);
     ctx.save();
+
+    // Clip to rounded square
     ctx.beginPath();
-    ctx.arc(
-      containerSize / 2,
-      containerSize / 2,
-      containerSize / 2 - 2,
-      0,
-      2 * Math.PI
+    ctx.moveTo(borderRadius, 0);
+    ctx.lineTo(borderSize - borderRadius, 0);
+    ctx.quadraticCurveTo(borderSize, 0, borderSize, borderRadius);
+    ctx.lineTo(borderSize, borderSize - borderRadius);
+    ctx.quadraticCurveTo(
+      borderSize,
+      borderSize,
+      borderSize - borderRadius,
+      borderSize
     );
+    ctx.lineTo(borderRadius, borderSize);
+    ctx.quadraticCurveTo(0, borderSize, 0, borderSize - borderRadius);
+    ctx.lineTo(0, borderRadius);
+    ctx.quadraticCurveTo(0, 0, borderRadius, 0);
+    ctx.closePath();
     ctx.clip();
     ctx.restore();
   }, [zoom, offsetX, offsetY]);
@@ -137,7 +159,7 @@ export default function AvatarCropModal({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Create a circular crop
+    // Create a square crop with rounded corners
     const size = 300;
     const croppedCanvas = document.createElement("canvas");
     croppedCanvas.width = size;
@@ -146,9 +168,19 @@ export default function AvatarCropModal({
     const ctx = croppedCanvas.getContext("2d");
     if (!ctx) return;
 
-    // Draw circular mask
+    // Draw with rounded corners
+    const borderRadius = 12;
     ctx.beginPath();
-    ctx.arc(size / 2, size / 2, size / 2, 0, 2 * Math.PI);
+    ctx.moveTo(borderRadius, 0);
+    ctx.lineTo(size - borderRadius, 0);
+    ctx.quadraticCurveTo(size, 0, size, borderRadius);
+    ctx.lineTo(size, size - borderRadius);
+    ctx.quadraticCurveTo(size, size, size - borderRadius, size);
+    ctx.lineTo(borderRadius, size);
+    ctx.quadraticCurveTo(0, size, 0, size - borderRadius);
+    ctx.lineTo(0, borderRadius);
+    ctx.quadraticCurveTo(0, 0, borderRadius, 0);
+    ctx.closePath();
     ctx.clip();
 
     // Draw the cropped image

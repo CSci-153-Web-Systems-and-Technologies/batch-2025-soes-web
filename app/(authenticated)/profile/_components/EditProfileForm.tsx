@@ -185,16 +185,23 @@ export default function EditProfileForm({
               disabled={isUploadingAvatar}
               className="relative group"
             >
-              <div className="h-24 w-24 rounded-lg border-2 border-gray-300 group-hover:border-blue-500 transition-colors overflow-hidden bg-gray-100 flex items-center justify-center">
+              <div className="h-24 w-24 flex-shrink-0 rounded-[16px] border-2 border-gray-300 group-hover:border-blue-500 transition-colors overflow-hidden bg-gray-100 flex items-center justify-center">
                 {avatarUrl ? (
-                  <img src={avatarUrl} alt={fullName} className="h-full w-full object-cover" />
+                  <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={avatarUrl}
+                      alt={fullName}
+                      className="h-full w-full object-cover"
+                    />
+                  </>
                 ) : (
                   <span className="text-2xl font-semibold text-gray-400">
                     {getInitials(fullName)}
                   </span>
                 )}
               </div>
-              <div className="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/40 rounded-[16px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <Upload size={20} className="text-white" />
               </div>
             </button>
