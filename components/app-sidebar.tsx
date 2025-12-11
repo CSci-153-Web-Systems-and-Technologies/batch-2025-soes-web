@@ -31,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton"; 
+import { Skeleton } from "@/components/ui/skeleton";
 import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 
@@ -218,6 +218,9 @@ export function AppSidebar() {
                   align="start"
                   sideOffset={10}
                 >
+                  <DropdownMenuItem asChild>
+                    <a href="/profile">Edit Profile</a>
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={async () => {
                       await supabase.auth.signOut();
