@@ -3,15 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Users,
-  Vote,
-  Zap,
-  TrendingUp,
-  BarChart3,
-  Plus,
-  ArrowRight,
-} from "lucide-react";
+import { Users, Vote, TrendingUp, BarChart3, Plus } from "lucide-react";
 import { format } from "date-fns";
 
 export default async function DashboardPage() {
@@ -21,7 +13,7 @@ export default async function DashboardPage() {
   const { data: activeElection } = await supabase
     .from("election_sessions")
     .select("*")
-    .eq("election_status", "active")
+    .eq("status", "active")
     .single();
 
   // If no active election, show empty state
@@ -57,7 +49,6 @@ export default async function DashboardPage() {
     { count: totalVoters },
     { count: votesCast },
     { count: totalPositions },
-    { count: totalCandidates },
   ] = await Promise.all([
     supabase
       .from("eligible_voters")
@@ -70,10 +61,6 @@ export default async function DashboardPage() {
       .eq("has_voted", true),
     supabase
       .from("positions")
-      .select("*", { count: "exact", head: true })
-      .eq("election_id", activeElection.id),
-    supabase
-      .from("candidates")
       .select("*", { count: "exact", head: true })
       .eq("election_id", activeElection.id),
   ]);
@@ -91,168 +78,167 @@ export default async function DashboardPage() {
     : null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900">
+          Current Running Election Statistics
+        </h1>
+        <p className="text-gray-600 text-sm mt-1">
           Monitor and manage your election campaign
         </p>
       </div>
 
-      {/* Active Election Card */}
-      <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+      {/* Active Election Card - Compact */}
+      <Card className="border-2 border-green-600 rounded-2xl">
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
-            <div>
-              <div className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold mb-2">
-                ✓ Active
+            <div className="flex items-center gap-3">
+              <Vote className="w-5 h-5 text-green-600" />
+              <div>
+                <h2 className="font-semibold text-gray-900">
+                  Current Election
+                </h2>
+                <p className="text-sm text-gray-600">{activeElection.title}</p>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                {activeElection.title}
-              </h2>
-              <p className="text-gray-600 text-sm mt-1">
-                {activeElection.description || "Election campaign"}
-              </p>
             </div>
-            <Link href={`/admin/elections/${activeElection.id}`}>
-              <Button className="bg-green-700 hover:bg-green-900 gap-2">
-                Manage
-                <ArrowRight size={16} />
-              </Button>
-            </Link>
+            <span className="px-3 py-1 bg-green-600 text-white rounded-full text-xs font-semibold">
+              Active
+            </span>
           </div>
 
-          {/* Election Period */}
-          <div className="bg-white/50 rounded-lg p-4 mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <p className="text-xs text-gray-600 font-medium uppercase tracking-wide">
-                  Start Date
+          {/* Three Column Layout */}
+          <div className="grid grid-cols-3 gap-8 mt-6">
+            {/* Voting Period */}
+            <div>
+              <p className="text-xs text-gray-600 font-medium mb-2">
+                Voting Period
+              </p>
+              <p className="font-semibold text-gray-900">
+                {electionStart
+                  ? format(electionStart, "MMM dd, yyyy")
+                  : "Not set"}{" "}
+                -{" "}
+                {electionEnd ? format(electionEnd, "MMM dd, yyyy") : "Not set"}
+              </p>
+            </div>
+
+            {/* Voter Turnout with Progress */}
+            <div>
+              <p className="text-xs text-gray-600 font-medium mb-2">
+                Voter Turnout
+              </p>
+              <div className="flex items-baseline gap-2 mb-2">
+                <p className="text-xl font-bold text-gray-900">
+                  {votesCast || 0}
                 </p>
-                <p className="text-lg font-semibold text-gray-900">
-                  {electionStart
-                    ? format(electionStart, "MMM dd, yyyy")
-                    : "Not set"}
-                </p>
+                <p className="text-sm text-gray-600">/ {totalVoters || 0}</p>
               </div>
-              <div>
-                <p className="text-xs text-gray-600 font-medium uppercase tracking-wide">
-                  End Date
-                </p>
-                <p className="text-lg font-semibold text-gray-900">
-                  {electionEnd
-                    ? format(electionEnd, "MMM dd, yyyy")
-                    : "Not set"}
-                </p>
+              <div className="w-full bg-gray-300 rounded-full h-2">
+                <div
+                  className="bg-green-600 h-2 rounded-full"
+                  style={{ width: `${turnoutPercentage}%` }}
+                ></div>
               </div>
-              <div>
-                <p className="text-xs text-gray-600 font-medium uppercase tracking-wide">
-                  Voter Turnout
-                </p>
-                <div className="flex items-baseline gap-2">
-                  <p className="text-lg font-semibold text-gray-900">
-                    {turnoutPercentage}%
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    ({votesCast || 0}/{totalVoters || 0})
-                  </p>
-                </div>
-              </div>
+              <p className="text-xs text-gray-600 mt-2">
+                {turnoutPercentage}% turnout
+              </p>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="flex items-end gap-3">
+              <Link href={`/admin/elections/${activeElection.id}`}>
+                <Button className="bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 px-4 py-2 text-sm font-medium">
+                  View Results
+                </Button>
+              </Link>
+              <Link href={`/admin/elections/${activeElection.id}`}>
+                <Button className="bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 px-4 py-2 text-sm font-medium">
+                  Manage
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </Card>
 
-      {/* Statistics Grid */}
+      {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Registered Voters */}
-        <Card>
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <Users className="w-6 h-6 text-blue-600" />
-              </div>
-              <span className="text-xs font-semibold text-gray-500">Total</span>
+        <Card className="border border-gray-200">
+          <div className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-gray-600">
+                Total Registered Voters
+              </h3>
+              <Users className="w-4 h-4 text-gray-400" />
             </div>
-            <div>
-              <p className="text-3xl font-bold text-gray-900">
-                {totalVoters || 0}
-              </p>
-              <p className="text-sm text-gray-600 mt-1">Registered Voters</p>
-            </div>
+            <p className="text-3xl font-bold text-gray-900">
+              {totalVoters || 0}
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              Active student accounts
+            </p>
           </div>
         </Card>
 
         {/* Votes Cast */}
-        <Card>
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-green-100 rounded-lg">
-                <Vote className="w-6 h-6 text-green-600" />
-              </div>
-              <span className="text-xs font-semibold text-gray-500">Live</span>
+        <Card className="border border-gray-200">
+          <div className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-gray-600">Votes Cast</h3>
+              <Vote className="w-4 h-4 text-gray-400" />
             </div>
-            <div>
-              <p className="text-3xl font-bold text-gray-900">
-                {votesCast || 0}
-              </p>
-              <p className="text-sm text-gray-600 mt-1">Votes Cast</p>
-            </div>
+            <p className="text-3xl font-bold text-gray-900">{votesCast || 0}</p>
+            <p className="text-xs text-gray-600 mt-2">+13 from last hour</p>
           </div>
         </Card>
 
-        {/* Total Positions */}
-        <Card>
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-purple-100 rounded-lg">
-                <TrendingUp className="w-6 h-6 text-purple-600" />
-              </div>
-              <span className="text-xs font-semibold text-gray-500">
-                Active
-              </span>
+        {/* Active Positions */}
+        <Card className="border border-gray-200">
+          <div className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-gray-600">
+                Active Positions
+              </h3>
+              <TrendingUp className="w-4 h-4 text-gray-400" />
             </div>
-            <div>
-              <p className="text-3xl font-bold text-gray-900">
-                {totalPositions || 0}
-              </p>
-              <p className="text-sm text-gray-600 mt-1">Positions</p>
-            </div>
+            <p className="text-3xl font-bold text-gray-900">
+              {totalPositions || 0}
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              Presidential, VP, and more
+            </p>
           </div>
         </Card>
 
-        {/* Total Candidates */}
-        <Card>
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-orange-100 rounded-lg">
-                <Zap className="w-6 h-6 text-orange-600" />
-              </div>
-              <span className="text-xs font-semibold text-gray-500">Total</span>
+        {/* Real-time Updates */}
+        <Card className="border border-gray-200">
+          <div className="p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-gray-600">
+                Real-time Updates
+              </h3>
+              <BarChart3 className="w-4 h-4 text-gray-400" />
             </div>
-            <div>
-              <p className="text-3xl font-bold text-gray-900">
-                {totalCandidates || 0}
-              </p>
-              <p className="text-sm text-gray-600 mt-1">Candidates</p>
-            </div>
+            <p className="text-3xl font-bold text-green-600">Live</p>
+            <p className="text-xs text-gray-600 mt-2">Results updating</p>
           </div>
         </Card>
       </div>
 
-      {/* Quick Actions */}
+      {/* Quick Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link href={`/admin/elections/${activeElection.id}`}>
-          <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
-            <div className="p-6">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-gray-300">
+            <div className="p-5">
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-3 bg-blue-100 rounded-lg">
-                  <BarChart3 className="w-5 h-5 text-blue-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900">View Results</h3>
+                <BarChart3 className="w-5 h-5 text-blue-600" />
+                <h3 className="font-semibold text-gray-900">
+                  View Live Results
+                </h3>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-xs text-gray-600">
                 Monitor real-time voting progress and preliminary results
               </p>
             </div>
@@ -260,17 +246,15 @@ export default async function DashboardPage() {
         </Link>
 
         <Link href={`/admin/elections/${activeElection.id}/positions`}>
-          <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
-            <div className="p-6">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-gray-300">
+            <div className="p-5">
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-3 bg-purple-100 rounded-lg">
-                  <TrendingUp className="w-5 h-5 text-purple-600" />
-                </div>
+                <Users className="w-5 h-5 text-purple-600" />
                 <h3 className="font-semibold text-gray-900">
                   Manage Candidates
                 </h3>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-xs text-gray-600">
                 Add, edit, or review candidate registrations and profiles
               </p>
             </div>
@@ -278,17 +262,15 @@ export default async function DashboardPage() {
         </Link>
 
         <Link href={`/admin/elections/${activeElection.id}/settings`}>
-          <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
-            <div className="p-6">
+          <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-gray-300">
+            <div className="p-5">
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-3 bg-orange-100 rounded-lg">
-                  <Zap className="w-5 h-5 text-orange-600" />
-                </div>
+                <TrendingUp className="w-5 h-5 text-green-600" />
                 <h3 className="font-semibold text-gray-900">
                   Election Settings
                 </h3>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-xs text-gray-600">
                 Configure voting periods, positions, and system settings
               </p>
             </div>
