@@ -15,6 +15,10 @@ interface CandidateData {
     id: string;
     title: string;
   } | null;
+  partylists: {
+    id: string;
+    name: string;
+  } | null;
 }
 
 interface CandidateSearchProps {
@@ -40,8 +44,11 @@ export default function CandidateSearch({
       const positionMatch = candidate.positions?.title
         .toLowerCase()
         .includes(term);
+      const partylistMatch = candidate.partylists?.name
+        .toLowerCase()
+        .includes(term);
 
-      return nameMatch || idMatch || positionMatch;
+      return nameMatch || idMatch || positionMatch || partylistMatch;
     });
   }, [candidates, searchTerm]);
 
@@ -62,7 +69,7 @@ export default function CandidateSearch({
         </div>
         <input
           type="text"
-          placeholder="Search by name, ID, or position..."
+          placeholder="Search by name, ID, position, or partylist..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg w-full sm:w-80 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -74,6 +81,7 @@ export default function CandidateSearch({
             <tr>
               <th className="px-6 py-3">Candidate</th>
               <th className="px-6 py-3">Running For</th>
+              <th className="px-6 py-3">Partylist</th>
               <th className="px-6 py-3">School ID</th>
               <th className="px-6 py-3 text-right">Actions</th>
             </tr>
@@ -82,7 +90,7 @@ export default function CandidateSearch({
             {filteredCandidates.length === 0 ? (
               <tr>
                 <td
-                  colSpan={4}
+                  colSpan={5}
                   className="px-6 py-12 text-center text-gray-500"
                 >
                   {allCandidatesCount === 0
@@ -125,6 +133,15 @@ export default function CandidateSearch({
                       </span>
                     ) : (
                       <span className="text-gray-400 italic">No Position</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 align-top pt-5">
+                    {candidate.partylists ? (
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-purple-50 text-purple-700 border border-purple-100">
+                        {candidate.partylists.name}
+                      </span>
+                    ) : (
+                      <span className="text-gray-400 italic">No Partylist</span>
                     )}
                   </td>
                   <td className="px-6 py-4 align-top pt-5 font-mono text-gray-600">

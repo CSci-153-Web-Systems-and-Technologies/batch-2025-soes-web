@@ -7,9 +7,15 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { PositionOption } from "../[id]/candidates/page";
 
+interface PartylistOption {
+  id: string;
+  name: string;
+}
+
 interface ImportCandidatesModalProps {
   electionId: string;
   positions: PositionOption[];
+  partylists: PartylistOption[];
   isOpen: boolean;
   onClose: () => void;
 }
@@ -21,11 +27,13 @@ interface CandidateImportData {
   full_name: string;
   nickname: string | null;
   position_id: string;
+  partylist_id: string | null;
 }
 
 export default function ImportCandidatesModal({
   electionId,
   positions,
+  partylists,
   isOpen,
   onClose,
 }: ImportCandidatesModalProps) {
@@ -38,6 +46,11 @@ export default function ImportCandidatesModal({
   // Create a map for fast position lookup with flexible matching
   const positionMap = new Map(
     positions.map((p) => [p.title.toLowerCase().trim(), p.id])
+  );
+
+  // Create a map for partylist lookup
+  const partylistMap = new Map(
+    partylists.map((p) => [p.name.toLowerCase().trim(), p.id])
   );
 
   // Fuzzy match helper - tries exact match first, then normalized match
@@ -55,6 +68,25 @@ export default function ImportCandidatesModal({
         storedTitle.includes(normalized) ||
         normalized.includes(storedTitle)
       ) {
+        return id;
+      }
+    }
+
+    return undefined;
+  };
+
+  // Fuzzy match helper for partylist lookup
+  const findPartylistId = (partylistName: string): string | undefined => {
+    const normalized = partylistName.toLowerCase().trim();
+
+    // Exact match
+    if (partylistMap.has(normalized)) {
+      return partylistMap.get(normalized);
+    }
+
+    // Fuzzy match
+    for (const [storedName, id] of partylistMap.entries()) {
+      if (storedName.includes(normalized) || normalized.includes(storedName)) {
         return id;
       }
     }
@@ -85,9 +117,11 @@ export default function ImportCandidatesModal({
       const entry: Partial<CandidateImportData> = {
         election_id: electionId,
         nickname: null,
+        partylist_id: null,
       };
 
       let positionTitle = "";
+      let partylistName = "";
 
       headers.forEach((header, index) => {
         const val = values[index] || "";
@@ -95,6 +129,7 @@ export default function ImportCandidatesModal({
         if (header === "full_name") entry.full_name = val;
         if (header === "nickname") entry.nickname = val || null;
         if (header === "position_title") positionTitle = val;
+        if (header === "partylist_name") partylistName = val;
       });
 
       // Lookup Position ID
@@ -108,6 +143,24 @@ export default function ImportCandidatesModal({
             `Row ${
               i + 1
             }: Position "${positionTitle}" not found. Available: ${availablePositions}`
+          );
+          continue;
+        }
+      }
+
+      // Lookup Partylist ID (optional)
+      if (partylistName) {
+        const plistId = findPartylistId(partylistName);
+        if (plistId) {
+          entry.partylist_id = plistId;
+        } else {
+          const availablePartylists = Array.from(partylistMap.keys()).join(
+            ", "
+          );
+          errors.push(
+            `Row ${
+              i + 1
+            }: Partylist "${partylistName}" not found. Available: ${availablePartylists}`
           );
           continue;
         }
@@ -203,7 +256,7 @@ export default function ImportCandidatesModal({
           <div className="space-y-3">
             <p className="text-sm text-gray-600">
               Upload a <strong>.CSV</strong> file with candidate data. Position
-              names should match your existing positions.
+              names should match your existing positions. Partylist is optional.
             </p>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <p className="text-xs font-semibold text-blue-900 mb-2">
@@ -219,15 +272,29 @@ export default function ImportCandidatesModal({
                 )}
               </div>
             </div>
+            {partylists.length > 0 && (
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                <p className="text-xs font-semibold text-purple-900 mb-2">
+                  Available Partylists:
+                </p>
+                <div className="text-xs text-purple-800 font-mono space-y-1">
+                  {partylists.map((p) => (
+                    <div key={p.id}>• {p.name}</div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs font-mono text-gray-600 overflow-x-auto">
               <div className="font-semibold mb-2 text-gray-900">
                 CSV Format Example:
               </div>
-              student_id,full_name,nickname,position_title
+              student_id,full_name,nickname,position_title,partylist_name
               <br />
-              2023-001,Juan Cruz,John,President
+              2023-001,Juan Cruz,John,President,ABC Party
               <br />
-              2023-002,Maria Clara,,Vice President
+              2023-002,Maria Clara,,Vice President,Student Union
+              <br />
+              2023-003,Pedro Makabayan,Pete,Secretary,
             </div>
           </div>
 

@@ -7,6 +7,11 @@ export interface PositionOption {
   title: string;
 }
 
+export interface PartylistOption {
+  id: string;
+  name: string;
+}
+
 // UPDATE: Matched interface to your DB Schema
 interface CandidateData {
   id: string;
@@ -14,9 +19,14 @@ interface CandidateData {
   full_name: string;
   description: string | null; // "platform" is actually "description" in your DB
   avatar_url: string | null;
+  partylist_id: string | null;
   positions: {
     id: string;
     title: string;
+  } | null;
+  partylists: {
+    id: string;
+    name: string;
   } | null;
 }
 
@@ -28,11 +38,11 @@ export default async function CandidatesPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  // UPDATE: Removed 'nickname', added 'description'
+  // UPDATE: Removed 'nickname', added 'description', added partylists
   const { data, error: candidatesError } = await supabase
     .from("candidates")
     .select(
-      "id, student_id, full_name, description, avatar_url, positions(id, title)"
+      "id, student_id, full_name, description, avatar_url, partylist_id, positions(id, title), partylists(id, name)"
     )
     .eq("election_id", id)
     .order("title", { foreignTable: "positions", ascending: true })
@@ -51,8 +61,15 @@ export default async function CandidatesPage({
     .eq("election_id", id)
     .order("title", { ascending: true });
 
+  const { data: partyleistsData } = await supabase
+    .from("partylists")
+    .select("id, name")
+    .eq("election_id", id)
+    .order("name", { ascending: true });
+
   const candidates = (data as unknown as CandidateData[]) || [];
   const positions = (positionsData as PositionOption[]) || [];
+  const partylists = (partyleistsData as PartylistOption[]) || [];
 
   return (
     <div className="flex flex-col gap-6">
@@ -64,7 +81,11 @@ export default async function CandidatesPage({
           </p>
         </div>
         <div className="flex gap-2">
-          <CandidateActions electionId={id} positions={positions} />
+          <CandidateActions
+            electionId={id}
+            positions={positions}
+            partylists={partylists}
+          />
         </div>
       </div>
 

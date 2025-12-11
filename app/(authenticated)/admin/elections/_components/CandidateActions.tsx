@@ -11,14 +11,21 @@ interface PositionOption {
   title: string;
 }
 
+interface PartylistOption {
+  id: string;
+  name: string;
+}
+
 interface CandidateActionsProps {
   electionId: string;
   positions: PositionOption[];
+  partylists: PartylistOption[];
 }
 
 export default function CandidateActions({
   electionId,
   positions,
+  partylists,
 }: CandidateActionsProps) {
   // 1. Manage state for both modals here
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -27,7 +34,7 @@ export default function CandidateActions({
   return (
     <>
       {/* --- BUTTONS --- */}
-      
+
       {/* Import Button */}
       <button
         onClick={() => setIsImportOpen(true)}
@@ -47,11 +54,12 @@ export default function CandidateActions({
       </button>
 
       {/* --- MODALS --- */}
-      
+
       {/* We pass the state (isOpen) and the closer (onClose) to the modals */}
       <ImportCandidatesModal
         electionId={electionId}
-        positions={positions} // Don't forget positions, the import modal needs them for mapping!
+        positions={positions}
+        partylists={partylists}
         isOpen={isImportOpen}
         onClose={() => setIsImportOpen(false)}
       />
@@ -59,6 +67,7 @@ export default function CandidateActions({
       <AddCandidateModal
         electionId={electionId}
         positions={positions}
+        partylists={partylists}
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
       />

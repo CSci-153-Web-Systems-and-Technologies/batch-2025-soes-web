@@ -7,9 +7,15 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { PositionOption } from "../[id]/candidates/page";
 
+interface PartylistOption {
+  id: string;
+  name: string;
+}
+
 interface AddCandidateModalProps {
   electionId: string;
   positions: PositionOption[];
+  partylists: PartylistOption[];
   isOpen: boolean;
   onClose: () => void;
 }
@@ -17,6 +23,7 @@ interface AddCandidateModalProps {
 export default function AddCandidateModal({
   electionId,
   positions,
+  partylists,
   isOpen,
   onClose,
 }: AddCandidateModalProps) {
@@ -28,6 +35,7 @@ export default function AddCandidateModal({
     full_name: "",
     nickname: "",
     position_id: "",
+    partylist_id: "",
     platform: "",
   });
 
@@ -49,6 +57,7 @@ export default function AddCandidateModal({
         full_name: formData.full_name,
         nickname: formData.nickname || null,
         position_id: formData.position_id,
+        partylist_id: formData.partylist_id || null,
         platform: formData.platform || null,
       });
 
@@ -60,6 +69,7 @@ export default function AddCandidateModal({
         full_name: "",
         nickname: "",
         position_id: "",
+        partylist_id: "",
         platform: "",
       });
       onClose();
@@ -174,6 +184,33 @@ export default function AddCandidateModal({
                 setFormData({ ...formData, nickname: e.target.value })
               }
             />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Partylist{" "}
+              <span className="text-gray-400 font-normal">(Optional)</span>
+            </label>
+            <select
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+              value={formData.partylist_id}
+              onChange={(e) =>
+                setFormData({ ...formData, partylist_id: e.target.value })
+              }
+            >
+              <option value="">Select a partylist (optional)...</option>
+              {partylists.length === 0 ? (
+                <option value="" disabled>
+                  No partylists found
+                </option>
+              ) : (
+                partylists.map((partylist) => (
+                  <option key={partylist.id} value={partylist.id}>
+                    {partylist.name}
+                  </option>
+                ))
+              )}
+            </select>
           </div>
 
           <div className="space-y-1">
