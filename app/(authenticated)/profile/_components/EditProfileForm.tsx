@@ -4,7 +4,6 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Upload, Loader2, Check } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
@@ -40,6 +39,11 @@ export default function EditProfileForm({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const supabase = createClient();
+
+  // Track if there are unsaved changes
+  const hasChanges =
+    fullName !== (initialProfile.full_name || "") ||
+    avatarUrl !== (initialProfile.avatar_url || "");
 
   const getInitials = (name: string) => {
     if (!name) return "CN";
@@ -143,6 +147,19 @@ export default function EditProfileForm({
 
       toast.success("Profile updated successfully");
       setIsSaved(true);
+
+      // Broadcast profile update to sidebar
+      try {
+        const channel = new BroadcastChannel("profile-update");
+        channel.postMessage({
+          full_name: fullName.trim(),
+          avatar_url: avatarUrl,
+        });
+        channel.close();
+      } catch (error) {
+        console.warn("BroadcastChannel not supported:", error);
+      }
+
       setTimeout(() => setIsSaved(false), 2000);
       router.refresh();
     } catch (error) {
@@ -168,13 +185,16 @@ export default function EditProfileForm({
               disabled={isUploadingAvatar}
               className="relative group"
             >
-              <Avatar className="h-24 w-24 border-2 border-gray-300 group-hover:border-blue-500 transition-colors">
-                <AvatarImage src={avatarUrl} alt={fullName} />
-                <AvatarFallback className="text-xl font-semibold">
-                  {getInitials(fullName)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="h-24 w-24 rounded-lg border-2 border-gray-300 group-hover:border-blue-500 transition-colors overflow-hidden bg-gray-100 flex items-center justify-center">
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt={fullName} className="h-full w-full object-cover" />
+                ) : (
+                  <span className="text-2xl font-semibold text-gray-400">
+                    {getInitials(fullName)}
+                  </span>
+                )}
+              </div>
+              <div className="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <Upload size={20} className="text-white" />
               </div>
             </button>
@@ -231,10 +251,10 @@ export default function EditProfileForm({
       <div className="flex gap-3 pt-4">
         <Button
           type="submit"
-          disabled={isLoading || isUploadingAvatar}
+          disabled={isLoading || isUploadingAvatar || (!hasChanges && !isSaved)}
           className="bg-green-700 hover:bg-green-900 gap-2"
         >
-          {isSaved ? (
+          {isSaved && !hasChanges ? (
             <>
               <Check size={16} />
               Saved

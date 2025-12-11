@@ -112,6 +112,28 @@ export function AppSidebar() {
     };
 
     getUserData();
+
+    // Listen for profile updates from BroadcastChannel
+    try {
+      const channel = new BroadcastChannel("profile-update");
+      const handleMessage = (event: MessageEvent) => {
+        if (event.data.full_name || event.data.avatar_url) {
+          setProfile((prevProfile) => ({
+            ...prevProfile,
+            full_name: event.data.full_name || prevProfile?.full_name || null,
+            avatar_url:
+              event.data.avatar_url || prevProfile?.avatar_url || null,
+          }));
+        }
+      };
+      channel.addEventListener("message", handleMessage);
+      return () => {
+        channel.removeEventListener("message", handleMessage);
+        channel.close();
+      };
+    } catch (error) {
+      console.warn("BroadcastChannel not supported:", error);
+    }
   }, [supabase]);
 
   const getInitials = (name: string) => {
