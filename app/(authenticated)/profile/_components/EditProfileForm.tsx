@@ -89,6 +89,23 @@ export default function EditProfileForm({
     setIsUploadingAvatar(true);
 
     try {
+      // Delete old avatar if it exists
+      if (avatarUrl) {
+        try {
+          // Extract the filepath from the URL
+          const urlParts = avatarUrl.split(
+            "/storage/v1/object/public/avatars/"
+          );
+          if (urlParts.length > 1) {
+            const oldFilepath = decodeURIComponent(urlParts[1]);
+            await supabase.storage.from("avatars").remove([oldFilepath]);
+          }
+        } catch (deleteError) {
+          console.warn("Failed to delete old avatar:", deleteError);
+          // Continue with upload even if deletion fails
+        }
+      }
+
       // Generate a unique filename with user ID in path
       const timestamp = Date.now();
       const filename = `${timestamp}.png`;
