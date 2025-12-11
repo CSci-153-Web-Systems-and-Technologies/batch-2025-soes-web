@@ -6,11 +6,11 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Copy, Trash2, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import DeleteElectionDialog from "../../_components/DeleteElectionDialog";
 import CopyBallotLinkButton from "../../_components/CopyBallotLinkButton";
 import ToggleElectionStatusButton from "../../_components/ToggleElectionStatusButton";
+import EditElectionDetailsModal from "../../_components/EditElectionDetailsModal";
 
 interface ElectionSession {
   id: string;
@@ -90,11 +90,18 @@ export default async function ElectionSettingsPage({
 
       {/* Election Information Card */}
       <Card className="bg-white border border-gray-200">
-        <CardHeader>
-          <CardTitle>Election Information</CardTitle>
-          <CardDescription>
-            Basic details about this election session
-          </CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Election Information</CardTitle>
+            <CardDescription>
+              Basic details about this election session
+            </CardDescription>
+          </div>
+          <EditElectionDetailsModal
+            electionId={electionId}
+            currentTitle={election?.title || ""}
+            currentDescription={election?.description}
+          />
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Title */}
@@ -221,19 +228,34 @@ export default async function ElectionSettingsPage({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="text-xs text-gray-600 mb-2">Ballot URL:</p>
-            <div className="flex items-center gap-2">
-              <code className="flex-1 text-sm text-blue-900 font-mono break-all">
-                {ballotUrl}
-              </code>
-              <CopyBallotLinkButton ballotUrl={ballotUrl} />
+          {election?.status === "active" ? (
+            <>
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <p className="text-xs text-gray-600 mb-2">Ballot URL:</p>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 text-sm text-blue-900 font-mono break-all">
+                    {ballotUrl}
+                  </code>
+                  <CopyBallotLinkButton ballotUrl={ballotUrl} />
+                </div>
+              </div>
+              <p className="text-xs text-gray-500">
+                ⓘ Voters can access the ballot using this link. It can be shared
+                via email, QR code, or direct link.
+              </p>
+            </>
+          ) : (
+            <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+              <p className="text-sm text-yellow-800 font-medium">
+                ⚠️ Activate the election session first
+              </p>
+              <p className="text-xs text-yellow-700 mt-2">
+                The ballot link will be available once you activate this
+                election session. This ensures voters can only access the ballot
+                when the election is running.
+              </p>
             </div>
-          </div>
-          <p className="text-xs text-gray-500">
-            ⓘ Voters can access the ballot using this link. It can be shared via
-            email, QR code, or direct link.
-          </p>
+          )}
         </CardContent>
       </Card>
 
