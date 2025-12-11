@@ -11,6 +11,7 @@ import DeleteElectionDialog from "../../_components/DeleteElectionDialog";
 import CopyBallotLinkButton from "../../_components/CopyBallotLinkButton";
 import ToggleElectionStatusButton from "../../_components/ToggleElectionStatusButton";
 import EditElectionDetailsModal from "../../_components/EditElectionDetailsModal";
+import EndElectionButton from "../../_components/EndElectionButton";
 
 interface ElectionSession {
   id: string;
@@ -162,11 +163,18 @@ export default async function ElectionSettingsPage({
 
           {/* Status Toggle Button */}
           {election?.status !== "completed" && (
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap gap-4">
               <ToggleElectionStatusButton
                 electionId={electionId}
                 currentStatus={election?.status || "draft"}
               />
+              {election?.status === "active" && (
+                <EndElectionButton
+                  electionId={electionId}
+                  electionStatus={election.status}
+                  electionTitle={election.title}
+                />
+              )}
             </div>
           )}
         </CardContent>
