@@ -1,8 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
-import { Users, Plus, LayoutTemplate } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Users, LayoutTemplate } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import ImportTemplateModalWrapper from "../../_components/ImportTemplateModalWrapper";
+import AddPositionModal from "../../_components/AddPositionModal";
 import PositionCandidates from "../../_components/PositionCandidates";
 import PositionActions from "../../_components/PositionActions";
 import ClearPositionsButton from "../../_components/ClearPositionsButton";
@@ -82,19 +82,10 @@ export default async function ElectionPositionsPage({
             disabled={positions.length > 0}
           />
 
-          <Button
-            variant="outline"
-            className="gap-2"
+          <AddPositionModal
+            electionId={electionId}
             disabled={positions.length > 0}
-            title={
-              positions.length > 0
-                ? "Cannot add positions after template import"
-                : ""
-            }
-          >
-            <Plus size={16} />
-            Add Manually
-          </Button>
+          />
 
           <ClearPositionsButton electionId={electionId} />
         </div>
