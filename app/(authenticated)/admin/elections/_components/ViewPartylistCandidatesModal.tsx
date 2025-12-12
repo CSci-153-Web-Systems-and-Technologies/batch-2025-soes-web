@@ -57,9 +57,6 @@ export default function ViewPartylistCandidatesModal({
 
   const partylists = Object.values(candidatesByPartylist);
 
-  // Count candidates by partylist
-  const candidatesWithPartylist = candidates.filter((c) => c.partylists);
-
   return (
     <>
       <button
@@ -68,12 +65,8 @@ export default function ViewPartylistCandidatesModal({
         title="View candidates by partylist"
       >
         <Eye size={16} />
-        <span className="hidden sm:inline">
-          View Partylists ({candidatesWithPartylist.length})
-        </span>
-        <span className="sm:hidden">
-          Partylists ({candidatesWithPartylist.length})
-        </span>
+        <span className="hidden sm:inline">View Partylists</span>
+        <span className="sm:hidden">Partylists</span>
       </button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>

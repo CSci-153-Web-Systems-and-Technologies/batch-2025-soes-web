@@ -25,8 +25,6 @@ import { importPositionsFromTemplate } from "@/lib/election-action";
 export interface TemplateOption {
   id: string;
   name: string;
-  // Supabase returns relations as arrays, even for counts
-  template_definitions: { count: number }[]; 
 }
 
 interface ImportTemplateModalProps {
@@ -102,9 +100,9 @@ export default function ImportTemplateModal({
               </SelectContent>
             </Select>
             {selectedTemplate && (
-               <p className="text-xs text-muted-foreground">
-                 This will import all positions defined in this template.
-               </p>
+              <p className="text-xs text-muted-foreground">
+                This will import all positions defined in this template.
+              </p>
             )}
           </div>
         </div>

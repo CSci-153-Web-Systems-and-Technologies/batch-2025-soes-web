@@ -42,7 +42,9 @@ export default function ViewPartylistMembersModal({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-2xl max-h-[70vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{partylistName} - Members ({candidates.length})</DialogTitle>
+            <DialogTitle>
+              {partylistName} - Members ({candidates.length})
+            </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-3">

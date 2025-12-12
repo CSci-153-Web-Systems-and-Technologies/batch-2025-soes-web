@@ -63,21 +63,16 @@ export default async function ElectionPositionsPage({
   const positions = (positionsData as unknown as Position[]) || [];
 
   // 2. Fetch Available Templates (active only)
-  // We explicitly select the count of definitions to show (optional, but good for UI)
   const { data: templatesData } = await supabase
     .from("position_templates")
-    .select("id, name, template_definitions(count)")
+    .select("id, name")
     .eq("status", "active");
 
   // Transform/Cast data to match the Modal's expected type
-  // Supabase returns { count: number }[] for count queries
   const templates =
     templatesData?.map((t) => ({
       id: t.id,
       name: t.name,
-      template_definitions: t.template_definitions as unknown as {
-        count: number;
-      }[],
     })) || [];
 
   // Collect all candidates from all positions for the partylist viewer

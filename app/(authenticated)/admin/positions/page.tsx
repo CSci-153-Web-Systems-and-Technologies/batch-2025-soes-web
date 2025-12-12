@@ -79,10 +79,6 @@ export default function PositionsPage() {
     (acc, curr) => acc + (curr.template_definitions?.length || 0),
     0
   );
-  const timesUsed = templates.reduce(
-    (acc, curr) => acc + (curr.usage_count || 0),
-    0
-  );
 
   return (
     <div className="p-8 space-y-8 bg-gray-50/50 min-h-screen">
@@ -103,11 +99,10 @@ export default function PositionsPage() {
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <StatCard title="Total Templates" value={totalTemplates} />
         <StatCard title="Active Templates" value={activeTemplates} />
         <StatCard title="Total Positions" value={totalPositions} />
-        <StatCard title="Times Used" value={timesUsed} />
       </div>
 
       <Card className="border-gray-200 shadow-sm">
