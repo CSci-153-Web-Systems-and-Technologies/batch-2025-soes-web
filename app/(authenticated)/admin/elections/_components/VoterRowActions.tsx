@@ -20,11 +20,13 @@ import {
 interface VoterRowActionsProps {
   voterId: string;
   hasVoted: boolean;
+  disabled?: boolean;
 }
 
 export default function VoterRowActions({
   voterId,
   hasVoted,
+  disabled,
 }: VoterRowActionsProps) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -88,7 +90,7 @@ export default function VoterRowActions({
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <button
-            disabled={isToggling}
+            disabled={isToggling || disabled}
             title={hasVoted ? "Reset Vote Status" : "Mark as Voted (Manual)"}
             className={`p-1.5 rounded-md transition-colors disabled:opacity-50 ${
               hasVoted
@@ -134,6 +136,7 @@ export default function VoterRowActions({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleToggleStatus}
+              disabled={disabled}
               className={
                 hasVoted
                   ? "bg-orange-600 hover:bg-orange-700"
@@ -149,7 +152,7 @@ export default function VoterRowActions({
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <button
-            disabled={isDeleting}
+            disabled={isDeleting || disabled}
             title="Remove Voter"
             className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50"
           >
@@ -173,6 +176,7 @@ export default function VoterRowActions({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
+              disabled={disabled}
               className="bg-red-600 hover:bg-red-700 text-white border-0"
             >
               Delete Voter

@@ -18,6 +18,7 @@ interface ImportCandidatesModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  disabled?: boolean;
 }
 
 // 1. Strict Interface for the data we want to insert
@@ -37,6 +38,7 @@ export default function ImportCandidatesModal({
   isOpen,
   onClose,
   onSuccess,
+  disabled,
 }: ImportCandidatesModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -188,6 +190,12 @@ export default function ImportCandidatesModal({
 
   const handleFileUpload = async () => {
     if (!file) return;
+    
+    if (disabled) {
+      toast.error("Cannot import candidates to an ended election.");
+      return;
+    }
+    
     if (positions.length === 0) {
       toast.error("Please create positions before importing candidates.");
       return;

@@ -36,6 +36,15 @@ export default async function ElectionPositionsPage({
   const { id: electionId } = await params;
   const supabase = await createClient();
 
+  // Get election status
+  const { data: election } = await supabase
+    .from("election_sessions")
+    .select("status")
+    .eq("id", electionId)
+    .single();
+
+  const isElectionEnded = election?.status === "ended";
+
   // 1. Fetch Current Positions for this Election (with candidates)
   const { data: positionsData } = await supabase
     .from("positions")
@@ -79,15 +88,18 @@ export default async function ElectionPositionsPage({
           <ImportTemplateModalWrapper
             electionId={electionId}
             templates={templates}
-            disabled={positions.length > 0}
+            disabled={positions.length > 0 || isElectionEnded}
           />
 
           <AddPositionModal
             electionId={electionId}
-            disabled={positions.length > 0}
+            disabled={positions.length > 0 || isElectionEnded}
           />
 
-          <ClearPositionsButton electionId={electionId} />
+          <ClearPositionsButton 
+            electionId={electionId} 
+            disabled={isElectionEnded}
+          />
         </div>
       </div>
 

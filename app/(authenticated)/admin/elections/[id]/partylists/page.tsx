@@ -32,6 +32,15 @@ export default async function ElectionPartylistsPage({
   const { id: electionId } = await params;
   const supabase = await createClient();
 
+  // Get election status
+  const { data: election } = await supabase
+    .from("election_sessions")
+    .select("status")
+    .eq("id", electionId)
+    .single();
+
+  const isElectionEnded = election?.status === "ended";
+
   // Fetch partylists for this election
   const { data: partylistsData } = await supabase
     .from("partylists")
@@ -70,7 +79,7 @@ export default async function ElectionPartylistsPage({
             View partylists and the candidates running under them.
           </p>
         </div>
-        <AddPartylistModal electionId={electionId} />
+        <AddPartylistModal electionId={electionId} disabled={isElectionEnded} />
       </div>
 
       {/* Partylists Grid */}
@@ -89,7 +98,7 @@ export default async function ElectionPartylistsPage({
                   Create partylists to organize candidates into groups.
                 </p>
               </div>
-              <AddPartylistModal electionId={electionId} />
+              <AddPartylistModal electionId={electionId} disabled={isElectionEnded} />
             </div>
           </CardContent>
         </Card>

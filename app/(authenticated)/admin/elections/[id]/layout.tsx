@@ -55,7 +55,9 @@ export default async function SingleElectionLayout({
             className={`px-2.5 py-0.5 text-xs font-semibold rounded-full border ${
               election.status === "active"
                 ? "bg-green-100 text-green-700 border-green-200"
-                : "bg-yellow-50 text-yellow-700 border-yellow-200"
+                : election.status === "ended"
+                  ? "bg-red-100 text-red-700 border-red-200"
+                  : "bg-yellow-50 text-yellow-700 border-yellow-200"
             }`}
           >
             {election.status.toUpperCase()}
@@ -66,6 +68,16 @@ export default async function SingleElectionLayout({
           electionStatus={election.status}
         />
       </div>
+
+      {/* Show message if election is ended */}
+      {election.status === "ended" && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-800">
+            <strong>This election has ended.</strong> You cannot add, edit, or delete any data.
+            You can only view the results.
+          </p>
+        </div>
+      )}
 
       {/* Tabs */}
       <TabNavigation electionId={id} />

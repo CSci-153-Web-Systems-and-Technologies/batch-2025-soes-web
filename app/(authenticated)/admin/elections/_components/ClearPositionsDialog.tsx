@@ -19,10 +19,12 @@ import { useRouter } from "next/navigation";
 
 interface ClearPositionsDialogProps {
   electionId: string;
+  disabled?: boolean;
 }
 
 export default function ClearPositionsDialog({
   electionId,
+  disabled = false,
 }: ClearPositionsDialogProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,6 +79,7 @@ export default function ClearPositionsDialog({
           size="sm"
           className="gap-2 bg-green-700 hover:bg-green-900"
           title="Clear all positions and candidates"
+          disabled={disabled}
         >
           <Trash2 size={16} />
           Clear All

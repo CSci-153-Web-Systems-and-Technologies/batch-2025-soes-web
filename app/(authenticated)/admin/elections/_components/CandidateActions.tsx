@@ -21,6 +21,7 @@ interface CandidateActionsProps {
   positions: PositionOption[];
   partylists: PartylistOption[];
   onDataChange?: () => void;
+  isElectionEnded?: boolean;
 }
 
 export default function CandidateActions({
@@ -28,6 +29,7 @@ export default function CandidateActions({
   positions,
   partylists,
   onDataChange,
+  isElectionEnded = false,
 }: CandidateActionsProps) {
   // 1. Manage state for both modals here
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -40,7 +42,12 @@ export default function CandidateActions({
       {/* Import Button */}
       <button
         onClick={() => setIsImportOpen(true)}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        disabled={isElectionEnded}
+        className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+          isElectionEnded
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+            : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
+        }`}
       >
         <Upload size={16} />
         <span className="hidden sm:inline">Import CSV</span>
@@ -49,7 +56,12 @@ export default function CandidateActions({
       {/* Add Candidate Button */}
       <button
         onClick={() => setIsAddOpen(true)}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
+        disabled={isElectionEnded}
+        className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+          isElectionEnded
+            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+            : "text-white bg-gray-900 hover:bg-gray-800"
+        }`}
       >
         <UserPlus size={16} />
         <span>Add Candidate</span>
@@ -65,6 +77,7 @@ export default function CandidateActions({
         isOpen={isImportOpen}
         onClose={() => setIsImportOpen(false)}
         onSuccess={onDataChange}
+        disabled={isElectionEnded}
       />
 
       <AddCandidateModal
@@ -74,6 +87,7 @@ export default function CandidateActions({
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         onSuccess={onDataChange}
+        disabled={isElectionEnded}
       />
     </>
   );

@@ -10,6 +10,7 @@ interface AddVoterModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  disabled?: boolean;
 }
 
 export default function AddVoterModal({
@@ -17,6 +18,7 @@ export default function AddVoterModal({
   isOpen,
   onClose,
   onSuccess,
+  disabled,
 }: AddVoterModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,6 +34,12 @@ export default function AddVoterModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (disabled) {
+      toast.error("Cannot add voters to an ended election.");
+      return;
+    }
+    
     setIsLoading(true);
 
     const supabase = createClient();

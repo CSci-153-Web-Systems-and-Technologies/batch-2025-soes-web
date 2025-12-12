@@ -35,6 +35,7 @@ export default function ResultsPage() {
   const [results, setResults] = useState<PositionResults[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalVotesCast, setTotalVotesCast] = useState(0);
+  const [electionStatus, setElectionStatus] = useState<string>("");
 
   const supabase = createClient();
 
@@ -69,6 +70,25 @@ export default function ResultsPage() {
   const fetchResults = async () => {
     setIsLoading(true);
     try {
+      // First, get the election status
+      const { data: election, error: electionError } = await supabase
+        .from("election_sessions")
+        .select("status")
+        .eq("id", electionId)
+        .single();
+
+      if (electionError) {
+        console.error(
+          "Election error:",
+          electionError.message || electionError
+        );
+        throw electionError;
+      }
+
+      if (election) {
+        setElectionStatus(election.status);
+      }
+
       // Get all positions for this election
       const { data: positions, error: positionsError } = await supabase
         .from("positions")
@@ -76,7 +96,13 @@ export default function ResultsPage() {
         .eq("election_id", electionId)
         .order("order", { ascending: true });
 
-      if (positionsError) throw positionsError;
+      if (positionsError) {
+        console.error(
+          "Positions error:",
+          positionsError.message || positionsError
+        );
+        throw positionsError;
+      }
 
       if (!positions || positions.length === 0) {
         setResults([]);
@@ -90,7 +116,13 @@ export default function ResultsPage() {
         .select("id, name, partylist_id, partylists(id, name)")
         .eq("election_id", electionId);
 
-      if (candidatesError) throw candidatesError;
+      if (candidatesError) {
+        console.error(
+          "Candidates error:",
+          candidatesError.message || candidatesError
+        );
+        throw candidatesError;
+      }
 
       // Create a map for quick candidate lookup
       const candidateMap = new Map<string, CandidateInfo>();
@@ -127,7 +159,15 @@ export default function ResultsPage() {
           .eq("election_id", electionId)
           .eq("position_id", position.id);
 
-        if (votesError) throw votesError;
+        if (votesError) {
+          console.error(
+            "Votes error for position",
+            position.id,
+            ":",
+            votesError.message || votesError
+          );
+          throw votesError;
+        }
 
         // Group votes by candidate
         const candidateVotes = new Map<string, VoteCount>();
@@ -175,7 +215,9 @@ export default function ResultsPage() {
       setResults(positionResults);
       setTotalVotesCast(totalVotes);
     } catch (error) {
-      console.error("Error fetching results:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.error("Error fetching results:", errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -209,10 +251,10 @@ export default function ResultsPage() {
           variant="outline"
           size="sm"
           className="gap-2"
-          disabled={isLoading}
+          disabled={isLoading || electionStatus === "ended"}
         >
           <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
-          Refresh
+          {electionStatus === "ended" ? "Election Ended" : "Refresh"}
         </Button>
       </div>
 

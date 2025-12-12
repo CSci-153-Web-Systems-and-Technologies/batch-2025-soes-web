@@ -20,10 +20,12 @@ import { useRouter } from "next/navigation";
 
 interface AddPartylistModalProps {
   electionId: string;
+  disabled?: boolean;
 }
 
 export default function AddPartylistModal({
   electionId,
+  disabled,
 }: AddPartylistModalProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +36,12 @@ export default function AddPartylistModal({
 
   const handleAddPartylist = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (disabled) {
+      toast.error("Cannot add partylists to an ended election.");
+      return;
+    }
+    
     setIsLoading(true);
 
     if (!name.trim()) {
@@ -70,7 +78,7 @@ export default function AddPartylistModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2 bg-green-700 hover:bg-green-900">
+        <Button disabled={disabled} className="gap-2 bg-green-700 hover:bg-green-900 disabled:opacity-50 disabled:cursor-not-allowed">
           <Plus size={18} />
           Add Partylist
         </Button>

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
 import {
   X,
   Upload,
@@ -25,6 +26,7 @@ interface ImportVotersModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  disabled?: boolean;
 }
 
 export default function ImportVotersModal({
@@ -32,6 +34,7 @@ export default function ImportVotersModal({
   isOpen,
   onClose,
   onSuccess,
+  disabled,
 }: ImportVotersModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -95,6 +98,11 @@ export default function ImportVotersModal({
 
   const handleFileUpload = async () => {
     if (!file) return;
+    
+    if (disabled) {
+      toast.error("Cannot import voters to an ended election.");
+      return;
+    }
 
     setIsLoading(true);
     setStatus("idle");

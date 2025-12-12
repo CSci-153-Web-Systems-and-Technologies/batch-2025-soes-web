@@ -8,9 +8,11 @@ import ImportVotersModal from "./ImportVotersModal";
 export default function VoterActions({
   electionId,
   onDataChange,
+  disabled,
 }: {
   electionId: string;
   onDataChange?: () => void;
+  disabled?: boolean;
 }) {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
@@ -21,7 +23,12 @@ export default function VoterActions({
         {/* Import CSV Button */}
         <button
           onClick={() => setIsImportOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+          disabled={disabled}
+          className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+            disabled
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+          }`}
         >
           <Upload size={16} />
           Import CSV
@@ -30,7 +37,12 @@ export default function VoterActions({
         {/* Add Manually Button */}
         <button
           onClick={() => setIsAddOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+          disabled={disabled}
+          className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+            disabled
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-gray-900 text-white hover:bg-gray-800"
+          }`}
         >
           <UserPlus size={16} />
           Add Voter
@@ -43,6 +55,7 @@ export default function VoterActions({
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         onSuccess={onDataChange}
+        disabled={disabled}
       />
 
       <ImportVotersModal
@@ -50,6 +63,7 @@ export default function VoterActions({
         isOpen={isImportOpen}
         onClose={() => setIsImportOpen(false)}
         onSuccess={onDataChange}
+        disabled={disabled}
       />
     </>
   );

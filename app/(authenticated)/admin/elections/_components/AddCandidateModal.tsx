@@ -18,6 +18,7 @@ interface AddCandidateModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  disabled?: boolean;
 }
 
 export default function AddCandidateModal({
@@ -27,6 +28,7 @@ export default function AddCandidateModal({
   isOpen,
   onClose,
   onSuccess,
+  disabled,
 }: AddCandidateModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,6 +43,11 @@ export default function AddCandidateModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (disabled) {
+      toast.error("Cannot add candidates to an ended election.");
+      return;
+    }
 
     if (!formData.position_id) {
       toast.error("Please select a position.");
