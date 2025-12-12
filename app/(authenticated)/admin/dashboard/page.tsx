@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, Vote, TrendingUp, BarChart3, Plus } from "lucide-react";
 import { format } from "date-fns";
+import DashboardElectionSelector from "../elections/_components/DashboardElectionSelector";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -18,12 +19,22 @@ export default async function DashboardPage() {
     return <div>Not authenticated</div>;
   }
 
-  // Fetch active election - filtered by current user
+  // Fetch all active elections
+  const { data: activeElections } = await supabase
+    .from("election_sessions")
+    .select("id, title, status")
+    .eq("user_id", user.id)
+    .eq("status", "active")
+    .order("created_at", { ascending: false });
+
+  // Fetch detailed data for first active election
   const { data: activeElection } = await supabase
     .from("election_sessions")
     .select("*")
     .eq("user_id", user.id)
     .eq("status", "active")
+    .order("created_at", { ascending: false })
+    .limit(1)
     .single();
 
   // If no active election, show empty state
@@ -90,13 +101,21 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6 pt-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Current Running Election Statistics
-        </h1>
-        <p className="text-gray-600 text-sm mt-1">
-          Monitor and manage your election campaign
-        </p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Current Running Election Statistics
+          </h1>
+          <p className="text-gray-600 text-sm mt-1">
+            Monitor and manage your election campaign
+          </p>
+        </div>
+        {activeElections && activeElections.length > 1 && (
+          <DashboardElectionSelector
+            elections={activeElections as Array<{ id: string; title: string }>}
+            defaultElectionId={activeElection.id}
+          />
+        )}
       </div>
 
       {/* Active Election Card - Compact */}

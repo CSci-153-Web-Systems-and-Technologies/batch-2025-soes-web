@@ -3,7 +3,6 @@ import { createClient } from "@/utils/supabase/server";
 import { format } from "date-fns";
 import { ArrowRight } from "lucide-react";
 import CreateElectionModal from "./_components/CreateElectionModal";
-import ElectionSelectorDashboard from "./_components/ElectionSelectorDashboard";
 
 export default async function ElectionsListPage() {
   const supabase = await createClient();
@@ -80,15 +79,6 @@ export default async function ElectionsListPage() {
         </div>
 
         <div className="flex items-center gap-4">
-          <ElectionSelectorDashboard
-            elections={
-              electionsWithTurnout as Array<{
-                id: string;
-                title: string;
-                status: string;
-              }>
-            }
-          />
           <CreateElectionModal />
         </div>
       </div>
