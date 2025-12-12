@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Trophy, Users, Vote, TrendingUp } from "lucide-react";
+import { Trophy, Users, Vote, TrendingUp, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface Candidate {
@@ -59,8 +59,14 @@ export default function ResultsClient({
 }: ResultsClientProps) {
   const router = useRouter();
   const [timeUntilRefresh, setTimeUntilRefresh] = useState(1800); // 30 minutes in seconds
+  const isActive = election.status === "active";
+  const isDraft = election.status === "draft";
+  const isEnded = election.status === "ended";
 
   useEffect(() => {
+    // Only set up auto-refresh for active elections
+    if (!isActive) return;
+
     const interval = setInterval(() => {
       setTimeUntilRefresh((prev) => {
         if (prev <= 1) {
@@ -73,7 +79,7 @@ export default function ResultsClient({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [router]);
+  }, [router, isActive]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -100,19 +106,81 @@ export default function ResultsClient({
               {election.title}
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Live Election Results
+              {isEnded
+                ? "Final Election Results"
+                : isDraft
+                ? "Election Results Preview"
+                : "Live Election Results"}
             </p>
           </div>
 
-          {/* Auto-refresh indicator */}
-          <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span>Live • Updates in {formatTime(timeUntilRefresh)}</span>
+          {/* Status-based indicator */}
+          {isActive && (
+            <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span>Live • Updates in {formatTime(timeUntilRefresh)}</span>
+              </div>
+            </div>
+          )}
+          {isDraft && (
+            <div className="flex items-center gap-2 mt-3 text-xs text-yellow-600 dark:text-yellow-400">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                <span>Deactivated</span>
+              </div>
+            </div>
+          )}
+          {isEnded && (
+            <div className="flex items-center gap-2 mt-3 text-xs text-blue-600 dark:text-blue-400">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-blue-500" />
+                <span>Final Results</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Status Banners */}
+      {isDraft && (
+        <div className="bg-yellow-50 dark:bg-yellow-950/20 border-b border-yellow-200 dark:border-yellow-800">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-yellow-900 dark:text-yellow-200">
+                  {election.title} is on Break
+                </h3>
+                <p className="text-sm text-yellow-800 dark:text-yellow-300 mt-1">
+                  This election has been temporarily deactivated by
+                  administrators and will be back soon. Results shown are
+                  current but voting is paused.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {isEnded && (
+        <div className="bg-blue-50 dark:bg-blue-950/20 border-b border-blue-200 dark:border-blue-800">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex items-start gap-3">
+              <Trophy className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-blue-900 dark:text-blue-200">
+                  {election.title} Has Ended
+                </h3>
+                <p className="text-sm text-blue-800 dark:text-blue-300 mt-1">
+                  This election has concluded. The results displayed below are
+                  final and official.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="max-w-7xl mx-auto px-4 py-8">
