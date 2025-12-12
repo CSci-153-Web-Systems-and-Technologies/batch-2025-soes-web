@@ -38,7 +38,7 @@ export async function verifyVoter(schoolId: string, accessCode: string) {
 interface Vote {
   electionId: string;
   positionId: string;
-  candidateId: string;
+  candidateId: string | null;
   voterId: string;
 }
 

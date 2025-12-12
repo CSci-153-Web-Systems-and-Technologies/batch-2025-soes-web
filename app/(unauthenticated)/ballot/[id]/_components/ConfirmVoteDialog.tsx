@@ -30,7 +30,7 @@ interface Position {
 interface ConfirmVoteDialogProps {
   open: boolean;
   onClose: () => void;
-  selections: Record<string, string>;
+  selections: Record<string, string | null>;
   positions: Position[];
   electionId: string;
   voterId: string;
@@ -72,6 +72,7 @@ export default function ConfirmVoteDialog({
 
   const getSelectedCandidate = (positionId: string) => {
     const candidateId = selections[positionId];
+    if (candidateId === null) return null; // Abstain
     const position = positions.find((p) => p.id === positionId);
     return position?.candidates.find((c) => c.id === candidateId);
   };
@@ -95,6 +96,28 @@ export default function ConfirmVoteDialog({
           </p>
 
           {positions.map((position) => {
+            const candidateId = selections[position.id];
+
+            // Handle abstain
+            if (candidateId === null) {
+              return (
+                <div
+                  key={position.id}
+                  className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg border border-border"
+                >
+                  <CheckCircle2 className="w-5 h-5 text-gray-500 dark:text-gray-400 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-muted-foreground">
+                      {position.title}
+                    </p>
+                    <p className="font-medium text-muted-foreground italic">
+                      Abstained
+                    </p>
+                  </div>
+                </div>
+              );
+            }
+
             const candidate = getSelectedCandidate(position.id);
             if (!candidate) return null;
 

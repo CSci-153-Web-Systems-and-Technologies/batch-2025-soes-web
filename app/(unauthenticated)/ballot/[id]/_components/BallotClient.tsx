@@ -49,17 +49,22 @@ export default function BallotClient({
   positions,
   voter,
 }: BallotClientProps) {
-  const [selections, setSelections] = useState<Record<string, string>>({});
+  const [selections, setSelections] = useState<Record<string, string | null>>(
+    {}
+  );
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-  const handleSelectCandidate = (positionId: string, candidateId: string) => {
+  const handleSelectCandidate = (
+    positionId: string,
+    candidateId: string | null
+  ) => {
     setSelections((prev) => ({
       ...prev,
       [positionId]: candidateId,
     }));
   };
 
-  const isSelected = (positionId: string, candidateId: string) => {
+  const isSelected = (positionId: string, candidateId: string | null) => {
     return selections[positionId] === candidateId;
   };
 
@@ -135,77 +140,107 @@ export default function BallotClient({
                       No candidates available for this position
                     </div>
                   ) : (
-                    position.candidates.map((candidate) => {
-                      const selected = isSelected(position.id, candidate.id);
+                    <>
+                      {position.candidates.map((candidate) => {
+                        const selected = isSelected(position.id, candidate.id);
 
-                      return (
-                        <button
-                          key={candidate.id}
-                          onClick={() =>
-                            handleSelectCandidate(position.id, candidate.id)
-                          }
-                          className={`w-full p-4 rounded-lg border-2 transition-all ${
-                            selected
-                              ? "border-green-500 bg-green-50/50 dark:bg-green-950/20"
-                              : "border-border bg-card hover:border-muted-foreground/50"
-                          }`}
-                        >
-                          <div className="flex items-start gap-4">
-                            {/* Avatar */}
-                            <div className="relative flex-shrink-0">
-                              {candidate.avatar_url ? (
-                                <div className="w-12 h-12 rounded-full overflow-hidden bg-muted border border-border">
-                                  <Image
-                                    src={candidate.avatar_url}
-                                    alt={candidate.full_name}
-                                    width={48}
-                                    height={48}
-                                    className="object-cover"
-                                  />
-                                </div>
-                              ) : (
-                                <div className="w-12 h-12 rounded-full bg-muted border border-border flex items-center justify-center">
-                                  <span className="text-sm font-semibold text-muted-foreground">
-                                    {getInitials(candidate.full_name)}
+                        return (
+                          <button
+                            key={candidate.id}
+                            onClick={() =>
+                              handleSelectCandidate(position.id, candidate.id)
+                            }
+                            className={`w-full p-4 rounded-lg border-2 transition-all ${
+                              selected
+                                ? "border-green-500 bg-green-50/50 dark:bg-green-950/20"
+                                : "border-border bg-card hover:border-muted-foreground/50"
+                            }`}
+                          >
+                            <div className="flex items-start gap-4">
+                              {/* Avatar */}
+                              <div className="relative flex-shrink-0">
+                                {candidate.avatar_url ? (
+                                  <div className="w-12 h-12 rounded-full overflow-hidden bg-muted border border-border">
+                                    <Image
+                                      src={candidate.avatar_url}
+                                      alt={candidate.full_name}
+                                      width={48}
+                                      height={48}
+                                      className="object-cover"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="w-12 h-12 rounded-full bg-muted border border-border flex items-center justify-center">
+                                    <span className="text-sm font-semibold text-muted-foreground">
+                                      {getInitials(candidate.full_name)}
+                                    </span>
+                                  </div>
+                                )}
+                                {selected && (
+                                  <div className="absolute -top-1 -right-1 bg-green-500 rounded-full p-0.5">
+                                    <CheckCircle2 className="w-4 h-4 text-white" />
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Candidate Info */}
+                              <div className="flex-1 text-left">
+                                <h3 className="font-semibold text-foreground">
+                                  {candidate.full_name}
+                                </h3>
+                                {candidate.partylists && (
+                                  <span className="inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium bg-blue-50/50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                                    {candidate.partylists.name}
+                                  </span>
+                                )}
+                                {candidate.description && (
+                                  <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+                                    {candidate.description}
+                                  </p>
+                                )}
+                              </div>
+
+                              {/* Selection Indicator */}
+                              {selected && (
+                                <div className="flex items-center text-green-600 dark:text-green-400">
+                                  <span className="text-sm font-medium">
+                                    Selected
                                   </span>
                                 </div>
                               )}
-                              {selected && (
-                                <div className="absolute -top-1 -right-1 bg-green-500 rounded-full p-0.5">
-                                  <CheckCircle2 className="w-4 h-4 text-white" />
-                                </div>
-                              )}
                             </div>
+                          </button>
+                        );
+                      })}
 
-                            {/* Candidate Info */}
-                            <div className="flex-1 text-left">
-                              <h3 className="font-semibold text-foreground">
-                                {candidate.full_name}
-                              </h3>
-                              {candidate.partylists && (
-                                <span className="inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium bg-blue-50/50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
-                                  {candidate.partylists.name}
-                                </span>
-                              )}
-                              {candidate.description && (
-                                <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-                                  {candidate.description}
-                                </p>
-                              )}
-                            </div>
-
-                            {/* Selection Indicator */}
-                            {selected && (
-                              <div className="flex items-center text-green-600 dark:text-green-400">
-                                <span className="text-sm font-medium">
-                                  Selected
-                                </span>
-                              </div>
-                            )}
+                      {/* Abstain Option */}
+                      <button
+                        onClick={() => handleSelectCandidate(position.id, null)}
+                        className={`w-full p-4 rounded-lg border-2 transition-all ${
+                          isSelected(position.id, null)
+                            ? "border-gray-500 bg-gray-50/50 dark:bg-gray-900/20"
+                            : "border-border bg-card hover:border-muted-foreground/50"
+                        }`}
+                      >
+                        <div className="flex items-center justify-center gap-3">
+                          <div className="text-center">
+                            <h3 className="font-semibold text-muted-foreground">
+                              Abstain
+                            </h3>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              I choose not to vote for this position
+                            </p>
                           </div>
-                        </button>
-                      );
-                    })
+
+                          {/* Selection Indicator */}
+                          {isSelected(position.id, null) && (
+                            <div className="flex items-center text-gray-600 dark:text-gray-400">
+                              <CheckCircle2 className="w-5 h-5" />
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    </>
                   )}
                 </div>
               </div>
