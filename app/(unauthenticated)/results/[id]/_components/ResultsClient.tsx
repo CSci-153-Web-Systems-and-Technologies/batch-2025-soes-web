@@ -65,7 +65,6 @@ export default function ResultsClient({
       setTimeUntilRefresh((prev) => {
         if (prev <= 1) {
           // Refresh the page
-          setIsRefreshing(true);
           router.refresh();
           return 1800;
         }

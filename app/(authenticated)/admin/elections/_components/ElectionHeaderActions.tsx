@@ -47,7 +47,7 @@ export default function ElectionHeaderActions({
 
   const ballotUrl = `${
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-  }/ballot/${electionId}`;
+  }/vote?election=${electionId}`;
   const resultsUrl = `${
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   }/results/${electionId}`;
