@@ -96,17 +96,17 @@ export default function EditPartylistModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-gray-900">
+          <DialogTitle className="text-lg font-semibold text-foreground">
             Edit Partylist
           </DialogTitle>
-          <DialogDescription className="text-sm text-gray-600">
+          <DialogDescription className="text-sm text-muted-foreground">
             Update partylist information
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-sm font-medium text-gray-900">
+            <Label htmlFor="name" className="text-sm font-medium text-foreground">
               Partylist Name <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -123,7 +123,7 @@ export default function EditPartylistModal({
           <div className="space-y-2">
             <Label
               htmlFor="description"
-              className="text-sm font-medium text-gray-900"
+              className="text-sm font-medium text-foreground"
             >
               Description
             </Label>

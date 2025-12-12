@@ -38,17 +38,17 @@ export default async function DashboardPage() {
   // If no active election, show empty state
   if (!activeElection) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="min-h-[60vh] flex items-center justify-center p-4">
         <div className="text-center space-y-4">
           <div className="flex justify-center mb-6">
-            <div className="p-4 bg-gray-100 rounded-full">
-              <Vote className="w-12 h-12 text-gray-400" />
+            <div className="p-4 bg-muted rounded-full">
+              <Vote className="w-12 h-12 text-muted-foreground" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
             No Election Running
           </h1>
-          <p className="text-gray-500 max-w-md mx-auto">
+          <p className="text-muted-foreground max-w-md mx-auto">
             There is currently no active election. Create a new election to get
             started.
           </p>

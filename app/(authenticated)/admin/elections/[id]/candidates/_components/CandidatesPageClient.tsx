@@ -100,17 +100,17 @@ export default function CandidatesPageClient({
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Candidates</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-lg font-semibold text-foreground">Candidates</h2>
+          <p className="text-sm text-muted-foreground">
             Manage the official candidates running for positions.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             onClick={handleRefresh}
             disabled={isLoading}
             variant="outline"
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="w-full sm:w-auto"
           >
             <RefreshCw
               className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}

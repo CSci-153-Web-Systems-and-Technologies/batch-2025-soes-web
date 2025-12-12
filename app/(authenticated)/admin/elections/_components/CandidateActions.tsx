@@ -43,10 +43,10 @@ export default function CandidateActions({
       <button
         onClick={() => setIsImportOpen(true)}
         disabled={isElectionEnded}
-        className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+        className={`flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors w-full sm:w-auto ${
           isElectionEnded
-            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-            : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
+            ? "bg-muted text-muted-foreground cursor-not-allowed"
+            : "text-foreground bg-background border border-input hover:bg-accent"
         }`}
       >
         <Upload size={16} />
@@ -57,10 +57,10 @@ export default function CandidateActions({
       <button
         onClick={() => setIsAddOpen(true)}
         disabled={isElectionEnded}
-        className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+        className={`flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors w-full sm:w-auto ${
           isElectionEnded
-            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-            : "text-white bg-gray-900 hover:bg-gray-800"
+            ? "bg-muted text-muted-foreground cursor-not-allowed"
+            : "text-primary-foreground bg-primary hover:bg-primary/90"
         }`}
       >
         <UserPlus size={16} />

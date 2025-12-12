@@ -63,19 +63,19 @@ export default function VotersPageClient({
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-lg font-semibold text-foreground">
             Registered Voters
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Manage who is allowed to vote in this session.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             onClick={handleRefresh}
             disabled={isLoading}
             variant="outline"
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="w-full sm:w-auto"
           >
             <RefreshCw
               className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
@@ -94,34 +94,34 @@ export default function VotersPageClient({
       {/* Search Bar */}
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className="h-4 w-4 text-gray-400" />
+          <Search className="h-4 w-4 text-muted-foreground" />
         </div>
         <input
           type="text"
           placeholder="Search by name or school ID..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg w-full sm:w-80 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="pl-10 pr-4 py-2 border border-border rounded-lg w-full sm:w-80 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
 
       {/* Table */}
-      <div className="border border-gray-200 rounded-xl overflow-hidden shadow-sm bg-white">
+      <div className="border border-border rounded-xl overflow-x-auto shadow-sm bg-card">
         <table className="w-full text-sm text-left">
-          <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
+          <thead className="bg-muted text-muted-foreground font-medium border-b border-border">
             <tr>
-              <th className="px-6 py-3">School ID</th>
-              <th className="px-6 py-3">Full Name</th>
-              <th className="px-6 py-3">Status</th>
-              <th className="px-6 py-3 text-right">Actions</th>
+              <th className="px-4 sm:px-6 py-3">School ID</th>
+              <th className="px-4 sm:px-6 py-3">Full Name</th>
+              <th className="px-4 sm:px-6 py-3 hidden md:table-cell">Status</th>
+              <th className="px-4 sm:px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-border">
             {!filteredVoters || filteredVoters.length === 0 ? (
               <tr>
                 <td
                   colSpan={4}
-                  className="px-6 py-12 text-center text-gray-500"
+                  className="px-4 sm:px-6 py-12 text-center text-muted-foreground"
                 >
                   {voters.length === 0
                     ? 'No voters found. Click "Add Voter" to import students.'
@@ -132,15 +132,15 @@ export default function VotersPageClient({
               filteredVoters.map((voter: Voter) => (
                 <tr
                   key={voter.id}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-muted/50 transition-colors"
                 >
-                  <td className="px-6 py-3 font-mono text-gray-600">
+                  <td className="px-4 sm:px-6 py-3 font-mono text-muted-foreground">
                     {voter.school_id}
                   </td>
-                  <td className="px-6 py-3 font-medium text-gray-900">
+                  <td className="px-4 sm:px-6 py-3 font-medium text-foreground">
                     {voter.full_name}
                   </td>
-                  <td className="px-6 py-3">
+                  <td className="px-4 sm:px-6 py-3 hidden md:table-cell">
                     {voter.has_voted ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         Voted
@@ -152,7 +152,7 @@ export default function VotersPageClient({
                     )}
                   </td>
 
-                  <td className="px-6 py-3 text-right">
+                  <td className="px-4 sm:px-6 py-3 text-right">
                     <VoterRowActions
                       voterId={voter.id}
                       hasVoted={voter.has_voted}

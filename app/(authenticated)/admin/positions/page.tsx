@@ -81,10 +81,10 @@ export default function PositionsPage() {
   );
 
   return (
-    <div className="p-8 space-y-8 bg-gray-50/50 min-h-screen">
+    <div className="p-4 md:p-8 space-y-8 bg-background min-h-screen">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
             Position Templates
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
@@ -93,21 +93,21 @@ export default function PositionsPage() {
         </div>
         <Button
           onClick={handleCreate}
-          className="bg-green-700 hover:bg-green-800 text-white shadow-sm"
+          className="bg-green-700 hover:bg-green-800 text-white shadow-sm w-full md:w-auto"
         >
           <Plus className="mr-2 h-4 w-4" /> Create Template
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <StatCard title="Total Templates" value={totalTemplates} />
         <StatCard title="Active Templates" value={activeTemplates} />
         <StatCard title="Total Positions" value={totalPositions} />
       </div>
 
-      <Card className="border-gray-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold text-gray-900">
+          <CardTitle className="text-base font-semibold text-foreground">
             All Position Templates
           </CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -117,7 +117,7 @@ export default function PositionsPage() {
         <CardContent>
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             </div>
           ) : (
             <PositionsTable
@@ -145,12 +145,12 @@ export default function PositionsPage() {
 
 function StatCard({ title, value }: { title: string; value: number | string }) {
   return (
-    <Card className="shadow-sm border-gray-200">
+    <Card className="shadow-sm border-border">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <span className="text-sm font-medium text-gray-500">{title}</span>
+        <span className="text-sm font-medium text-muted-foreground">{title}</span>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold text-gray-900">{value}</div>
+        <div className="text-2xl font-bold text-foreground">{value}</div>
       </CardContent>
     </Card>
   );

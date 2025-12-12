@@ -91,39 +91,39 @@ export default function CreateElectionModal() {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-200">
+          <div className="bg-card rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
             
             {/* Header */}
-            <div className="flex justify-between items-center p-4 border-b bg-gray-50">
-              <h2 className="font-semibold text-gray-900">Create New Election</h2>
-              <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-gray-600">
+            <div className="flex justify-between items-center p-4 md:p-6 border-b border-border bg-muted">
+              <h2 className="text-lg md:text-xl font-semibold text-foreground">Create New Election</h2>
+              <button onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
                 <X size={20} />
               </button>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-5">
+            <form onSubmit={handleSubmit} className="p-4 md:p-6 space-y-4 md:space-y-5">
               {error && (
-                <div className="bg-red-50 text-red-600 p-3 rounded text-sm border border-red-100">
+                <div className="bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 p-3 rounded text-sm border border-red-100 dark:border-red-800">
                   {error}
                 </div>
               )}
 
               {/* Title Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Title</label>
                 <input 
                   name="title" 
                   required 
                   placeholder="e.g. 2025 CS Council" 
-                  className="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" 
+                  className="w-full border border-input bg-background text-foreground rounded-md p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" 
                 />
               </div>
 
               {/* START DATE & TIME ROW */}
               <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">Start Date & Time</label>
-                <div className="flex gap-2">
+                <label className="block text-sm font-medium text-foreground">Start Date & Time</label>
+                <div className="flex flex-col sm:flex-row gap-2">
                   {/* Date Picker */}
                   <Popover>
                     <PopoverTrigger asChild>
@@ -145,15 +145,15 @@ export default function CreateElectionModal() {
                     type="time"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="border rounded-md px-3 py-2 text-sm w-[130px] focus:ring-2 focus:ring-green-500 outline-none"
+                    className="border border-input bg-background text-foreground rounded-md px-3 py-2 text-sm w-full sm:w-[130px] focus:ring-2 focus:ring-green-500 outline-none"
                   />
                 </div>
               </div>
 
               {/* END DATE & TIME ROW */}
               <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">End Date & Time</label>
-                <div className="flex gap-2">
+                <label className="block text-sm font-medium text-foreground">End Date & Time</label>
+                <div className="flex flex-col sm:flex-row gap-2">
                   {/* Date Picker */}
                   <Popover>
                     <PopoverTrigger asChild>
@@ -175,33 +175,33 @@ export default function CreateElectionModal() {
                     type="time"
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="border rounded-md px-3 py-2 text-sm w-[130px] focus:ring-2 focus:ring-green-500 outline-none"
+                    className="border border-input bg-background text-foreground rounded-md px-3 py-2 text-sm w-full sm:w-[130px] focus:ring-2 focus:ring-green-500 outline-none"
                   />
                 </div>
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Description</label>
                 <textarea 
                   name="description" 
                   rows={3} 
-                  className="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" 
+                  className="w-full border border-input bg-background text-foreground rounded-md p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" 
                 />
               </div>
 
-              <div className="pt-2 flex justify-end gap-3">
+              <div className="pt-2 flex flex-col sm:flex-row justify-end gap-2">
                 <button 
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+                  className="px-4 py-2 text-sm font-medium text-foreground hover:bg-accent rounded-md w-full sm:w-auto"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
                   disabled={loading}
-                  className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 w-full sm:w-auto"
                 >
                   {loading ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
                   Create

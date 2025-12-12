@@ -54,10 +54,10 @@ export default async function SingleElectionLayout({
           <span
             className={`px-2.5 py-0.5 text-xs font-semibold rounded-full border ${
               election.status === "active"
-                ? "bg-green-100 text-green-700 border-green-200"
+                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800"
                 : election.status === "ended"
-                ? "bg-red-100 text-red-700 border-red-200"
-                : "bg-yellow-50 text-yellow-700 border-yellow-200"
+                ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800"
+                : "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800"
             }`}
           >
             {election.status.toUpperCase()}

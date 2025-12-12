@@ -105,12 +105,12 @@ export default function AddCandidateModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md animate-in fade-in zoom-in-95 duration-200 my-8">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-foreground">
             Add New Candidate
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <X size={20} />
           </button>
@@ -147,8 +147,8 @@ export default function AddCandidateModal({
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">
-              School ID <span className="text-red-500">*</span>
+            <label className="text-sm font-medium text-foreground">
+              Position <span className="text-red-500">*</span>
             </label>
             <input
               required
@@ -162,7 +162,7 @@ export default function AddCandidateModal({
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-foreground">
               Full Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -192,9 +192,9 @@ export default function AddCandidateModal({
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-foreground">
               Partylist{" "}
-              <span className="text-gray-400 font-normal">(Optional)</span>
+              <span className="text-muted-foreground font-normal">(Optional)</span>
             </label>
             <select
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
@@ -237,7 +237,7 @@ export default function AddCandidateModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex-1 px-4 py-2 text-sm font-medium text-foreground bg-muted hover:bg-accent rounded-lg transition-colors"
             >
               Cancel
             </button>

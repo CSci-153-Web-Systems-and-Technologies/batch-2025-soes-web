@@ -88,12 +88,12 @@ export default async function ElectionPositionsPage({
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Positions</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-lg font-semibold text-foreground">Positions</h2>
+          <p className="text-sm text-muted-foreground">
             Manage the positions candidates can run for.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {/* Wrapper handles the client-side modal state */}
           <ImportTemplateModalWrapper
             electionId={electionId}
@@ -117,15 +117,15 @@ export default async function ElectionPositionsPage({
 
       {/* Positions List */}
       {positions.length === 0 ? (
-        <Card className="bg-white border border-gray-200">
+        <Card className="bg-card border border-border">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <div className="flex flex-col items-center justify-center space-y-3">
-              <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
-                <LayoutTemplate className="h-6 w-6 text-gray-400" />
+              <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+                <LayoutTemplate className="h-6 w-6 text-muted-foreground" />
               </div>
               <div className="text-center">
-                <p className="font-medium text-gray-900">No positions yet</p>
-                <p className="text-gray-500 text-sm mt-1 max-w-sm mx-auto">
+                <p className="font-medium text-foreground">No positions yet</p>
+                <p className="text-muted-foreground text-sm mt-1 max-w-sm mx-auto">
                   You can manually add positions or import them from a template
                   to get started quickly.
                 </p>
@@ -138,21 +138,21 @@ export default async function ElectionPositionsPage({
           {positions.map((pos) => (
             <Card
               key={pos.id}
-              className="bg-white border border-gray-200 overflow-hidden"
+              className="bg-card border border-border overflow-hidden"
             >
               <CardHeader className="pb-0">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
-                      <span className="text-xs font-mono text-gray-400">
+                      <span className="text-xs font-mono text-muted-foreground">
                         #{pos.rank}
                       </span>
-                      <h3 className="text-lg font-semibold text-gray-900">
+                      <h3 className="text-lg font-semibold text-foreground">
                         {pos.title}
                       </h3>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium">
                         <Users size={14} className="mr-1.5" />
                         {pos.rules?.vote_limit || 1} Seat(s)
                       </span>

@@ -143,22 +143,22 @@ export default function PartylistsPage() {
     totalPartylists > 0 ? Math.round(totalMembers / totalPartylists) : 0;
 
   return (
-    <div className="p-8 space-y-8 bg-gray-50/50 min-h-screen">
+    <div className="p-4 md:p-8 space-y-8 bg-background min-h-screen">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
             Manage Partylists
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
             Create and manage political party lists and organizations
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
           <Button
             onClick={handleRefresh}
             disabled={isLoading}
             variant="outline"
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="border-input text-foreground hover:bg-accent w-full sm:w-auto"
           >
             <RefreshCw
               className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
@@ -168,13 +168,13 @@ export default function PartylistsPage() {
           <Button
             onClick={() => setIsImportModalOpen(true)}
             variant="outline"
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="border-input text-foreground hover:bg-accent w-full sm:w-auto"
           >
             <Upload className="mr-2 h-4 w-4" /> Import CSV
           </Button>
           <Button
             onClick={() => setIsCreateModalOpen(true)}
-            className="bg-green-700 hover:bg-green-800 text-white shadow-sm"
+            className="bg-green-700 hover:bg-green-800 text-white shadow-sm w-full sm:w-auto"
           >
             <Plus className="mr-2 h-4 w-4" /> Create Partylist
           </Button>
@@ -182,7 +182,7 @@ export default function PartylistsPage() {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard title="Total Partylists" value={totalPartylists} />
         <StatCard title="Total Members" value={totalMembers} />
         <StatCard title="Average Members" value={averageMembersPerList} />
@@ -190,9 +190,9 @@ export default function PartylistsPage() {
       </div>
 
       {/* Partylists Table */}
-      <Card className="border-gray-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold text-gray-900">
+          <CardTitle className="text-base font-semibold text-foreground">
             All Partylists
           </CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -202,28 +202,29 @@ export default function PartylistsPage() {
         <CardContent>
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             </div>
           ) : partylists.length === 0 ? (
             <div className="flex items-center justify-center py-8">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 No partylists yet. Create one to get started.
               </p>
             </div>
           ) : (
+            <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-b border-gray-200 bg-gray-50">
-                  <TableHead className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                <TableRow className="border-b border-border bg-muted">
+                  <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     Name
                   </TableHead>
-                  <TableHead className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                  <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">
                     Description
                   </TableHead>
-                  <TableHead className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                  <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                     Candidates
                   </TableHead>
-                  <TableHead className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wide text-right">
+                  <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide text-right">
                     Actions
                   </TableHead>
                 </TableRow>
@@ -232,14 +233,14 @@ export default function PartylistsPage() {
                 {partylists.map((partylist) => (
                   <TableRow
                     key={partylist.id}
-                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                    className="border-b border-border hover:bg-accent transition-colors"
                   >
                     <TableCell className="px-4 py-4">
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-foreground">
                         {partylist.name}
                       </div>
                     </TableCell>
-                    <TableCell className="px-4 py-4 text-sm text-gray-600">
+                    <TableCell className="px-4 py-4 text-sm text-muted-foreground hidden md:table-cell">
                       {partylist.description || "-"}
                     </TableCell>
                     <TableCell className="px-4 py-4">
@@ -277,6 +278,7 @@ export default function PartylistsPage() {
                 ))}
               </TableBody>
             </Table>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -303,12 +305,12 @@ export default function PartylistsPage() {
 
 function StatCard({ title, value }: { title: string; value: number | string }) {
   return (
-    <Card className="shadow-sm border-gray-200">
+    <Card className="shadow-sm border-border">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <span className="text-sm font-medium text-gray-500">{title}</span>
+        <span className="text-sm font-medium text-muted-foreground">{title}</span>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold text-gray-900">{value}</div>
+        <div className="text-2xl font-bold text-foreground">{value}</div>
       </CardContent>
     </Card>
   );

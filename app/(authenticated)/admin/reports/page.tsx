@@ -36,11 +36,11 @@ export default async function ReportsPage() {
     (completedElections as unknown as CompletedElection[]) || [];
 
   return (
-    <div className="space-y-6 mt-6">
+    <div className="space-y-6 mt-6 p-4 md:p-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Reports & Results</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">Reports & Results</h1>
+        <p className="text-muted-foreground mt-2">
           View final election results and generate comprehensive reports for
           completed elections
         </p>
@@ -50,11 +50,11 @@ export default async function ReportsPage() {
       {elections.length === 0 ? (
         <Card className="border-dashed">
           <CardContent className="pt-12 pb-12 text-center">
-            <BarChart3 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-lg font-semibold text-gray-900 mb-2">
+            <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-lg font-semibold text-foreground mb-2">
               No Completed Elections
             </p>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               Completed elections will appear here. End an active election
               session to generate reports.
             </p>

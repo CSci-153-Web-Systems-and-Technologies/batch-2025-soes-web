@@ -231,8 +231,8 @@ export default function ResultsPage() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="flex flex-col items-center gap-4">
-          <RefreshCw className="w-8 h-8 animate-spin text-gray-400" />
-          <p className="text-gray-500">Loading results...</p>
+          <RefreshCw className="w-8 h-8 animate-spin text-muted-foreground" />
+          <p className="text-muted-foreground">Loading results...</p>
         </div>
       </div>
     );
@@ -241,16 +241,16 @@ export default function ResultsPage() {
   return (
     <div className="space-y-6">
       {/* Header with Refresh */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-gray-700" />
-          <h2 className="text-2xl font-bold tracking-tight">Live Results</h2>
+          <BarChart3 className="w-5 h-5 text-foreground" />
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">Live Results</h2>
         </div>
         <Button
           onClick={handleRefresh}
           variant="outline"
           size="sm"
-          className="gap-2"
+          className="gap-2 w-full sm:w-auto"
           disabled={isLoading || electionStatus === "ended"}
         >
           <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
@@ -259,14 +259,14 @@ export default function ResultsPage() {
       </div>
 
       {/* Total Votes Cast */}
-      <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
+      <Card className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 border-blue-200 dark:border-blue-800">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg text-blue-900">
+          <CardTitle className="text-lg text-blue-900 dark:text-blue-300">
             Total Votes Cast
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-4xl font-bold text-blue-600">{totalVotesCast}</p>
+          <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">{totalVotesCast}</p>
         </CardContent>
       </Card>
 
@@ -275,19 +275,19 @@ export default function ResultsPage() {
         {results.length === 0 ? (
           <Card>
             <CardContent className="pt-8 text-center">
-              <p className="text-gray-500">No votes cast yet</p>
+              <p className="text-muted-foreground">No votes cast yet</p>
             </CardContent>
           </Card>
         ) : (
           results.map((position) => (
             <Card key={position.positionId}>
               <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                   <div>
                     <CardTitle className="text-lg">
                       {position.positionName}
                     </CardTitle>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       {position.totalVotes} vote
                       {position.totalVotes !== 1 ? "s" : ""}
                     </p>
@@ -296,7 +296,7 @@ export default function ResultsPage() {
               </CardHeader>
               <CardContent>
                 {position.votes.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">
+                  <p className="text-muted-foreground text-center py-8">
                     No votes for this position yet
                   </p>
                 ) : (
@@ -311,28 +311,28 @@ export default function ResultsPage() {
 
                       return (
                         <div key={candidate.candidateId} className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                              <p className="font-semibold text-gray-900">
+                          <div className="flex items-center justify-between gap-4">
+                            <div className="flex-1 min-w-0">
+                              <p className="font-semibold text-foreground truncate">
                                 {candidate.candidateName}
                               </p>
                               {candidate.partylist && (
-                                <p className="text-sm text-gray-500">
+                                <p className="text-sm text-muted-foreground">
                                   {candidate.partylist}
                                 </p>
                               )}
                             </div>
-                            <div className="text-right">
-                              <p className="text-lg font-bold text-gray-900">
+                            <div className="text-right flex-shrink-0">
+                              <p className="text-lg font-bold text-foreground">
                                 {candidate.voteCount}
                               </p>
-                              <p className="text-sm text-gray-500">
+                              <p className="text-sm text-muted-foreground">
                                 {percentage}%
                               </p>
                             </div>
                           </div>
                           {/* Progress Bar */}
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-muted rounded-full h-2">
                             <div
                               className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300"
                               style={{ width: `${percentage}%` }}
@@ -350,9 +350,9 @@ export default function ResultsPage() {
       </div>
 
       {/* Real-time Status */}
-      <Card className="bg-gray-50 border-gray-200">
+      <Card className="bg-muted border-border">
         <CardContent className="pt-6">
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-muted-foreground text-center">
             This page updates in real-time as votes are cast
           </p>
         </CardContent>

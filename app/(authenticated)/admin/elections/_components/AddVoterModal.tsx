@@ -79,10 +79,10 @@ export default function AddVoterModal({
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">Add New Voter</h3>
+          <h3 className="text-lg font-semibold text-foreground">Add New Voter</h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <X size={20} />
           </button>
@@ -138,7 +138,7 @@ export default function AddVoterModal({
             />
           </div>
 
-          <div className="bg-blue-50 text-blue-700 px-4 py-3 rounded-lg text-xs flex gap-2 items-start">
+          <div className="bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 px-4 py-3 rounded-lg text-xs flex gap-2 items-start border border-blue-200 dark:border-blue-800">
             <KeyRound size={14} className="mt-0.5 shrink-0" />
             <p>
               An access code will be automatically generated for this voter.
@@ -149,7 +149,7 @@ export default function AddVoterModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex-1 px-4 py-2 text-sm font-medium text-foreground bg-muted hover:bg-accent rounded-lg transition-colors"
             >
               Cancel
             </button>

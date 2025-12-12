@@ -78,8 +78,8 @@ export default async function ElectionPartylistsPage({
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Partylists</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-lg font-semibold text-foreground">Partylists</h2>
+          <p className="text-sm text-muted-foreground">
             View partylists and the candidates running under them.
           </p>
         </div>
@@ -88,17 +88,17 @@ export default async function ElectionPartylistsPage({
 
       {/* Partylists Grid */}
       {partylists.length === 0 ? (
-        <Card className="bg-white border border-gray-200">
+        <Card className="bg-card border border-border">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <div className="flex flex-col items-center justify-center space-y-4">
-              <div className="rounded-full bg-gray-100 p-4">
-                <Users className="h-8 w-8 text-gray-400" />
+              <div className="rounded-full bg-muted p-4">
+                <Users className="h-8 w-8 text-muted-foreground" />
               </div>
               <div className="text-center space-y-2">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-foreground">
                   No Partylists Yet
                 </h3>
-                <p className="text-sm text-gray-500 max-w-xs">
+                <p className="text-sm text-muted-foreground max-w-xs">
                   Create partylists to organize candidates into groups.
                 </p>
               </div>
@@ -110,23 +110,23 @@ export default async function ElectionPartylistsPage({
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {partylists.map((partylist) => {
             const partylistCandidates =
               candidatesByPartylist[partylist.id] || [];
             return (
               <Card
                 key={partylist.id}
-                className="bg-white border border-gray-200 hover:border-gray-300 transition-colors"
+                className="bg-card border border-border hover:border-accent transition-colors"
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <CardTitle className="text-lg text-gray-900 truncate">
+                      <CardTitle className="text-lg text-foreground truncate">
                         {partylist.name}
                       </CardTitle>
                       {partylist.description && (
-                        <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                           {partylist.description}
                         </p>
                       )}
@@ -136,7 +136,7 @@ export default async function ElectionPartylistsPage({
                 <CardContent className="space-y-4">
                   {/* Candidates List */}
                   <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-gray-700">
+                    <h4 className="text-sm font-medium text-foreground">
                       Candidates ({partylistCandidates.length})
                     </h4>
                     {partylistCandidates.length > 0 ? (
@@ -144,23 +144,23 @@ export default async function ElectionPartylistsPage({
                         {partylistCandidates.map((candidate) => (
                           <div
                             key={candidate.id}
-                            className="bg-gray-50 p-3 rounded-lg border border-gray-100"
+                            className="bg-muted p-3 rounded-lg border border-border"
                           >
                             <div className="flex items-start justify-between gap-2">
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-900 truncate">
+                                <p className="text-sm font-medium text-foreground truncate">
                                   {candidate.full_name}
                                 </p>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                   ID: {candidate.student_id}
                                 </p>
                                 {candidate.positions && (
-                                  <p className="text-xs text-blue-600 font-medium mt-1">
+                                  <p className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1">
                                     Running for: {candidate.positions.title}
                                   </p>
                                 )}
                                 {candidate.description && (
-                                  <p className="text-xs text-gray-600 mt-1 line-clamp-1">
+                                  <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
                                     {candidate.description}
                                   </p>
                                 )}
@@ -170,23 +170,23 @@ export default async function ElectionPartylistsPage({
                         ))}
                       </div>
                     ) : (
-                      <div className="text-xs text-gray-400 italic text-center py-4">
+                      <div className="text-xs text-muted-foreground italic text-center py-4">
                         No candidates in this partylist
                       </div>
                     )}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-2 pt-2 border-t border-gray-100">
+                  <div className="flex gap-2 pt-2 border-t border-border">
                     <button
                       disabled
-                      className="flex-1 px-3 py-2 text-sm text-gray-400 bg-gray-50 rounded-md border border-gray-200 cursor-not-allowed"
+                      className="flex-1 px-3 py-2 text-sm text-muted-foreground bg-muted rounded-md border border-border cursor-not-allowed"
                     >
                       Edit
                     </button>
                     <button
                       disabled
-                      className="flex-1 px-3 py-2 text-sm text-gray-400 bg-gray-50 rounded-md border border-gray-200 cursor-not-allowed"
+                      className="flex-1 px-3 py-2 text-sm text-muted-foreground bg-muted rounded-md border border-border cursor-not-allowed"
                     >
                       Delete
                     </button>

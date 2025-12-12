@@ -182,10 +182,11 @@ export default function ElectionHeaderActions({
             <Button
               size="sm"
               variant="outline"
-              className="gap-2 border-gray-300"
+              className="gap-2 w-full sm:w-auto"
             >
               <Share2 size={16} />
-              Share Ballot Link
+              <span className="hidden sm:inline">Share Ballot Link</span>
+              <span className="sm:hidden">Share</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
@@ -196,17 +197,17 @@ export default function ElectionHeaderActions({
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
-              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="text-xs text-gray-600 mb-2">Ballot URL:</p>
-                <div className="flex items-center gap-2">
-                  <code className="flex-1 text-sm text-blue-900 font-mono break-all">
+              <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p className="text-xs text-muted-foreground mb-2">Ballot URL:</p>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                  <code className="flex-1 text-xs md:text-sm text-blue-900 dark:text-blue-300 font-mono break-all">
                     {ballotUrl}
                   </code>
                   <Button
                     onClick={handleCopyLink}
                     size="sm"
                     variant="ghost"
-                    className="flex-shrink-0 hover:bg-blue-100"
+                    className="flex-shrink-0 hover:bg-blue-100 dark:hover:bg-blue-900/20 w-full sm:w-auto"
                   >
                     {isCopied ? (
                       <Check size={16} className="text-green-600" />
@@ -216,7 +217,7 @@ export default function ElectionHeaderActions({
                   </Button>
                 </div>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 ⓘ This link can be shared via email, QR code, messaging, or
                 direct link.
               </p>
@@ -229,7 +230,7 @@ export default function ElectionHeaderActions({
       {isActive && (
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button size="sm" variant="destructive" className="gap-2">
+            <Button size="sm" variant="destructive" className="gap-2 w-full sm:w-auto">
               End Session
             </Button>
           </AlertDialogTrigger>

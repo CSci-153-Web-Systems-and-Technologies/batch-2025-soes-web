@@ -20,8 +20,8 @@ export default function TabNavigation({ electionId }: { electionId: string }) {
   ];
 
   return (
-    <div className="border-b">
-      <div className="flex h-10 items-center space-x-6 px-2">
+    <div className="border-b border-border bg-background">
+      <div className="flex h-10 items-center space-x-4 md:space-x-6 px-2 overflow-x-auto scrollbar-hide">
         {tabs.map((tab) => {
           // Logic: If 'exact' is true, match perfectly.
           // Otherwise, check if the current path starts with the tab href.
@@ -34,10 +34,10 @@ export default function TabNavigation({ electionId }: { electionId: string }) {
               key={tab.name}
               href={tab.href}
               className={cn(
-                "flex items-center text-sm font-medium border-b-2 h-10 transition-colors hover:text-blue-600",
+                "flex items-center text-sm font-medium border-b-2 h-10 transition-colors whitespace-nowrap",
                 isActive
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:border-gray-300"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
               )}
             >
               {tab.name}

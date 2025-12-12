@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,8 +46,8 @@ export default function SettingsPage() {
     <div className="flex flex-col gap-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="text-3xl font-bold text-foreground">Settings</h1>
+        <p className="text-muted-foreground mt-1">
           Manage your account settings and preferences
         </p>
       </div>
@@ -50,7 +56,7 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <User className="h-5 w-5 text-gray-600" />
+            <User className="h-5 w-5 text-muted-foreground" />
             <CardTitle>Profile Settings</CardTitle>
           </div>
           <CardDescription>
@@ -82,7 +88,7 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Bell className="h-5 w-5 text-gray-600" />
+            <Bell className="h-5 w-5 text-muted-foreground" />
             <CardTitle>Notification Preferences</CardTitle>
           </div>
           <CardDescription>
@@ -93,7 +99,7 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Email Notifications</Label>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Receive email updates about elections and system events
               </p>
             </div>
@@ -106,7 +112,7 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>System Notifications</Label>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Get in-app notifications for important updates
               </p>
             </div>
@@ -116,9 +122,7 @@ export default function SettingsPage() {
             />
           </div>
           <div className="flex justify-end">
-            <Button onClick={handleSaveNotifications}>
-              Save Preferences
-            </Button>
+            <Button onClick={handleSaveNotifications}>Save Preferences</Button>
           </div>
         </CardContent>
       </Card>
@@ -127,7 +131,7 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-gray-600" />
+            <Shield className="h-5 w-5 text-muted-foreground" />
             <CardTitle>Security</CardTitle>
           </div>
           <CardDescription>
@@ -138,7 +142,7 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Two-Factor Authentication</Label>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Add an extra layer of security to your account
               </p>
             </div>
@@ -150,7 +154,7 @@ export default function SettingsPage() {
           <Separator />
           <div className="space-y-2">
             <Label>Change Password</Label>
-            <p className="text-sm text-gray-500 mb-2">
+            <p className="text-sm text-muted-foreground mb-2">
               Update your password to keep your account secure
             </p>
             <Button
@@ -172,7 +176,7 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Database className="h-5 w-5 text-gray-600" />
+            <Database className="h-5 w-5 text-muted-foreground" />
             <CardTitle>System & Data</CardTitle>
           </div>
           <CardDescription>
@@ -183,19 +187,16 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label>Automatic Backups</Label>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Automatically backup election data daily
               </p>
             </div>
-            <Switch
-              checked={autoBackup}
-              onCheckedChange={setAutoBackup}
-            />
+            <Switch checked={autoBackup} onCheckedChange={setAutoBackup} />
           </div>
           <Separator />
           <div className="space-y-2">
             <Label>Manual Backup</Label>
-            <p className="text-sm text-gray-500 mb-2">
+            <p className="text-sm text-muted-foreground mb-2">
               Create a backup of all election data and settings
             </p>
             <Button
@@ -214,17 +215,15 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Mail className="h-5 w-5 text-gray-600" />
+            <Mail className="h-5 w-5 text-muted-foreground" />
             <CardTitle>Support</CardTitle>
           </div>
-          <CardDescription>
-            Get help and contact support team
-          </CardDescription>
+          <CardDescription>Get help and contact support team</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label>Need Help?</Label>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Contact our support team for assistance with the election system
             </p>
           </div>

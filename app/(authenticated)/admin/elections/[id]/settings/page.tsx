@@ -80,18 +80,18 @@ export default async function ElectionSettingsPage({
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-900">
+        <h2 className="text-lg font-semibold text-foreground">
           Election Settings
         </h2>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Manage your election session, view details, and access the ballot
           link.
         </p>
       </div>
 
       {/* Election Information Card */}
-      <Card className="bg-white border border-gray-200">
-        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="bg-card border border-border">
+        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <CardTitle>Election Information</CardTitle>
             <CardDescription>
@@ -107,11 +107,11 @@ export default async function ElectionSettingsPage({
         <CardContent className="space-y-6">
           {/* Title */}
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-2">
+            <label className="text-sm font-medium text-foreground block mb-2">
               Election Title
             </label>
-            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <p className="text-gray-900 font-medium">
+            <div className="p-4 bg-muted rounded-lg border border-border">
+              <p className="text-foreground font-medium">
                 {election?.title || "N/A"}
               </p>
             </div>
@@ -120,11 +120,11 @@ export default async function ElectionSettingsPage({
           {/* Description */}
           {election?.description && (
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-2">
+              <label className="text-sm font-medium text-foreground block mb-2">
                 Description
               </label>
-              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <p className="text-gray-900 text-sm">{election.description}</p>
+              <div className="p-4 bg-muted rounded-lg border border-border">
+                <p className="text-foreground text-sm">{election.description}</p>
               </div>
             </div>
           )}
@@ -132,17 +132,17 @@ export default async function ElectionSettingsPage({
           {/* Status */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-2">
+              <label className="text-sm font-medium text-foreground block mb-2">
                 Status
               </label>
               <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                     election?.status === "active"
-                      ? "bg-green-100 text-green-700 border border-green-200"
+                      ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800"
                       : election?.status === "ended"
                       ? "bg-gray-100 text-gray-700 border border-gray-200"
-                      : "bg-yellow-100 text-yellow-700 border border-yellow-200"
+                      : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800"
                   }`}
                 >
                   {election?.status?.charAt(0).toUpperCase() +
@@ -181,7 +181,7 @@ export default async function ElectionSettingsPage({
       </Card>
 
       {/* Election Statistics Card */}
-      <Card className="bg-white border border-gray-200">
+      <Card className="bg-card border border-border">
         <CardHeader>
           <CardTitle>Election Statistics</CardTitle>
           <CardDescription>
@@ -189,7 +189,7 @@ export default async function ElectionSettingsPage({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-100">
               <p className="text-2xl font-bold text-blue-600">
                 {positionCount || 0}
@@ -225,7 +225,7 @@ export default async function ElectionSettingsPage({
       </Card>
 
       {/* Ballot Link Card */}
-      <Card className="bg-white border border-gray-200">
+      <Card className="bg-card border border-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Info size={18} className="text-blue-600" />
@@ -239,15 +239,15 @@ export default async function ElectionSettingsPage({
           {election?.status === "active" ? (
             <>
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="text-xs text-gray-600 mb-2">Ballot URL:</p>
-                <div className="flex items-center gap-2">
-                  <code className="flex-1 text-sm text-blue-900 font-mono break-all">
+                <p className="text-xs text-muted-foreground mb-2">Ballot URL:</p>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                  <code className="flex-1 text-sm text-blue-900 font-mono break-all w-full">
                     {ballotUrl}
                   </code>
                   <CopyBallotLinkButton ballotUrl={ballotUrl} />
                 </div>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 ⓘ Voters can access the ballot using this link. It can be shared
                 via email, QR code, or direct link.
               </p>
@@ -268,13 +268,13 @@ export default async function ElectionSettingsPage({
       </Card>
 
       {/* Danger Zone */}
-      <Card className="bg-white border border-red-200">
+      <Card className="bg-card border border-red-200">
         <CardHeader>
           <CardTitle className="text-red-600">Danger Zone</CardTitle>
           <CardDescription>Irreversible actions</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Deleting this election session will permanently remove all
             associated data including positions, candidates, voters, and votes.
             This action cannot be undone.

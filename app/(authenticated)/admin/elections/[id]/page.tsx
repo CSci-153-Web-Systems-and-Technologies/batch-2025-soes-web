@@ -102,49 +102,49 @@ export default async function ElectionOverviewPage({
   };
 
   const statusBgColors: Record<string, string> = {
-    red: "bg-red-50 border-red-200 text-red-800",
-    yellow: "bg-yellow-50 border-yellow-200 text-yellow-800",
-    green: "bg-green-50 border-green-200 text-green-800",
-    blue: "bg-blue-50 border-blue-200 text-blue-800",
+    red: "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-300",
+    yellow: "bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300",
+    green: "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300",
+    blue: "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-300",
   };
 
   return (
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">{election?.title}</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">{election?.title}</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Monitor and manage your election session
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Voters Card */}
-        <div className="p-4 border rounded-xl bg-white shadow-sm flex flex-col justify-between">
-          <div className="text-sm text-gray-500 font-medium">Total Voters</div>
-          <div className="mt-2 text-3xl font-bold text-gray-900">
+        <div className="p-4 border border-border rounded-xl bg-card shadow-sm flex flex-col justify-between">
+          <div className="text-sm text-muted-foreground font-medium">Total Voters</div>
+          <div className="mt-2 text-3xl font-bold text-foreground">
             {totalVoters}
           </div>
-          <div className="text-xs text-gray-400 mt-1">Registered students</div>
+          <div className="text-xs text-muted-foreground mt-1">Registered students</div>
         </div>
 
         {/* Votes Cast Card */}
-        <div className="p-4 border rounded-xl bg-white shadow-sm flex flex-col justify-between">
-          <div className="text-sm text-gray-500 font-medium">Votes Cast</div>
-          <div className="mt-2 text-3xl font-bold text-gray-900">
+        <div className="p-4 border border-border rounded-xl bg-card shadow-sm flex flex-col justify-between">
+          <div className="text-sm text-muted-foreground font-medium">Votes Cast</div>
+          <div className="mt-2 text-3xl font-bold text-foreground">
             {votesCast}
           </div>
-          <div className="text-xs text-gray-400 mt-1">Completed ballots</div>
+          <div className="text-xs text-muted-foreground mt-1">Completed ballots</div>
         </div>
 
         {/* Turnout Card */}
-        <div className="p-4 border rounded-xl bg-white shadow-sm flex flex-col justify-between">
-          <div className="text-sm text-gray-500 font-medium">Turnout</div>
-          <div className="mt-2 text-3xl font-bold text-gray-900">
+        <div className="p-4 border border-border rounded-xl bg-card shadow-sm flex flex-col justify-between">
+          <div className="text-sm text-muted-foreground font-medium">Turnout</div>
+          <div className="mt-2 text-3xl font-bold text-foreground">
             {turnout}%
           </div>
-          <div className="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+          <div className="w-full bg-muted rounded-full h-1.5 mt-2">
             <div
               className="bg-green-600 h-1.5 rounded-full transition-all duration-500"
               style={{ width: `${turnout}%` }}
@@ -153,12 +153,12 @@ export default async function ElectionOverviewPage({
         </div>
 
         {/* Candidates Card */}
-        <div className="p-4 border rounded-xl bg-white shadow-sm flex flex-col justify-between">
-          <div className="text-sm text-gray-500 font-medium">Setup Status</div>
-          <div className="mt-2 text-3xl font-bold text-gray-900">
+        <div className="p-4 border border-border rounded-xl bg-card shadow-sm flex flex-col justify-between">
+          <div className="text-sm text-muted-foreground font-medium">Setup Status</div>
+          <div className="mt-2 text-3xl font-bold text-foreground">
             {candidateCount > 0 ? "✓" : "—"}
           </div>
-          <div className="text-xs text-gray-400 mt-1">
+          <div className="text-xs text-muted-foreground mt-1">
             {candidateCount} candidate{candidateCount !== 1 ? "s" : ""} ready
           </div>
         </div>
@@ -176,8 +176,8 @@ export default async function ElectionOverviewPage({
 
       {/* Next Steps */}
       {nextSteps.length > 0 && (
-        <div className="p-4 border rounded-xl bg-white shadow-sm">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">
+        <div className="p-4 border border-border rounded-xl bg-card shadow-sm">
+          <h3 className="text-sm font-semibold text-foreground mb-3">
             Setup Progress
           </h3>
           <div className="space-y-2">
@@ -186,8 +186,8 @@ export default async function ElectionOverviewPage({
                 <div
                   className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${
                     step.complete
-                      ? "bg-green-100 text-green-600"
-                      : "bg-gray-100 text-gray-400"
+                      ? "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400"
+                      : "bg-muted text-muted-foreground"
                   }`}
                 >
                   {step.complete ? (
@@ -197,7 +197,7 @@ export default async function ElectionOverviewPage({
                   )}
                 </div>
                 <span
-                  className={step.complete ? "text-gray-900" : "text-gray-500"}
+                  className={step.complete ? "text-foreground" : "text-muted-foreground"}
                 >
                   {step.label}
                 </span>
@@ -209,23 +209,23 @@ export default async function ElectionOverviewPage({
 
       {/* Election Timeline */}
       {election && (
-        <div className="p-4 border rounded-xl bg-white shadow-sm">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">
+        <div className="p-4 border border-border rounded-xl bg-card shadow-sm">
+          <h3 className="text-sm font-semibold text-foreground mb-3">
             Election Timeline
           </h3>
           <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <Calendar className="w-4 h-4" />
               <span>
                 Start: {new Date(election.start_date).toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="w-4 h-4" />
               <span>End: {new Date(election.end_date).toLocaleString()}</span>
             </div>
             {election.status === "draft" && isSetupComplete && (
-              <div className="mt-3 text-xs text-blue-600 bg-blue-50 p-2 rounded">
+              <div className="mt-3 text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/20 p-2 rounded border border-blue-200 dark:border-blue-800">
                 When you click &quot;Activate Election&quot;, voters will
                 receive the voting link and can start voting immediately.
               </div>
