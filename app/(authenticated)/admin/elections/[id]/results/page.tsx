@@ -257,7 +257,8 @@ export default function ResultsPage() {
                   {electionTitle} is Currently Deactivated
                 </h3>
                 <p className="text-sm text-yellow-800 dark:text-yellow-300 mt-1">
-                  This election has been temporarily deactivated. Voting is paused and results shown are current.
+                  This election has been temporarily deactivated. Voting is
+                  paused and results shown are current.
                 </p>
               </div>
             </div>
@@ -275,7 +276,8 @@ export default function ResultsPage() {
                   {electionTitle} Has Ended
                 </h3>
                 <p className="text-sm text-blue-800 dark:text-blue-300 mt-1">
-                  This election has concluded. The results displayed are final and official.
+                  This election has concluded. The results displayed are final
+                  and official.
                 </p>
               </div>
             </div>
@@ -289,7 +291,11 @@ export default function ResultsPage() {
           <BarChart3 className="w-5 h-5 text-foreground" />
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-foreground">
-              {isEnded ? "Final Results" : isDraft ? "Results Preview" : "Live Results"}
+              {isEnded
+                ? "Final Results"
+                : isDraft
+                ? "Results Preview"
+                : "Live Results"}
             </h2>
             {isActive && (
               <p className="text-sm text-muted-foreground mt-0.5">
