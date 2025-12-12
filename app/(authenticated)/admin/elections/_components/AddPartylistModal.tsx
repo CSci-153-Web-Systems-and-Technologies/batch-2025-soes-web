@@ -36,12 +36,12 @@ export default function AddPartylistModal({
 
   const handleAddPartylist = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (disabled) {
       toast.error("Cannot add partylists to an ended election.");
       return;
     }
-    
+
     setIsLoading(true);
 
     if (!name.trim()) {
@@ -78,7 +78,10 @@ export default function AddPartylistModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button disabled={disabled} className="gap-2 bg-green-700 hover:bg-green-900 disabled:opacity-50 disabled:cursor-not-allowed">
+        <Button
+          disabled={disabled}
+          className="gap-2 bg-green-700 hover:bg-green-900 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           <Plus size={18} />
           Add Partylist
         </Button>

@@ -34,12 +34,12 @@ export default function AddVoterModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (disabled) {
       toast.error("Cannot add voters to an ended election.");
       return;
     }
-    
+
     setIsLoading(true);
 
     const supabase = createClient();

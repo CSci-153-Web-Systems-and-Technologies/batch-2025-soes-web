@@ -23,7 +23,6 @@ interface VoteCount {
 interface PositionResults {
   positionId: string;
   positionName: string;
-  voteLimit: number;
   votes: VoteCount[];
   totalVotes: number;
 }
@@ -92,9 +91,9 @@ export default function ResultsPage() {
       // Get all positions for this election
       const { data: positions, error: positionsError } = await supabase
         .from("positions")
-        .select("id, name, vote_limit")
+        .select("id, title, rank")
         .eq("election_id", electionId)
-        .order("order", { ascending: true });
+        .order("rank", { ascending: true });
 
       if (positionsError) {
         console.error(
@@ -113,7 +112,7 @@ export default function ResultsPage() {
       // Get all candidates for this election
       const { data: candidates, error: candidatesError } = await supabase
         .from("candidates")
-        .select("id, name, partylist_id, partylists(id, name)")
+        .select("id, full_name, partylist_id, partylists(id, name)")
         .eq("election_id", electionId);
 
       if (candidatesError) {
@@ -128,7 +127,7 @@ export default function ResultsPage() {
       const candidateMap = new Map<string, CandidateInfo>();
       interface CandidateFromDB {
         id: string;
-        name: string;
+        full_name: string;
         partylist_id?: string;
         partylists?:
           | { id: string; name: string }[]
@@ -142,7 +141,7 @@ export default function ResultsPage() {
 
         candidateMap.set(candidate.id, {
           id: candidate.id,
-          name: candidate.name,
+          name: candidate.full_name,
           partylist: partylistName,
         });
       });
@@ -158,6 +157,8 @@ export default function ResultsPage() {
           .select("id, candidate_id")
           .eq("election_id", electionId)
           .eq("position_id", position.id);
+
+        const positionTitle = position.title;
 
         if (votesError) {
           console.error(
@@ -203,8 +204,7 @@ export default function ResultsPage() {
 
         positionResults.push({
           positionId: position.id,
-          positionName: position.name,
-          voteLimit: position.vote_limit,
+          positionName: positionTitle,
           votes: voteArray,
           totalVotes: positionTotalVotes,
         });
@@ -289,9 +289,7 @@ export default function ResultsPage() {
                     </CardTitle>
                     <p className="text-sm text-gray-500 mt-1">
                       {position.totalVotes} vote
-                      {position.totalVotes !== 1 ? "s" : ""} • Up to{" "}
-                      {position.voteLimit} candidate
-                      {position.voteLimit !== 1 ? "s" : ""}
+                      {position.totalVotes !== 1 ? "s" : ""}
                     </p>
                   </div>
                 </div>

@@ -190,12 +190,12 @@ export default function ImportCandidatesModal({
 
   const handleFileUpload = async () => {
     if (!file) return;
-    
+
     if (disabled) {
       toast.error("Cannot import candidates to an ended election.");
       return;
     }
-    
+
     if (positions.length === 0) {
       toast.error("Please create positions before importing candidates.");
       return;

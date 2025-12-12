@@ -96,8 +96,8 @@ export default async function ElectionPositionsPage({
             disabled={positions.length > 0 || isElectionEnded}
           />
 
-          <ClearPositionsButton 
-            electionId={electionId} 
+          <ClearPositionsButton
+            electionId={electionId}
             disabled={isElectionEnded}
           />
         </div>

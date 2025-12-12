@@ -56,8 +56,8 @@ export default async function SingleElectionLayout({
               election.status === "active"
                 ? "bg-green-100 text-green-700 border-green-200"
                 : election.status === "ended"
-                  ? "bg-red-100 text-red-700 border-red-200"
-                  : "bg-yellow-50 text-yellow-700 border-yellow-200"
+                ? "bg-red-100 text-red-700 border-red-200"
+                : "bg-yellow-50 text-yellow-700 border-yellow-200"
             }`}
           >
             {election.status.toUpperCase()}
@@ -73,8 +73,9 @@ export default async function SingleElectionLayout({
       {election.status === "ended" && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-sm text-red-800">
-            <strong>This election has ended.</strong> You cannot add, edit, or delete any data.
-            You can only view the results.
+            <strong>This election has ended.</strong> You cannot add, edit, or
+            delete any data. You can check the results and export reports from
+            the Results and Reports pages.
           </p>
         </div>
       )}

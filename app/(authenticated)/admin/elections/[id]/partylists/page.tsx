@@ -54,10 +54,14 @@ export default async function ElectionPartylistsPage({
   // (if there's a partylist_id in the candidates table)
   const { data: candidatesData } = await supabase
     .from("candidates")
-    .select("id, student_id, full_name, description, avatar_url, positions(id, title), partylist_id")
+    .select(
+      "id, student_id, full_name, description, avatar_url, positions(id, title), partylist_id"
+    )
     .eq("election_id", electionId);
 
-  const candidates = (candidatesData as unknown as (Candidate & { partylist_id?: string })[]) || [];
+  const candidates =
+    (candidatesData as unknown as (Candidate & { partylist_id?: string })[]) ||
+    [];
 
   // Group candidates by partylist_id if available
   const candidatesByPartylist: Record<string, typeof candidates> = {};
@@ -98,14 +102,18 @@ export default async function ElectionPartylistsPage({
                   Create partylists to organize candidates into groups.
                 </p>
               </div>
-              <AddPartylistModal electionId={electionId} disabled={isElectionEnded} />
+              <AddPartylistModal
+                electionId={electionId}
+                disabled={isElectionEnded}
+              />
             </div>
           </CardContent>
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {partylists.map((partylist) => {
-            const partylistCandidates = candidatesByPartylist[partylist.id] || [];
+            const partylistCandidates =
+              candidatesByPartylist[partylist.id] || [];
             return (
               <Card
                 key={partylist.id}

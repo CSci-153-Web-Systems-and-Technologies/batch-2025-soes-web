@@ -98,7 +98,7 @@ export default function ImportVotersModal({
 
   const handleFileUpload = async () => {
     if (!file) return;
-    
+
     if (disabled) {
       toast.error("Cannot import voters to an ended election.");
       return;
