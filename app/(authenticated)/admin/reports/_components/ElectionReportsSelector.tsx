@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Download, FileText } from "lucide-react";
+import { exportToPDF, exportToExcel } from "@/lib/export-utils";
 import ElectionReportView from "./ElectionReportView";
 
 interface CompletedElection {
@@ -20,6 +21,24 @@ interface CompletedElection {
   status: string;
   created_at: string;
   updated_at: string;
+}
+
+interface ReportData {
+  totalVoters: number;
+  votesCast: number;
+  turnoutPercentage: string;
+  positionResults: Array<{
+    positionId: string;
+    positionName: string;
+    candidates: Array<{
+      candidateId: string;
+      candidateName: string;
+      partylist?: string;
+      voteCount: number;
+      percentage: number;
+    }>;
+    totalVotes: number;
+  }>;
 }
 
 interface ElectionReportsSelectorProps {
@@ -32,17 +51,47 @@ export default function ElectionReportsSelector({
   const [selectedElectionId, setSelectedElectionId] = useState<string>(
     elections[0]?.id || ""
   );
+  const [isExporting, setIsExporting] = useState(false);
+  const [reportData, setReportData] = useState<ReportData | null>(null);
 
   const selectedElection = elections.find((e) => e.id === selectedElectionId);
 
-  const handleDownloadPDF = () => {
-    // TODO: Implement PDF generation
-    alert("PDF download coming soon!");
+  const handleDownloadPDF = async () => {
+    if (!reportData || !selectedElection) return;
+    setIsExporting(true);
+    try {
+      await exportToPDF({
+        electionTitle: selectedElection.title,
+        totalVoters: reportData.totalVoters,
+        votesCast: reportData.votesCast,
+        turnoutPercentage: reportData.turnoutPercentage,
+        positions: reportData.positionResults,
+        exportDate: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
-  const handleExportExcel = () => {
-    // TODO: Implement Excel export
-    alert("Excel export coming soon!");
+  const handleExportExcel = async () => {
+    if (!reportData || !selectedElection) return;
+    setIsExporting(true);
+    try {
+      await exportToExcel({
+        electionTitle: selectedElection.title,
+        totalVoters: reportData.totalVoters,
+        votesCast: reportData.votesCast,
+        turnoutPercentage: reportData.turnoutPercentage,
+        positions: reportData.positionResults,
+        exportDate: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("Error exporting Excel:", error);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
@@ -99,19 +148,19 @@ export default function ElectionReportsSelector({
                 onClick={handleDownloadPDF}
                 variant="outline"
                 className="gap-2 flex-1"
-                disabled={!selectedElection}
+                disabled={!selectedElection || !reportData || isExporting}
               >
                 <Download className="w-4 h-4" />
-                PDF
+                {isExporting ? "Exporting..." : "PDF"}
               </Button>
               <Button
                 onClick={handleExportExcel}
                 variant="outline"
                 className="gap-2 flex-1"
-                disabled={!selectedElection}
+                disabled={!selectedElection || !reportData || isExporting}
               >
                 <Download className="w-4 h-4" />
-                Excel
+                {isExporting ? "Exporting..." : "Excel"}
               </Button>
             </div>
           </div>
@@ -131,6 +180,7 @@ export default function ElectionReportsSelector({
         <ElectionReportView
           electionId={selectedElection.id}
           electionTitle={selectedElection.title}
+          onReportDataReady={setReportData}
         />
       )}
     </div>

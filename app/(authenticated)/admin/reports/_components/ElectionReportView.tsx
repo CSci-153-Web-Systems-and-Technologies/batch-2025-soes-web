@@ -30,10 +30,17 @@ interface PositionResult {
 interface ElectionReportViewProps {
   electionId: string;
   electionTitle: string;
+  onReportDataReady?: (data: {
+    totalVoters: number;
+    votesCast: number;
+    turnoutPercentage: string;
+    positionResults: PositionResult[];
+  }) => void;
 }
 
 export default function ElectionReportView({
   electionId,
+  onReportDataReady,
 }: ElectionReportViewProps) {
   const [reportData, setReportData] = useState<{
     stats: StatCard[];
@@ -180,6 +187,16 @@ export default function ElectionReportView({
       ];
 
       setReportData({ stats, positionResults });
+
+      // Call the callback to notify parent component that data is ready
+      if (onReportDataReady) {
+        onReportDataReady({
+          totalVoters: totalVoters || 0,
+          votesCast: votesCast || 0,
+          turnoutPercentage: `${turnout}%`,
+          positionResults,
+        });
+      }
     } catch (error) {
       console.error("Error fetching report data:", error);
     } finally {
