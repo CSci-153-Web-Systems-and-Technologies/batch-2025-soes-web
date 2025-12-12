@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, BarChart3 } from "lucide-react";
+import { RefreshCw, BarChart3, AlertCircle, Trophy } from "lucide-react";
 import { useParams } from "next/navigation";
 
 interface CandidateInfo {
@@ -35,6 +35,7 @@ export default function ResultsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [totalVotesCast, setTotalVotesCast] = useState(0);
   const [electionStatus, setElectionStatus] = useState<string>("");
+  const [electionTitle, setElectionTitle] = useState<string>("");
 
   const supabase = createClient();
 
@@ -69,10 +70,10 @@ export default function ResultsPage() {
   const fetchResults = async () => {
     setIsLoading(true);
     try {
-      // First, get the election status
+      // First, get the election status and title
       const { data: election, error: electionError } = await supabase
         .from("election_sessions")
-        .select("status")
+        .select("status, title")
         .eq("id", electionId)
         .single();
 
@@ -86,6 +87,7 @@ export default function ResultsPage() {
 
       if (election) {
         setElectionStatus(election.status);
+        setElectionTitle(election.title);
       }
 
       // Get all positions for this election
@@ -238,15 +240,72 @@ export default function ResultsPage() {
     );
   }
 
+  const isActive = electionStatus === "active";
+  const isDraft = electionStatus === "draft";
+  const isEnded = electionStatus === "ended";
+
   return (
     <div className="space-y-6">
+      {/* Status Banners */}
+      {isDraft && (
+        <Card className="bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800">
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-yellow-900 dark:text-yellow-200">
+                  {electionTitle} is Currently Deactivated
+                </h3>
+                <p className="text-sm text-yellow-800 dark:text-yellow-300 mt-1">
+                  This election has been temporarily deactivated. Voting is
+                  paused and results shown are current.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {isEnded && (
+        <Card className="bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-3">
+              <Trophy className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-blue-900 dark:text-blue-200">
+                  {electionTitle} Has Ended
+                </h3>
+                <p className="text-sm text-blue-800 dark:text-blue-300 mt-1">
+                  This election has concluded. The results displayed are final
+                  and official.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Header with Refresh */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <BarChart3 className="w-5 h-5 text-foreground" />
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
-            Live Results
-          </h2>
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-foreground">
+              {isEnded
+                ? "Final Results"
+                : isDraft
+                ? "Results Preview"
+                : "Live Results"}
+            </h2>
+            {isActive && (
+              <p className="text-sm text-muted-foreground mt-0.5">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                  Updates in real-time
+                </span>
+              </p>
+            )}
+          </div>
         </div>
         <Button
           onClick={handleRefresh}

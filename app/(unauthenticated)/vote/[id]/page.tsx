@@ -3,16 +3,11 @@ import { redirect } from "next/navigation";
 import VoteClient from "./_components/VoteClient";
 
 export default async function VotePage({
-  searchParams,
+  params,
 }: {
-  searchParams: Promise<{ election?: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const params = await searchParams;
-  const electionId = params.election;
-
-  if (!electionId) {
-    redirect("/");
-  }
+  const { id: electionId } = await params;
 
   // Create admin client to fetch election details
   const supabaseAdmin = createClient(
