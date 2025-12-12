@@ -17,9 +17,14 @@ import {
 import CreatePartylistModal from "./_components/CreatePartylistModal";
 import ImportPartyleysModal from "./_components/ImportPartyleysModal";
 import EditPartylistModal from "./_components/EditPartylistModal";
+import ViewPartylistMembersModal from "./_components/ViewPartylistMembersModal";
 
 interface Candidate {
   id: string;
+  student_id: string;
+  full_name: string;
+  description: string | null;
+  avatar_url: string | null;
 }
 
 interface PartylistWithCandidates {
@@ -36,6 +41,7 @@ interface Partylist {
   description: string | null;
   members_count: number;
   created_at: string;
+  candidates?: Candidate[];
 }
 
 export default function PartylistsPage() {
@@ -64,7 +70,7 @@ export default function PartylistsPage() {
         name,
         description,
         created_at,
-        candidates(id)
+        candidates(id, student_id, full_name, description, avatar_url)
       `
       )
       .order("created_at", { ascending: false });
@@ -77,6 +83,7 @@ export default function PartylistsPage() {
           description: p.description,
           members_count: p.candidates?.length || 0,
           created_at: p.created_at,
+          candidates: p.candidates || [],
         })
       );
       setPartylists(partylistsWithCount);
@@ -225,6 +232,10 @@ export default function PartylistsPage() {
                     </TableCell>
                     <TableCell className="px-4 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <ViewPartylistMembersModal
+                          partylistName={partylist.name}
+                          candidates={partylist.candidates || []}
+                        />
                         <Button
                           variant="ghost"
                           size="sm"
