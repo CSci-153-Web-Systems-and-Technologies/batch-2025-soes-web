@@ -25,14 +25,12 @@ interface Candidate {
   full_name: string;
   description: string | null;
   avatar_url: string | null;
-}
-
-interface PartylistWithCandidates {
-  id: string;
-  name: string;
-  description: string | null;
-  created_at: string;
-  candidates?: Candidate[];
+  partylist_id: string;
+  position_id: string | null;
+  positions?: {
+    id: string;
+    title: string;
+  } | null;
 }
 
 interface Partylist {
@@ -62,33 +60,50 @@ export default function PartylistsPage() {
 
   const fetchPartylists = async () => {
     setIsLoading(true);
-    const { data, error } = await supabase
-      .from("partylists")
-      .select(
-        `
-        id,
-        name,
-        description,
-        created_at,
-        candidates(id, student_id, full_name, description, avatar_url)
-      `
-      )
-      .order("created_at", { ascending: false });
+    try {
+      // Fetch partylists first
+      const { data: partylistData, error: partylistError } = await supabase
+        .from("partylists")
+        .select("id, name, description, created_at")
+        .order("created_at", { ascending: false });
 
-    if (!error && data) {
-      const partylistsWithCount = (data as PartylistWithCandidates[]).map(
-        (p) => ({
+      if (partylistError) {
+        toast.error("Failed to load partylists");
+        setIsLoading(false);
+        return;
+      }
+
+      // Fetch all candidates with their positions using the position_id foreign key
+      const { data: candidatesData, error: candidatesError } = await supabase
+        .from("candidates")
+        .select("id, student_id, full_name, description, avatar_url, partylist_id, position_id, positions:position_id(id, title)");
+
+      if (candidatesError) {
+        console.error("Candidates fetch error:", candidatesError);
+        toast.error("Failed to load candidates");
+        setIsLoading(false);
+        return;
+      }
+
+      // Map candidates to their partylists
+      const partylistsWithCount = partylistData.map((p) => {
+        const partyCandidates = (candidatesData as Candidate[]).filter(
+          (c) => c.partylist_id === p.id
+        );
+        return {
           id: p.id,
           name: p.name,
           description: p.description,
-          members_count: p.candidates?.length || 0,
           created_at: p.created_at,
-          candidates: p.candidates || [],
-        })
-      );
+          candidates: partyCandidates,
+          members_count: partyCandidates.length,
+        };
+      });
+
       setPartylists(partylistsWithCount);
-    } else {
-      toast.error("Failed to load partylists");
+    } catch (error) {
+      console.error("Error fetching partylists:", error);
+      toast.error("An error occurred while loading partylists");
     }
     setIsLoading(false);
   };

@@ -20,6 +20,10 @@ interface Candidate {
     id: string;
     name: string;
   };
+  positions?: {
+    id: string;
+    title: string;
+  };
 }
 
 interface ViewPartylistCandidatesModalProps {

@@ -16,6 +16,10 @@ interface Candidate {
   full_name: string;
   description: string | null;
   avatar_url: string | null;
+  positions?: {
+    id: string;
+    title: string;
+  } | null;
 }
 
 interface ViewPartylistMembersModalProps {
@@ -74,6 +78,11 @@ export default function ViewPartylistMembersModal({
                     <p className="text-sm text-gray-600">
                       ID: {candidate.student_id}
                     </p>
+                    {candidate.positions && (
+                      <p className="text-sm text-blue-600 font-medium">
+                        Position: {candidate.positions.title}
+                      </p>
+                    )}
                     {candidate.description && (
                       <p className="text-sm text-gray-600 mt-1 line-clamp-3">
                         {candidate.description}
