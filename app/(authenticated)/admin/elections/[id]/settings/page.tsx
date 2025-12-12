@@ -68,6 +68,9 @@ export default async function ElectionSettingsPage({
   const ballotUrl = `${
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   }/ballot/${electionId}`;
+  const resultsUrl = `${
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  }/results/${electionId}`;
   const createdDate = election?.created_at
     ? new Date(election.created_at).toLocaleDateString("en-US", {
         year: "numeric",
@@ -270,6 +273,34 @@ export default async function ElectionSettingsPage({
               </p>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Live Results Link Card */}
+      <Card className="bg-card border border-border">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Info size={18} className="text-green-600 dark:text-green-400" />
+            Live Results Link
+          </CardTitle>
+          <CardDescription>
+            Share this link with voters to view live election results
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="p-4 bg-green-50/50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+            <p className="text-xs text-muted-foreground mb-2">Results URL:</p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              <code className="flex-1 text-sm text-green-900 dark:text-green-300 font-mono break-all w-full">
+                {resultsUrl}
+              </code>
+              <CopyBallotLinkButton ballotUrl={resultsUrl} linkType="Results" />
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            ⓘ Results update automatically every 30 minutes. Voters can view
+            live results without logging in.
+          </p>
         </CardContent>
       </Card>
 

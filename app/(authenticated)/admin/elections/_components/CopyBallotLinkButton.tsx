@@ -5,14 +5,16 @@ import { toast } from "sonner";
 
 interface CopyBallotLinkButtonProps {
   ballotUrl: string;
+  linkType?: string;
 }
 
 export default function CopyBallotLinkButton({
   ballotUrl,
+  linkType = "Ballot",
 }: CopyBallotLinkButtonProps) {
   const handleCopy = () => {
     navigator.clipboard.writeText(ballotUrl);
-    toast.success("Ballot link copied to clipboard!");
+    toast.success(`${linkType} link copied to clipboard!`);
   };
 
   return (

@@ -38,7 +38,7 @@ export default function ElectionHeaderActions({
   endDate,
 }: ElectionHeaderActionsProps) {
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const [isCopied, setIsCopied] = useState(false);
+  const [isCopied, setIsCopied] = useState<string | null>(null);
   const [isToggling, setIsToggling] = useState(false);
   const [isEnding, setIsEnding] = useState(false);
   const [autoEnded, setAutoEnded] = useState(false);
@@ -48,6 +48,9 @@ export default function ElectionHeaderActions({
   const ballotUrl = `${
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   }/ballot/${electionId}`;
+  const resultsUrl = `${
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  }/results/${electionId}`;
 
   const isActive = electionStatus === "active";
 
@@ -85,12 +88,12 @@ export default function ElectionHeaderActions({
     return () => clearInterval(interval);
   }, [isActive, endDate, autoEnded, electionId, supabase, router]);
 
-  const handleCopyLink = async () => {
+  const handleCopyLink = async (url: string, type: string) => {
     try {
-      await navigator.clipboard.writeText(ballotUrl);
-      setIsCopied(true);
-      toast.success("Ballot link copied to clipboard!");
-      setTimeout(() => setIsCopied(false), 2000);
+      await navigator.clipboard.writeText(url);
+      setIsCopied(type);
+      toast.success(`${type} link copied to clipboard!`);
+      setTimeout(() => setIsCopied(null), 2000);
     } catch {
       toast.error("Failed to copy link");
     }
@@ -185,42 +188,79 @@ export default function ElectionHeaderActions({
               className="gap-2 w-full sm:w-auto"
             >
               <Share2 size={16} />
-              <span className="hidden sm:inline">Share Ballot Link</span>
+              <span className="hidden sm:inline">Share Your Election</span>
               <span className="sm:hidden">Share</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Share Ballot Link</DialogTitle>
+              <DialogTitle>Share Your Election</DialogTitle>
               <DialogDescription>
-                Share this link with voters to access the ballot
+                Share these links with voters to access the ballot and view live
+                results
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
-              <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                <p className="text-xs text-muted-foreground mb-2">
-                  Ballot URL:
-                </p>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                  <code className="flex-1 text-xs md:text-sm text-blue-900 dark:text-blue-300 font-mono break-all">
-                    {ballotUrl}
-                  </code>
-                  <Button
-                    onClick={handleCopyLink}
-                    size="sm"
-                    variant="ghost"
-                    className="flex-shrink-0 hover:bg-blue-100 dark:hover:bg-blue-900/20 w-full sm:w-auto"
-                  >
-                    {isCopied ? (
-                      <Check size={16} className="text-green-600" />
-                    ) : (
-                      <Copy size={16} className="text-blue-600" />
-                    )}
-                  </Button>
+              {/* Ballot Link */}
+              <div>
+                <h4 className="text-sm font-semibold text-foreground mb-2">
+                  Ballot Link
+                </h4>
+                <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <p className="text-xs text-muted-foreground mb-2">
+                    For voters to cast their votes:
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                    <code className="flex-1 text-xs md:text-sm text-blue-900 dark:text-blue-300 font-mono break-all">
+                      {ballotUrl}
+                    </code>
+                    <Button
+                      onClick={() => handleCopyLink(ballotUrl, "Ballot")}
+                      size="sm"
+                      variant="ghost"
+                      className="flex-shrink-0 hover:bg-blue-100 dark:hover:bg-blue-900/20 w-full sm:w-auto"
+                    >
+                      {isCopied === "Ballot" ? (
+                        <Check size={16} className="text-green-600" />
+                      ) : (
+                        <Copy size={16} className="text-blue-600" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </div>
+
+              {/* Results Link */}
+              <div>
+                <h4 className="text-sm font-semibold text-foreground mb-2">
+                  Live Results Link
+                </h4>
+                <div className="p-3 md:p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                  <p className="text-xs text-muted-foreground mb-2">
+                    For viewers to see live results:
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                    <code className="flex-1 text-xs md:text-sm text-green-900 dark:text-green-300 font-mono break-all">
+                      {resultsUrl}
+                    </code>
+                    <Button
+                      onClick={() => handleCopyLink(resultsUrl, "Results")}
+                      size="sm"
+                      variant="ghost"
+                      className="flex-shrink-0 hover:bg-green-100 dark:hover:bg-green-900/20 w-full sm:w-auto"
+                    >
+                      {isCopied === "Results" ? (
+                        <Check size={16} className="text-green-600" />
+                      ) : (
+                        <Copy size={16} className="text-green-600" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
               <p className="text-xs text-muted-foreground">
-                ⓘ This link can be shared via email, QR code, messaging, or
+                ⓘ These links can be shared via email, QR code, messaging, or
                 direct link.
               </p>
             </div>
