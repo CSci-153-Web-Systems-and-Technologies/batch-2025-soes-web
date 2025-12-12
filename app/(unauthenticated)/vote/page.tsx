@@ -2,12 +2,22 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { verifyVoter } from "@/lib/vote-action"; // We will create this server action next
-import { Loader2, ArrowRight } from "lucide-react";
+import { verifyVoter } from "@/lib/vote-action";
+import { Loader2, ArrowRight, AlertCircle } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 export default function VoterLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showAlreadyVotedDialog, setShowAlreadyVotedDialog] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (formData: FormData) => {
@@ -24,7 +34,12 @@ export default function VoterLoginPage() {
       // Redirect to the actual ballot page with the encrypted voter session
       router.push(`/ballot/${result.electionId}`);
     } else {
-      setError(result.message || "An unknown error occurred.");
+      // Check if the error is about already voting
+      if (result.message?.includes("already voted")) {
+        setShowAlreadyVotedDialog(true);
+      } else {
+        setError(result.message || "An unknown error occurred.");
+      }
       setLoading(false);
     }
   };
@@ -88,6 +103,44 @@ export default function VoterLoginPage() {
           </button>
         </form>
       </div>
+
+      {/* Already Voted Alert Dialog */}
+      <AlertDialog
+        open={showAlreadyVotedDialog}
+        onOpenChange={setShowAlreadyVotedDialog}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="bg-yellow-100 dark:bg-yellow-900/30 p-2 rounded-full">
+                <AlertCircle className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+              </div>
+              <AlertDialogTitle className="text-xl">
+                Already Voted
+              </AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="text-base">
+              Our records show that you have already cast your vote in this
+              election. Each student is only allowed to vote once to ensure fair
+              and secure elections.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="bg-muted/50 p-4 rounded-lg my-2">
+            <p className="text-sm text-muted-foreground">
+              If you believe this is an error, please contact the election
+              administrator for assistance.
+            </p>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogAction
+              onClick={() => setShowAlreadyVotedDialog(false)}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              Understood
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { CheckCircle2, User } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -50,7 +49,6 @@ export default function BallotClient({
   positions,
   voter,
 }: BallotClientProps) {
-  const router = useRouter();
   const [selections, setSelections] = useState<Record<string, string>>({});
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
