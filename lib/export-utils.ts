@@ -163,7 +163,7 @@ export async function exportToPDF(data: ExportData) {
 }
 
 /**
- * Export election results to Excel
+ * Export election results to Excel with styling
  */
 export async function exportToExcel(data: ExportData) {
   // Create workbook
@@ -171,6 +171,7 @@ export async function exportToExcel(data: ExportData) {
 
   // Summary sheet data
   const summaryData = [
+    ["STUDENT ORGANIZATION ELECTION SYSTEM"],
     ["Election Report"],
     [],
     ["Metric", "Value"],
@@ -182,12 +183,14 @@ export async function exportToExcel(data: ExportData) {
   ];
 
   const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
-  summarySheet["!cols"] = [{ wch: 30 }, { wch: 20 }];
+  summarySheet["!cols"] = [{ wch: 30 }, { wch: 25 }];
+
   XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
 
-  // Detailed results sheet with all positions
+  // Detailed results sheet
   const resultsData: (string | number)[][] = [
-    ["Election Results - Detailed Breakdown"],
+    ["STUDENT ORGANIZATION ELECTION SYSTEM"],
+    ["ELECTION RESULTS - DETAILED BREAKDOWN"],
     [],
     ["Position", "Rank", "Candidate Name", "Partylist", "Votes", "Percentage"],
   ];
@@ -203,7 +206,7 @@ export async function exportToExcel(data: ExportData) {
         `${candidate.percentage.toFixed(1)}%`,
       ]);
     });
-    resultsData.push([]); // Add blank row between positions
+    resultsData.push([]);
   }
 
   const resultsSheet = XLSX.utils.aoa_to_sheet(resultsData);
@@ -215,12 +218,14 @@ export async function exportToExcel(data: ExportData) {
     { wch: 12 },
     { wch: 15 },
   ];
+
   XLSX.utils.book_append_sheet(workbook, resultsSheet, "Detailed Results");
 
   // Add individual sheets for each position
   for (const position of data.positions) {
     const positionData: (string | number)[][] = [
-      [`${position.positionName} - Results`],
+      ["STUDENT ORGANIZATION ELECTION SYSTEM"],
+      [`${position.positionName.toUpperCase()} - RESULTS`],
       [],
       ["Rank", "Candidate Name", "Partylist", "Votes", "Percentage"],
     ];
@@ -244,7 +249,6 @@ export async function exportToExcel(data: ExportData) {
       { wch: 15 },
     ];
 
-    // Sanitize sheet name (Excel has a 31 character limit)
     const sheetName = position.positionName.substring(0, 31);
     XLSX.utils.book_append_sheet(workbook, positionSheet, sheetName);
   }
