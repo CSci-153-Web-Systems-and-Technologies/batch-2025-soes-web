@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Share2, Power, Loader2, Copy, Check } from "lucide-react";
 import {
   Dialog,
@@ -10,6 +10,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
@@ -18,15 +29,19 @@ import { useRouter } from "next/navigation";
 interface ElectionHeaderActionsProps {
   electionId: string;
   electionStatus: string;
+  endDate?: string;
 }
 
 export default function ElectionHeaderActions({
   electionId,
   electionStatus,
+  endDate,
 }: ElectionHeaderActionsProps) {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
+  const [isEnding, setIsEnding] = useState(false);
+  const [autoEnded, setAutoEnded] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -35,6 +50,40 @@ export default function ElectionHeaderActions({
   }/ballot/${electionId}`;
 
   const isActive = electionStatus === "active";
+
+  // Auto-end election when end time is reached
+  useEffect(() => {
+    if (!isActive || !endDate || autoEnded) return;
+
+    const checkEndTime = async () => {
+      const now = new Date();
+      const endDateTime = new Date(endDate);
+
+      if (now >= endDateTime) {
+        try {
+          const { error } = await supabase
+            .from("election_sessions")
+            .update({ status: "ended" })
+            .eq("id", electionId);
+
+          if (!error) {
+            setAutoEnded(true);
+            toast.success("Election has ended automatically");
+            router.refresh();
+          }
+        } catch (err) {
+          console.error("Failed to auto-end election:", err);
+        }
+      }
+    };
+
+    // Check immediately
+    checkEndTime();
+
+    // Set interval to check every minute
+    const interval = setInterval(checkEndTime, 60000);
+    return () => clearInterval(interval);
+  }, [isActive, endDate, autoEnded, electionId, supabase, router]);
 
   const handleCopyLink = async () => {
     try {
@@ -71,6 +120,30 @@ export default function ElectionHeaderActions({
       console.error("Error:", error);
     } finally {
       setIsToggling(false);
+    }
+  };
+
+  const handleEndSession = async () => {
+    setIsEnding(true);
+    try {
+      const { error } = await supabase
+        .from("election_sessions")
+        .update({ status: "ended" })
+        .eq("id", electionId);
+
+      if (error) {
+        toast.error("Failed to end election: " + error.message);
+        setIsEnding(false);
+        return;
+      }
+
+      toast.success("Election ended successfully");
+      router.refresh();
+    } catch (error) {
+      toast.error("An error occurred while ending the election");
+      console.error("Error:", error);
+    } finally {
+      setIsEnding(false);
     }
   };
 
@@ -150,6 +223,42 @@ export default function ElectionHeaderActions({
             </div>
           </DialogContent>
         </Dialog>
+      )}
+
+      {/* End Session Button - Only show if active */}
+      {isActive && (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button size="sm" variant="destructive" className="gap-2">
+              End Session
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>End Election Session?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will immediately end the election and prevent further
+                voting. You can view results and export reports after ending.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleEndSession}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                {isEnding ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin mr-2" />
+                    Ending...
+                  </>
+                ) : (
+                  "End Session"
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
     </div>
   );

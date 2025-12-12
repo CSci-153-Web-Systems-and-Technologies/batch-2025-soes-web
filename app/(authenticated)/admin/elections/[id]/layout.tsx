@@ -26,7 +26,7 @@ export default async function SingleElectionLayout({
 
   const { data: election } = await supabase
     .from("election_sessions")
-    .select("title, status")
+    .select("title, status, end_date")
     .eq("id", id)
     .eq("user_id", user.id)
     .single();
@@ -66,6 +66,7 @@ export default async function SingleElectionLayout({
         <ElectionHeaderActions
           electionId={id}
           electionStatus={election.status}
+          endDate={election.end_date}
         />
       </div>
 
