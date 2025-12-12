@@ -96,9 +96,14 @@ export default async function BallotPage({
   // Group candidates by position
   const positionsWithCandidates = (positions || []).map((position) => ({
     ...position,
-    candidates: (candidates || []).filter(
-      (candidate) => candidate.position_id === position.id
-    ),
+    candidates: (candidates || [])
+      .filter((candidate) => candidate.position_id === position.id)
+      .map((candidate) => ({
+        ...candidate,
+        partylists: Array.isArray(candidate.partylists)
+          ? candidate.partylists[0] || null
+          : candidate.partylists,
+      })),
   }));
 
   // Debug log
