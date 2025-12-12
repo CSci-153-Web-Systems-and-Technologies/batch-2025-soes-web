@@ -24,12 +24,12 @@ export default async function ReportsPage() {
     return <div>Not authenticated</div>;
   }
 
-  // Fetch completed elections for the current user
+  // Fetch ended elections for the current user
   const { data: completedElections } = await supabase
     .from("election_sessions")
     .select("*")
     .eq("user_id", user.id)
-    .eq("status", "completed")
+    .eq("status", "ended")
     .order("updated_at", { ascending: false });
 
   const elections =

@@ -140,7 +140,7 @@ export default async function ElectionSettingsPage({
                   className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                     election?.status === "active"
                       ? "bg-green-100 text-green-700 border border-green-200"
-                      : election?.status === "completed"
+                      : election?.status === "ended"
                       ? "bg-gray-100 text-gray-700 border border-gray-200"
                       : "bg-yellow-100 text-yellow-700 border border-yellow-200"
                   }`}
@@ -162,7 +162,7 @@ export default async function ElectionSettingsPage({
           </div>
 
           {/* Status Toggle Button */}
-          {election?.status !== "completed" && (
+          {election?.status !== "ended" && (
             <div className="pt-2 flex flex-wrap gap-4">
               <ToggleElectionStatusButton
                 electionId={electionId}

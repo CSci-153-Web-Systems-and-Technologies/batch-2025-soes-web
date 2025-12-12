@@ -58,7 +58,7 @@ export default async function ElectionsListPage() {
     switch (status) {
       case "active":
         return "bg-green-100 text-green-700 border-green-200";
-      case "completed":
+      case "ended":
         return "bg-gray-100 text-gray-700 border-gray-200";
       default:
         return "bg-yellow-50 text-yellow-700 border-yellow-200";

@@ -77,7 +77,7 @@ export default function ElectionHeaderActions({
   return (
     <div className="flex items-center gap-3">
       {/* Status Toggle Button */}
-      {electionStatus !== "completed" && (
+      {electionStatus !== "ended" && (
         <Button
           onClick={handleToggleStatus}
           disabled={isToggling}

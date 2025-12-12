@@ -43,18 +43,26 @@ export default function EndElectionButton({
       const { error } = await supabase
         .from("election_sessions")
         .update({
-          status: "completed",
+          status: "ended",
           updated_at: new Date().toISOString(),
         })
         .eq("id", electionId);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error details:", {
+          message: error.message,
+          code: error.code,
+        });
+        throw new Error(error.message || "Failed to end election");
+      }
 
       toast.success("Election session ended successfully!");
       router.refresh();
     } catch (error) {
-      console.error("Error ending election:", error);
-      toast.error("Failed to end election session");
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      console.error("Error ending election:", errorMessage);
+      toast.error(errorMessage || "Failed to end election session");
     } finally {
       setIsLoading(false);
     }
@@ -79,15 +87,15 @@ export default function EndElectionButton({
           <AlertDialogDescription>
             Are you sure you want to end the &quot;{electionTitle}&quot;
             election session? This action will:
-            <ul className="mt-3 space-y-2 ml-4 list-disc text-sm">
-              <li>Mark the election as completed</li>
-              <li>Make the election available in reports</li>
-              <li>Stop accepting new votes</li>
-              <li>This action cannot be undone</li>
-            </ul>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="flex justify-end gap-3">
+        <ul className="mt-3 space-y-2 ml-4 list-disc text-sm">
+          <li>Permanently end the election</li>
+          <li>Make results available in reports</li>
+          <li>Prevent any new votes from being accepted</li>
+          <li>This action cannot be undone</li>
+        </ul>
+        <div className="flex justify-end gap-3 mt-6">
           <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleEndElection}
