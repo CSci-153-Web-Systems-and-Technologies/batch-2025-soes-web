@@ -76,7 +76,9 @@ export default function PartylistsPage() {
       // Fetch all candidates with their positions using the position_id foreign key
       const { data: candidatesData, error: candidatesError } = await supabase
         .from("candidates")
-        .select("id, student_id, full_name, description, avatar_url, partylist_id, position_id, positions:position_id(id, title)");
+        .select(
+          "id, student_id, full_name, description, avatar_url, partylist_id, position_id, positions:position_id(id, title)"
+        );
 
       if (candidatesError) {
         console.error("Candidates fetch error:", candidatesError);
@@ -87,9 +89,9 @@ export default function PartylistsPage() {
 
       // Map candidates to their partylists
       const partylistsWithCount = partylistData.map((p) => {
-        const partyCandidates = (candidatesData as Candidate[]).filter(
-          (c) => c.partylist_id === p.id
-        );
+        const partyCandidates = (
+          candidatesData as unknown as Candidate[]
+        ).filter((c) => c.partylist_id === p.id);
         return {
           id: p.id,
           name: p.name,
