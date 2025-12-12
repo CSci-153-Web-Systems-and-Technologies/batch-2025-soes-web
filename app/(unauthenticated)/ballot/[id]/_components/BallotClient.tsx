@@ -23,6 +23,10 @@ interface Position {
   id: string;
   title: string;
   rank: number;
+  rules?: {
+    vote_limit?: number;
+    allow_abstain?: boolean;
+  } | null;
   candidates: Candidate[];
 }
 
@@ -49,23 +53,58 @@ export default function BallotClient({
   positions,
   voter,
 }: BallotClientProps) {
-  const [selections, setSelections] = useState<Record<string, string | null>>(
-    {}
-  );
+  const [selections, setSelections] = useState<
+    Record<string, (string | null)[]>
+  >({});
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const handleSelectCandidate = (
     positionId: string,
-    candidateId: string | null
+    candidateId: string | null,
+    voteLimit: number = 1
   ) => {
-    setSelections((prev) => ({
-      ...prev,
-      [positionId]: candidateId,
-    }));
+    setSelections((prev) => {
+      const currentSelections = prev[positionId] || [];
+
+      // If abstain (null) is clicked
+      if (candidateId === null) {
+        return { ...prev, [positionId]: [null] };
+      }
+
+      // If selecting a candidate while abstain is active, replace abstain
+      if (currentSelections.includes(null)) {
+        return { ...prev, [positionId]: [candidateId] };
+      }
+
+      // Check if already selected
+      if (currentSelections.includes(candidateId)) {
+        // Deselect
+        return {
+          ...prev,
+          [positionId]: currentSelections.filter((id) => id !== candidateId),
+        };
+      }
+
+      // Check if limit reached
+      if (currentSelections.length >= voteLimit) {
+        // Replace first selection if limit is 1, otherwise don't add
+        if (voteLimit === 1) {
+          return { ...prev, [positionId]: [candidateId] };
+        }
+        return prev;
+      }
+
+      // Add to selections
+      return {
+        ...prev,
+        [positionId]: [...currentSelections, candidateId],
+      };
+    });
   };
 
   const isSelected = (positionId: string, candidateId: string | null) => {
-    return selections[positionId] === candidateId;
+    const currentSelections = selections[positionId] || [];
+    return currentSelections.includes(candidateId);
   };
 
   const handleSubmit = () => {
@@ -73,9 +112,10 @@ export default function BallotClient({
   };
 
   // Check if all positions have selections (including abstain)
-  const isVoteComplete = positions.every(
-    (position) => selections[position.id] !== undefined
-  );
+  const isVoteComplete = positions.every((position) => {
+    const currentSelections = selections[position.id] || [];
+    return currentSelections.length > 0;
+  });
 
   const getInitials = (name: string) => {
     return name
@@ -117,15 +157,37 @@ export default function BallotClient({
               <div key={position.id} className="space-y-4">
                 {/* Position Header */}
                 <div className="bg-muted/50 rounded-lg p-4 border border-border">
-                  <div className="flex items-center gap-2">
-                    <User className="w-5 h-5 text-muted-foreground" />
-                    <h2 className="text-lg font-semibold text-foreground">
-                      {position.title}
-                    </h2>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <User className="w-5 h-5 text-muted-foreground" />
+                      <h2 className="text-lg font-semibold text-foreground">
+                        {position.title}
+                      </h2>
+                    </div>
+                    {(position.rules?.vote_limit || 1) > 1 && (
+                      <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded">
+                        Select up to {position.rules?.vote_limit || 1}
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Choose one candidate for this position
+                    {(position.rules?.vote_limit || 1) === 1
+                      ? "Choose one candidate for this position"
+                      : `Choose up to ${
+                          position.rules?.vote_limit || 1
+                        } candidates for this position`}
                   </p>
+                  {(position.rules?.vote_limit || 1) > 1 && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Selected:{" "}
+                      {
+                        (selections[position.id] || []).filter(
+                          (id) => id !== null
+                        ).length
+                      }
+                      /{position.rules?.vote_limit || 1}
+                    </p>
+                  )}
                 </div>
 
                 {/* Candidates List */}
@@ -143,7 +205,11 @@ export default function BallotClient({
                           <button
                             key={candidate.id}
                             onClick={() =>
-                              handleSelectCandidate(position.id, candidate.id)
+                              handleSelectCandidate(
+                                position.id,
+                                candidate.id,
+                                position.rules?.vote_limit || 1
+                              )
                             }
                             className={`w-full p-4 rounded-lg border-2 transition-all ${
                               selected
@@ -210,7 +276,13 @@ export default function BallotClient({
 
                       {/* Abstain Option */}
                       <button
-                        onClick={() => handleSelectCandidate(position.id, null)}
+                        onClick={() =>
+                          handleSelectCandidate(
+                            position.id,
+                            null,
+                            position.rules?.vote_limit || 1
+                          )
+                        }
                         className={`w-full p-4 rounded-lg border-2 transition-all ${
                           isSelected(position.id, null)
                             ? "border-gray-500 bg-gray-50/50 dark:bg-gray-900/20"

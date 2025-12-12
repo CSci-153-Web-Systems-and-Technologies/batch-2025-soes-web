@@ -60,7 +60,8 @@ export default async function BallotPage({
       `
       id,
       title,
-      rank
+      rank,
+      rules
     `
     )
     .eq("election_id", electionId)

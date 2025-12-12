@@ -24,13 +24,17 @@ interface Candidate {
 interface Position {
   id: string;
   title: string;
+  rules?: {
+    vote_limit?: number;
+    allow_abstain?: boolean;
+  } | null;
   candidates: Candidate[];
 }
 
 interface ConfirmVoteDialogProps {
   open: boolean;
   onClose: () => void;
-  selections: Record<string, string | null>;
+  selections: Record<string, (string | null)[]>;
   positions: Position[];
   electionId: string;
   voterId: string;
@@ -50,14 +54,15 @@ export default function ConfirmVoteDialog({
   const handleConfirmVote = async () => {
     setSubmitting(true);
 
-    // Prepare votes array
-    const votes = Object.entries(selections).map(
-      ([positionId, candidateId]) => ({
-        electionId,
-        positionId,
-        candidateId,
-        voterId,
-      })
+    // Prepare votes array - flatten multiple selections per position
+    const votes = Object.entries(selections).flatMap(
+      ([positionId, candidateIds]) =>
+        candidateIds.map((candidateId) => ({
+          electionId,
+          positionId,
+          candidateId,
+          voterId,
+        }))
     );
 
     const result = await submitVote(votes);
@@ -70,11 +75,16 @@ export default function ConfirmVoteDialog({
     }
   };
 
-  const getSelectedCandidate = (positionId: string) => {
-    const candidateId = selections[positionId];
-    if (candidateId === null) return null; // Abstain
+  const getSelectedCandidates = (positionId: string) => {
+    const candidateIds = selections[positionId] || [];
     const position = positions.find((p) => p.id === positionId);
-    return position?.candidates.find((c) => c.id === candidateId);
+
+    return candidateIds
+      .map((candidateId) => {
+        if (candidateId === null) return null;
+        return position?.candidates.find((c) => c.id === candidateId);
+      })
+      .filter(Boolean);
   };
 
   return (
@@ -96,10 +106,10 @@ export default function ConfirmVoteDialog({
           </p>
 
           {positions.map((position) => {
-            const candidateId = selections[position.id];
+            const candidateIds = selections[position.id] || [];
 
             // Handle abstain
-            if (candidateId === null) {
+            if (candidateIds.includes(null)) {
               return (
                 <div
                   key={position.id}
@@ -118,28 +128,34 @@ export default function ConfirmVoteDialog({
               );
             }
 
-            const candidate = getSelectedCandidate(position.id);
-            if (!candidate) return null;
+            const candidates = getSelectedCandidates(
+              position.id
+            ) as Candidate[];
+            if (candidates.length === 0) return null;
 
             return (
-              <div
-                key={position.id}
-                className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg border border-border"
-              >
-                <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm text-muted-foreground">
-                    {position.title}
-                  </p>
-                  <p className="font-medium text-foreground">
-                    {candidate.full_name}
-                  </p>
-                  {candidate.partylists && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {candidate.partylists.name}
-                    </p>
-                  )}
-                </div>
+              <div key={position.id} className="space-y-2">
+                <p className="text-sm font-medium text-muted-foreground">
+                  {position.title}
+                </p>
+                {candidates.map((candidate) => (
+                  <div
+                    key={candidate.id}
+                    className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg border border-border ml-2"
+                  >
+                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">
+                        {candidate.full_name}
+                      </p>
+                      {candidate.partylists && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {candidate.partylists.name}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             );
           })}
