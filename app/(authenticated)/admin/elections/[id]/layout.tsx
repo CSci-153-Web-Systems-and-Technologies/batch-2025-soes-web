@@ -48,7 +48,7 @@ export default async function SingleElectionLayout({
       {/* Session Title Header */}
       <div className="flex items-center justify-between mb-6 gap-4">
         <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
             {election.title}
           </h1>
           <span
