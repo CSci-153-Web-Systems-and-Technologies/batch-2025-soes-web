@@ -23,7 +23,36 @@ export async function verifyVoter(schoolId: string, accessCode: string) {
   if (!voter) return { success: false, message: 'Invalid Student ID or Access Code' }
   if (voter.has_voted) return { success: false, message: 'You have already voted in this election.' }
 
-  // 4. Create a temporary "Session" for the voter
+  // 4. Check election status
+  const { data: election } = await supabaseAdmin
+    .from('election_sessions')
+    .select('status, title')
+    .eq('id', voter.election_id)
+    .single()
+
+  if (!election) return { success: false, message: 'Election not found' }
+  
+  if (election.status === 'draft') {
+    return { 
+      success: false, 
+      message: 'ELECTION_DEACTIVATED',
+      electionTitle: election.title 
+    }
+  }
+  
+  if (election.status === 'ended') {
+    return { 
+      success: false, 
+      message: 'ELECTION_ENDED',
+      electionTitle: election.title 
+    }
+  }
+  
+  if (election.status !== 'active') {
+    return { success: false, message: 'This election is not currently accepting votes' }
+  }
+
+  // 5. Create a temporary "Session" for the voter
   // We store their ID in a secure HTTP-only cookie so we know who they are on the next page
   const cookieStore = await cookies()
   cookieStore.set('voter_session', JSON.stringify({ voterId: voter.id }), { 
