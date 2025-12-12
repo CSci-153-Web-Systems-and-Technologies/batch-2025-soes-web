@@ -90,85 +90,94 @@ export default async function ElectionsListPage() {
         </div>
 
         <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-border text-xs uppercase text-muted-foreground font-semibold tracking-wide">
-              <th className="px-4 md:px-6 py-4">Election Title</th>
-              <th className="px-4 md:px-6 py-4 hidden sm:table-cell">Status</th>
-              <th className="px-4 md:px-6 py-4 hidden md:table-cell">Period</th>
-              <th className="px-4 md:px-6 py-4 hidden lg:table-cell">Turnout</th>
-              <th className="px-4 md:px-6 py-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {electionsWithTurnout?.map((election) => (
-              <tr
-                key={election.id}
-                className="hover:bg-accent transition-colors group"
-              >
-                {/* Title & Link */}
-                <td className="px-4 md:px-6 py-4">
-                  <div className="font-medium text-foreground">
-                    {election.title}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-0.5 font-mono">
-                    ID: {election.id.slice(0, 8)}...
-                  </div>
-                </td>
-
-                {/* Status Badge */}
-                <td className="px-4 md:px-6 py-4 hidden sm:table-cell">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
-                      election.status
-                    )}`}
-                  >
-                    {election.status.charAt(0).toUpperCase() +
-                      election.status.slice(1)}
-                  </span>
-                </td>
-
-                {/* Date Range */}
-                <td className="px-4 md:px-6 py-4 hidden md:table-cell">
-                  <div className="text-sm text-foreground font-medium">
-                    {format(new Date(election.start_date), "yyyy-MM-dd")}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-0.5">
-                    to {format(new Date(election.end_date), "yyyy-MM-dd")}
-                  </div>
-                </td>
-
-                {/* Turnout */}
-                <td className="px-4 md:px-6 py-4 hidden lg:table-cell">
-                  <div className="text-sm font-semibold text-foreground">
-                    {election.votesCast} / {election.totalVoters}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {election.turnoutPercentage}%
-                  </div>
-                </td>
-
-                {/* Action Button: THIS ENTERS THE [ID] FOLDER */}
-                <td className="px-4 md:px-6 py-4 text-right">
-                  <Link
-                    href={`/admin/elections/${election.id}`}
-                    className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
-                  >
-                    Manage <ArrowRight size={14} />
-                  </Link>
-                </td>
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-border text-xs uppercase text-muted-foreground font-semibold tracking-wide">
+                <th className="px-4 md:px-6 py-4">Election Title</th>
+                <th className="px-4 md:px-6 py-4 hidden sm:table-cell">
+                  Status
+                </th>
+                <th className="px-4 md:px-6 py-4 hidden md:table-cell">
+                  Period
+                </th>
+                <th className="px-4 md:px-6 py-4 hidden lg:table-cell">
+                  Turnout
+                </th>
+                <th className="px-4 md:px-6 py-4 text-right">Actions</th>
               </tr>
-            ))}
+            </thead>
+            <tbody className="divide-y divide-border">
+              {electionsWithTurnout?.map((election) => (
+                <tr
+                  key={election.id}
+                  className="hover:bg-accent transition-colors group"
+                >
+                  {/* Title & Link */}
+                  <td className="px-4 md:px-6 py-4">
+                    <div className="font-medium text-foreground">
+                      {election.title}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5 font-mono">
+                      ID: {election.id.slice(0, 8)}...
+                    </div>
+                  </td>
 
-            {(!electionsWithTurnout || electionsWithTurnout.length === 0) && (
-              <tr>
-                <td colSpan={5} className="p-8 text-center text-muted-foreground">
-                  No elections found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                  {/* Status Badge */}
+                  <td className="px-4 md:px-6 py-4 hidden sm:table-cell">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                        election.status
+                      )}`}
+                    >
+                      {election.status.charAt(0).toUpperCase() +
+                        election.status.slice(1)}
+                    </span>
+                  </td>
+
+                  {/* Date Range */}
+                  <td className="px-4 md:px-6 py-4 hidden md:table-cell">
+                    <div className="text-sm text-foreground font-medium">
+                      {format(new Date(election.start_date), "yyyy-MM-dd")}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
+                      to {format(new Date(election.end_date), "yyyy-MM-dd")}
+                    </div>
+                  </td>
+
+                  {/* Turnout */}
+                  <td className="px-4 md:px-6 py-4 hidden lg:table-cell">
+                    <div className="text-sm font-semibold text-foreground">
+                      {election.votesCast} / {election.totalVoters}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {election.turnoutPercentage}%
+                    </div>
+                  </td>
+
+                  {/* Action Button: THIS ENTERS THE [ID] FOLDER */}
+                  <td className="px-4 md:px-6 py-4 text-right">
+                    <Link
+                      href={`/admin/elections/${election.id}`}
+                      className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    >
+                      Manage <ArrowRight size={14} />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+
+              {(!electionsWithTurnout || electionsWithTurnout.length === 0) && (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="p-8 text-center text-muted-foreground"
+                  >
+                    No elections found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

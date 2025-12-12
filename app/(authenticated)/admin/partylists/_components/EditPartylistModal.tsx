@@ -106,7 +106,10 @@ export default function EditPartylistModal({
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-sm font-medium text-foreground">
+            <Label
+              htmlFor="name"
+              className="text-sm font-medium text-foreground"
+            >
               Partylist Name <span className="text-red-500">*</span>
             </Label>
             <Input

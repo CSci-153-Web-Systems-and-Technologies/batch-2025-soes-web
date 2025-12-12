@@ -195,13 +195,17 @@ export default function DashboardStats({
         <Card className="border border-border">
           <div className="p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-muted-foreground">Votes Cast</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">
+                Votes Cast
+              </h3>
               <Vote className="w-4 h-4 text-muted-foreground" />
             </div>
             <p className="text-3xl font-bold text-foreground">
               {stats.votesCast || 0}
             </p>
-            <p className="text-xs text-muted-foreground mt-2">+13 from last hour</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              +13 from last hour
+            </p>
           </div>
         </Card>
 
@@ -233,7 +237,9 @@ export default function DashboardStats({
               <BarChart3 className="w-4 h-4 text-muted-foreground" />
             </div>
             <p className="text-3xl font-bold text-green-600">Live</p>
-            <p className="text-xs text-muted-foreground mt-2">Results updating</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              Results updating
+            </p>
           </div>
         </Card>
       </div>

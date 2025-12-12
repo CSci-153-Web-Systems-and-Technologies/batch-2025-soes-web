@@ -65,19 +65,19 @@ export default function CandidateSearch({
     <div className="space-y-4">
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className="h-4 w-4 text-gray-400" />
+          <Search className="h-4 w-4 text-muted-foreground" />
         </div>
         <input
           type="text"
           placeholder="Search by name, ID, position, or partylist..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg w-full sm:w-80 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="pl-10 pr-4 py-2 border border-input rounded-lg w-full sm:w-80 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
         />
       </div>
-      <div className="border border-gray-200 rounded-xl overflow-hidden shadow-sm bg-white">
+      <div className="border border-border rounded-xl overflow-hidden shadow-sm bg-background">
         <table className="w-full text-sm text-left">
-          <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
+          <thead className="bg-muted text-muted-foreground font-medium border-b border-border">
             <tr>
               <th className="px-6 py-3">Candidate</th>
               <th className="px-6 py-3">Running For</th>
@@ -86,12 +86,12 @@ export default function CandidateSearch({
               <th className="px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-border">
             {filteredCandidates.length === 0 ? (
               <tr>
                 <td
                   colSpan={5}
-                  className="px-6 py-12 text-center text-gray-500"
+                  className="px-6 py-12 text-center text-muted-foreground"
                 >
                   {allCandidatesCount === 0
                     ? 'No candidates found. Click "Add Candidate" to get started.'
@@ -102,24 +102,24 @@ export default function CandidateSearch({
               filteredCandidates.map((candidate) => (
                 <tr
                   key={candidate.id}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-muted/50 transition-colors"
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-start gap-3">
-                      <Avatar className="h-10 w-10 border border-gray-200 mt-1">
+                      <Avatar className="h-10 w-10 border border-border mt-1">
                         <AvatarImage src={candidate.avatar_url || ""} />
-                        <AvatarFallback className="bg-gray-100 text-gray-500">
+                        <AvatarFallback className="bg-muted text-muted-foreground">
                           {getInitials(candidate.full_name)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
-                        <div className="font-medium text-gray-900">
+                        <div className="font-medium text-foreground">
                           {candidate.full_name}
                         </div>
 
                         {/* Render Description */}
                         {candidate.description && (
-                          <p className="text-xs text-gray-500 mt-1 line-clamp-2 max-w-[240px] leading-relaxed">
+                          <p className="text-xs text-muted-foreground mt-1 line-clamp-2 max-w-[240px] leading-relaxed">
                             {candidate.description}
                           </p>
                         )}
@@ -128,23 +128,27 @@ export default function CandidateSearch({
                   </td>
                   <td className="px-6 py-4 align-top pt-5">
                     {candidate.positions ? (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-transparent text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400">
                         {candidate.positions.title}
                       </span>
                     ) : (
-                      <span className="text-gray-400 italic">No Position</span>
+                      <span className="text-muted-foreground italic">
+                        No Position
+                      </span>
                     )}
                   </td>
                   <td className="px-6 py-4 align-top pt-5">
                     {candidate.partylists ? (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-purple-50 text-purple-700 border border-purple-100">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-transparent text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400">
                         {candidate.partylists.name}
                       </span>
                     ) : (
-                      <span className="text-gray-400 italic">No Partylist</span>
+                      <span className="text-muted-foreground italic">
+                        No Partylist
+                      </span>
                     )}
                   </td>
-                  <td className="px-6 py-4 align-top pt-5 font-mono text-gray-600">
+                  <td className="px-6 py-4 align-top pt-5 font-mono text-foreground">
                     {candidate.student_id}
                   </td>
                   <td className="px-6 py-4 align-top pt-5 text-right">

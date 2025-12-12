@@ -124,7 +124,9 @@ export default async function ElectionSettingsPage({
                 Description
               </label>
               <div className="p-4 bg-muted rounded-lg border border-border">
-                <p className="text-foreground text-sm">{election.description}</p>
+                <p className="text-foreground text-sm">
+                  {election.description}
+                </p>
               </div>
             </div>
           )}
@@ -135,14 +137,14 @@ export default async function ElectionSettingsPage({
               <label className="text-sm font-medium text-foreground block mb-2">
                 Status
               </label>
-              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="p-4 bg-muted rounded-lg border border-border">
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                     election?.status === "active"
-                      ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800"
+                      ? "bg-green-50/50 dark:bg-green-950/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300 border"
                       : election?.status === "ended"
-                      ? "bg-gray-100 text-gray-700 border border-gray-200"
-                      : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800"
+                      ? "bg-muted text-muted-foreground border border-border"
+                      : "bg-yellow-50/50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300 border"
                   }`}
                 >
                   {election?.status?.charAt(0).toUpperCase() +
@@ -152,11 +154,11 @@ export default async function ElectionSettingsPage({
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-2">
+              <label className="text-sm font-medium text-foreground block mb-2">
                 Created Date
               </label>
-              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <p className="text-gray-900 text-sm">{createdDate}</p>
+              <div className="p-4 bg-muted rounded-lg border border-border">
+                <p className="text-foreground text-sm">{createdDate}</p>
               </div>
             </div>
           </div>
@@ -190,33 +192,35 @@ export default async function ElectionSettingsPage({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-100">
-              <p className="text-2xl font-bold text-blue-600">
+            <div className="text-center p-4 bg-blue-50/50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                 {positionCount || 0}
               </p>
-              <p className="text-xs text-blue-600 font-medium mt-1">
+              <p className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1">
                 Positions
               </p>
             </div>
-            <div className="text-center p-4 bg-purple-50 rounded-lg border border-purple-100">
-              <p className="text-2xl font-bold text-purple-600">
+            <div className="text-center p-4 bg-purple-50/50 dark:bg-purple-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
+              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                 {candidateCount || 0}
               </p>
-              <p className="text-xs text-purple-600 font-medium mt-1">
+              <p className="text-xs text-purple-600 dark:text-purple-400 font-medium mt-1">
                 Candidates
               </p>
             </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg border border-green-100">
-              <p className="text-2xl font-bold text-green-600">
+            <div className="text-center p-4 bg-green-50/50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                 {voterCount || 0}
               </p>
-              <p className="text-xs text-green-600 font-medium mt-1">Voters</p>
+              <p className="text-xs text-green-600 dark:text-green-400 font-medium mt-1">
+                Voters
+              </p>
             </div>
-            <div className="text-center p-4 bg-orange-50 rounded-lg border border-orange-100">
-              <p className="text-2xl font-bold text-orange-600">
+            <div className="text-center p-4 bg-yellow-50/50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+              <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
                 {votesCastCount || 0}
               </p>
-              <p className="text-xs text-orange-600 font-medium mt-1">
+              <p className="text-xs text-yellow-600 dark:text-yellow-400 font-medium mt-1">
                 Votes Cast
               </p>
             </div>
@@ -228,7 +232,7 @@ export default async function ElectionSettingsPage({
       <Card className="bg-card border border-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Info size={18} className="text-blue-600" />
+            <Info size={18} className="text-blue-600 dark:text-blue-400" />
             Ballot Link
           </CardTitle>
           <CardDescription>
@@ -238,10 +242,12 @@ export default async function ElectionSettingsPage({
         <CardContent className="space-y-4">
           {election?.status === "active" ? (
             <>
-              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="text-xs text-muted-foreground mb-2">Ballot URL:</p>
+              <div className="p-4 bg-blue-50/50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p className="text-xs text-muted-foreground mb-2">
+                  Ballot URL:
+                </p>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                  <code className="flex-1 text-sm text-blue-900 font-mono break-all w-full">
+                  <code className="flex-1 text-sm text-blue-900 dark:text-blue-300 font-mono break-all w-full">
                     {ballotUrl}
                   </code>
                   <CopyBallotLinkButton ballotUrl={ballotUrl} />
@@ -253,11 +259,11 @@ export default async function ElectionSettingsPage({
               </p>
             </>
           ) : (
-            <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-              <p className="text-sm text-yellow-800 font-medium">
+            <div className="p-4 bg-yellow-50/50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+              <p className="text-sm text-yellow-800 dark:text-yellow-300 font-medium">
                 ⚠️ Activate the election session first
               </p>
-              <p className="text-xs text-yellow-700 mt-2">
+              <p className="text-xs text-yellow-700 dark:text-yellow-400 mt-2">
                 The ballot link will be available once you activate this
                 election session. This ensures voters can only access the ballot
                 when the election is running.
@@ -268,7 +274,7 @@ export default async function ElectionSettingsPage({
       </Card>
 
       {/* Danger Zone */}
-      <Card className="bg-card border border-red-200">
+      <Card className="bg-card border border-red-600">
         <CardHeader>
           <CardTitle className="text-red-600">Danger Zone</CardTitle>
           <CardDescription>Irreversible actions</CardDescription>

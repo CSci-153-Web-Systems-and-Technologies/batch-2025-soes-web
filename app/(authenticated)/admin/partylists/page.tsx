@@ -212,72 +212,72 @@ export default function PartylistsPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-b border-border bg-muted">
-                  <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                    Name
-                  </TableHead>
-                  <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">
-                    Description
-                  </TableHead>
-                  <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                    Candidates
-                  </TableHead>
-                  <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide text-right">
-                    Actions
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {partylists.map((partylist) => (
-                  <TableRow
-                    key={partylist.id}
-                    className="border-b border-border hover:bg-accent transition-colors"
-                  >
-                    <TableCell className="px-4 py-4">
-                      <div className="font-medium text-foreground">
-                        {partylist.name}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-4 py-4 text-sm text-muted-foreground hidden md:table-cell">
-                      {partylist.description || "-"}
-                    </TableCell>
-                    <TableCell className="px-4 py-4">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        {partylist.members_count}
-                      </span>
-                    </TableCell>
-                    <TableCell className="px-4 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <ViewPartylistMembersModal
-                          partylistName={partylist.name}
-                          candidates={partylist.candidates || []}
-                        />
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEdit(partylist)}
-                          className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
-                        >
-                          <Edit2 className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() =>
-                            handleDelete(partylist.id, partylist.name)
-                          }
-                          className="text-red-600 hover:text-red-800 hover:bg-red-50"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-b border-border bg-muted">
+                    <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                      Name
+                    </TableHead>
+                    <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">
+                      Description
+                    </TableHead>
+                    <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                      Candidates
+                    </TableHead>
+                    <TableHead className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide text-right">
+                      Actions
+                    </TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {partylists.map((partylist) => (
+                    <TableRow
+                      key={partylist.id}
+                      className="border-b border-border hover:bg-accent transition-colors"
+                    >
+                      <TableCell className="px-4 py-4">
+                        <div className="font-medium text-foreground">
+                          {partylist.name}
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-4 py-4 text-sm text-muted-foreground hidden md:table-cell">
+                        {partylist.description || "-"}
+                      </TableCell>
+                      <TableCell className="px-4 py-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          {partylist.members_count}
+                        </span>
+                      </TableCell>
+                      <TableCell className="px-4 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <ViewPartylistMembersModal
+                            partylistName={partylist.name}
+                            candidates={partylist.candidates || []}
+                          />
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEdit(partylist)}
+                            className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                          >
+                            <Edit2 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() =>
+                              handleDelete(partylist.id, partylist.name)
+                            }
+                            className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           )}
         </CardContent>
@@ -307,7 +307,9 @@ function StatCard({ title, value }: { title: string; value: number | string }) {
   return (
     <Card className="shadow-sm border-border">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <span className="text-sm font-medium text-muted-foreground">{title}</span>
+        <span className="text-sm font-medium text-muted-foreground">
+          {title}
+        </span>
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold text-foreground">{value}</div>

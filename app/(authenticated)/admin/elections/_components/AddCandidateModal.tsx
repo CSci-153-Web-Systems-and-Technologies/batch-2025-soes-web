@@ -194,7 +194,9 @@ export default function AddCandidateModal({
           <div className="space-y-1">
             <label className="text-sm font-medium text-foreground">
               Partylist{" "}
-              <span className="text-muted-foreground font-normal">(Optional)</span>
+              <span className="text-muted-foreground font-normal">
+                (Optional)
+              </span>
             </label>
             <select
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
@@ -244,7 +246,7 @@ export default function AddCandidateModal({
             <button
               type="submit"
               disabled={isLoading || positions.length === 0 || disabled}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isLoading ? (
                 <Loader2 size={16} className="animate-spin" />

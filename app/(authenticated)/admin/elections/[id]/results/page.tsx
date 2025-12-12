@@ -244,7 +244,9 @@ export default function ResultsPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <BarChart3 className="w-5 h-5 text-foreground" />
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">Live Results</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            Live Results
+          </h2>
         </div>
         <Button
           onClick={handleRefresh}
@@ -266,7 +268,9 @@ export default function ResultsPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">{totalVotesCast}</p>
+          <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">
+            {totalVotesCast}
+          </p>
         </CardContent>
       </Card>
 

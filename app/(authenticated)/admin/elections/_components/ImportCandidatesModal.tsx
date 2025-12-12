@@ -336,7 +336,7 @@ export default function ImportCandidatesModal({
             <button
               onClick={handleFileUpload}
               disabled={!file || isLoading || disabled}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <Loader2 size={16} className="animate-spin" />

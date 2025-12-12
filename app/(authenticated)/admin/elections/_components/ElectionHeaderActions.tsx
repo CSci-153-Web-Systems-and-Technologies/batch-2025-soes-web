@@ -198,7 +198,9 @@ export default function ElectionHeaderActions({
             </DialogHeader>
             <div className="space-y-4">
               <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                <p className="text-xs text-muted-foreground mb-2">Ballot URL:</p>
+                <p className="text-xs text-muted-foreground mb-2">
+                  Ballot URL:
+                </p>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                   <code className="flex-1 text-xs md:text-sm text-blue-900 dark:text-blue-300 font-mono break-all">
                     {ballotUrl}
@@ -230,7 +232,11 @@ export default function ElectionHeaderActions({
       {isActive && (
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button size="sm" variant="destructive" className="gap-2 w-full sm:w-auto">
+            <Button
+              size="sm"
+              variant="destructive"
+              className="gap-2 w-full sm:w-auto"
+            >
               End Session
             </Button>
           </AlertDialogTrigger>

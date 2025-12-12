@@ -147,7 +147,9 @@ function StatCard({ title, value }: { title: string; value: number | string }) {
   return (
     <Card className="shadow-sm border-border">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <span className="text-sm font-medium text-muted-foreground">{title}</span>
+        <span className="text-sm font-medium text-muted-foreground">
+          {title}
+        </span>
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold text-foreground">{value}</div>

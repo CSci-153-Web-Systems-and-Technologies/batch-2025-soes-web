@@ -39,7 +39,9 @@ export default async function ReportsPage() {
     <div className="space-y-6 mt-6 p-4 md:p-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground">Reports & Results</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+          Reports & Results
+        </h1>
         <p className="text-muted-foreground mt-2">
           View final election results and generate comprehensive reports for
           completed elections

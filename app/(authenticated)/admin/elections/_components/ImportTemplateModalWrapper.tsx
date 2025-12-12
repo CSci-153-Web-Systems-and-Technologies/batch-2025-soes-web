@@ -24,7 +24,7 @@ export default function ImportTemplateModalWrapper({
       <Button
         onClick={() => setIsOpen(true)}
         disabled={disabled}
-        className="bg-gray-900 text-white hover:bg-gray-800 gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
         title={
           disabled ? "Cannot import after template is already imported" : ""
         }

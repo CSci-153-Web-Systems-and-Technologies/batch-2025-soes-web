@@ -85,7 +85,7 @@ export default async function SingleElectionLayout({
       <TabNavigation electionId={id} />
 
       {/* The Tab Content */}
-      <div className="flex-1 bg-white border border-t-0 rounded-b-xl shadow-sm p-6 min-h-[500px]">
+      <div className="flex-1 bg-background border border-t-0 rounded-b-xl shadow-sm p-6 min-h-[500px]">
         {children}
       </div>
     </div>
