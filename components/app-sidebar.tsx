@@ -50,8 +50,8 @@ const items = [
     icon: Vote,
   },
   {
-    title: "Candidates and Partylists",
-    url: "/admin/candidates",
+    title: "Partylists",
+    url: "/admin/partylists",
     icon: Users,
   },
   {

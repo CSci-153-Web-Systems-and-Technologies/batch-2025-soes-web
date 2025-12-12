@@ -6,6 +6,7 @@ import AddPositionModal from "../../_components/AddPositionModal";
 import PositionCandidates from "../../_components/PositionCandidates";
 import PositionActions from "../../_components/PositionActions";
 import ClearPositionsButton from "../../_components/ClearPositionsButton";
+import ViewPartylistCandidatesModal from "../../_components/ViewPartylistCandidatesModal";
 
 interface PositionRule {
   vote_limit?: number;
@@ -18,6 +19,10 @@ interface Candidate {
   full_name: string;
   description: string | null;
   avatar_url: string | null;
+  partylists?: {
+    id: string;
+    name: string;
+  };
 }
 
 interface Position {
@@ -36,10 +41,21 @@ export default async function ElectionPositionsPage({
   const { id: electionId } = await params;
   const supabase = await createClient();
 
-  // 1. Fetch Current Positions for this Election (with candidates)
+  // Get election status
+  const { data: election } = await supabase
+    .from("election_sessions")
+    .select("status")
+    .eq("id", electionId)
+    .single();
+
+  const isElectionEnded = election?.status === "ended";
+
+  // 1. Fetch Current Positions for this Election (with candidates and partylist info)
   const { data: positionsData } = await supabase
     .from("positions")
-    .select("*, candidates(id, student_id, full_name, description, avatar_url)")
+    .select(
+      "*, candidates(id, student_id, full_name, description, avatar_url, partylists(id, name))"
+    )
     .eq("election_id", electionId)
     .order("rank", { ascending: true });
 
@@ -47,61 +63,69 @@ export default async function ElectionPositionsPage({
   const positions = (positionsData as unknown as Position[]) || [];
 
   // 2. Fetch Available Templates (active only)
-  // We explicitly select the count of definitions to show (optional, but good for UI)
   const { data: templatesData } = await supabase
     .from("position_templates")
-    .select("id, name, template_definitions(count)")
+    .select("id, name")
     .eq("status", "active");
 
   // Transform/Cast data to match the Modal's expected type
-  // Supabase returns { count: number }[] for count queries
   const templates =
     templatesData?.map((t) => ({
       id: t.id,
       name: t.name,
-      template_definitions: t.template_definitions as unknown as {
-        count: number;
-      }[],
     })) || [];
+
+  // Collect all candidates from all positions for the partylist viewer
+  const allCandidates: Candidate[] = [];
+  positions.forEach((pos) => {
+    if (pos.candidates) {
+      allCandidates.push(...pos.candidates);
+    }
+  });
 
   return (
     <div className="space-y-6">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Positions</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-lg font-semibold text-foreground">Positions</h2>
+          <p className="text-sm text-muted-foreground">
             Manage the positions candidates can run for.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {/* Wrapper handles the client-side modal state */}
           <ImportTemplateModalWrapper
             electionId={electionId}
             templates={templates}
-            disabled={positions.length > 0}
+            disabled={positions.length > 0 || isElectionEnded}
           />
 
           <AddPositionModal
             electionId={electionId}
-            disabled={positions.length > 0}
+            disabled={positions.length > 0 || isElectionEnded}
           />
 
-          <ClearPositionsButton electionId={electionId} />
+          <ViewPartylistCandidatesModal candidates={allCandidates} />
+
+          <ClearPositionsButton
+            electionId={electionId}
+            disabled={isElectionEnded}
+          />
         </div>
       </div>
 
       {/* Positions List */}
       {positions.length === 0 ? (
-        <Card className="bg-white border border-gray-200">
+        <Card className="bg-card border border-border">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <div className="flex flex-col items-center justify-center space-y-3">
-              <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center">
-                <LayoutTemplate className="h-6 w-6 text-gray-400" />
+              <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+                <LayoutTemplate className="h-6 w-6 text-muted-foreground" />
               </div>
               <div className="text-center">
-                <p className="font-medium text-gray-900">No positions yet</p>
-                <p className="text-gray-500 text-sm mt-1 max-w-sm mx-auto">
+                <p className="font-medium text-foreground">No positions yet</p>
+                <p className="text-muted-foreground text-sm mt-1 max-w-sm mx-auto">
                   You can manually add positions or import them from a template
                   to get started quickly.
                 </p>
@@ -114,21 +138,21 @@ export default async function ElectionPositionsPage({
           {positions.map((pos) => (
             <Card
               key={pos.id}
-              className="bg-white border border-gray-200 overflow-hidden"
+              className="bg-card border border-border overflow-hidden"
             >
               <CardHeader className="pb-0">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
-                      <span className="text-xs font-mono text-gray-400">
+                      <span className="text-xs font-mono text-muted-foreground">
                         #{pos.rank}
                       </span>
-                      <h3 className="text-lg font-semibold text-gray-900">
+                      <h3 className="text-lg font-semibold text-foreground">
                         {pos.title}
                       </h3>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium">
                         <Users size={14} className="mr-1.5" />
                         {pos.rules?.vote_limit || 1} Seat(s)
                       </span>

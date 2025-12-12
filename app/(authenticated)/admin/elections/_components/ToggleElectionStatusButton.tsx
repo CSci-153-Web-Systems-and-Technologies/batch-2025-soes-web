@@ -53,7 +53,8 @@ export default function ToggleElectionStatusButton({
     <Button
       onClick={handleToggleStatus}
       disabled={isLoading}
-      className={`gap-2 ${
+      size="sm"
+      className={`h-7 px-2 py-1 text-xs font-semibold gap-1 ${
         isActive
           ? "bg-red-600 hover:bg-red-700"
           : "bg-green-700 hover:bg-green-900"

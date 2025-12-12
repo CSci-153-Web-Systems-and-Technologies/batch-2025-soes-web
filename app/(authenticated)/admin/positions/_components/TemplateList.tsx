@@ -48,9 +48,9 @@ export default function TemplateList({
         </button>
       </div>
 
-      <div className="border border-gray-200 rounded-xl overflow-hidden shadow-sm bg-white">
+      <div className="border border-border rounded-xl overflow-hidden shadow-sm bg-background">
         <table className="w-full text-sm text-left">
-          <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
+          <thead className="bg-muted text-muted-foreground font-medium border-b border-border">
             <tr>
               <th className="w-12 px-6 py-3"></th>
               <th className="px-6 py-3">Template Name</th>
@@ -59,12 +59,12 @@ export default function TemplateList({
               <th className="px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-border">
             {templates.length === 0 ? (
               <tr>
                 <td
                   colSpan={5}
-                  className="px-6 py-12 text-center text-gray-500"
+                  className="px-6 py-12 text-center text-muted-foreground"
                 >
                   No templates found. Create one to get started.
                 </td>
@@ -79,14 +79,14 @@ export default function TemplateList({
                   <div key={template.id} style={{ display: "contents" }}>
                     {/* Main Row */}
                     <tr
-                      className={`hover:bg-gray-50 transition-colors ${
-                        isExpanded ? "bg-gray-50" : ""
+                      className={`hover:bg-muted/50 transition-colors ${
+                        isExpanded ? "bg-muted/50" : ""
                       }`}
                     >
                       <td className="px-6 py-4">
                         <button
                           onClick={() => toggleRow(template.id)}
-                          className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition"
+                          className="p-1 text-muted-foreground hover:text-foreground hover:bg-accent rounded transition"
                         >
                           {isExpanded ? (
                             <ChevronDown size={18} />
@@ -135,17 +135,17 @@ export default function TemplateList({
                             <div className="divide-y divide-gray-100">
                               {/* FIX: Use correct DB field names (order, name, vote_limit) */}
                               {definitions
-                                .sort((a, b) => a.order - b.order) 
+                                .sort((a, b) => a.order - b.order)
                                 .map((pos) => (
                                   <div key={pos.id}>
                                     {/* The Position Title Row */}
                                     <div className="flex items-center justify-between px-4 py-3">
                                       <div className="flex items-center gap-3">
                                         <div className="w-6 text-center text-xs font-mono text-gray-400">
-                                          #{pos.order} 
+                                          #{pos.order}
                                         </div>
                                         <span className="font-medium text-gray-700">
-                                          {pos.name} 
+                                          {pos.name}
                                         </span>
                                       </div>
                                       <div className="flex items-center gap-2">
@@ -163,7 +163,9 @@ export default function TemplateList({
                                           }`}
                                         >
                                           {pos.vote_limit}{" "}
-                                          {pos.vote_limit === 1 ? "Seat" : "Seats"}
+                                          {pos.vote_limit === 1
+                                            ? "Seat"
+                                            : "Seats"}
                                         </span>
                                       </div>
                                     </div>
@@ -171,25 +173,25 @@ export default function TemplateList({
                                     {/* Sub-row Logic */}
                                     {pos.vote_limit > 1 && (
                                       <div className="bg-gray-50 border-t border-gray-100">
-                                        {Array.from({ length: pos.vote_limit }).map(
-                                          (_, index) => (
-                                            <div
-                                              key={index}
-                                              className="flex items-center gap-3 py-2 px-4 pl-14 text-sm border-b border-gray-100 last:border-0 text-gray-500"
-                                            >
-                                              <div className="text-gray-300">
-                                                └
-                                              </div>
-                                              <div className="w-5 h-5 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[10px] font-mono">
-                                                {index + 1}
-                                              </div>
-                                              <span className="text-xs">
-                                                Candidate Slot {index + 1} for{" "}
-                                                {pos.name}
-                                              </span>
+                                        {Array.from({
+                                          length: pos.vote_limit,
+                                        }).map((_, index) => (
+                                          <div
+                                            key={index}
+                                            className="flex items-center gap-3 py-2 px-4 pl-14 text-sm border-b border-gray-100 last:border-0 text-gray-500"
+                                          >
+                                            <div className="text-gray-300">
+                                              └
                                             </div>
-                                          )
-                                        )}
+                                            <div className="w-5 h-5 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[10px] font-mono">
+                                              {index + 1}
+                                            </div>
+                                            <span className="text-xs">
+                                              Candidate Slot {index + 1} for{" "}
+                                              {pos.name}
+                                            </span>
+                                          </div>
+                                        ))}
                                       </div>
                                     )}
                                   </div>

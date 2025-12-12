@@ -11,14 +11,25 @@ interface PositionOption {
   title: string;
 }
 
+interface PartylistOption {
+  id: string;
+  name: string;
+}
+
 interface CandidateActionsProps {
   electionId: string;
   positions: PositionOption[];
+  partylists: PartylistOption[];
+  onDataChange?: () => void;
+  isElectionEnded?: boolean;
 }
 
 export default function CandidateActions({
   electionId,
   positions,
+  partylists,
+  onDataChange,
+  isElectionEnded = false,
 }: CandidateActionsProps) {
   // 1. Manage state for both modals here
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -27,11 +38,16 @@ export default function CandidateActions({
   return (
     <>
       {/* --- BUTTONS --- */}
-      
+
       {/* Import Button */}
       <button
         onClick={() => setIsImportOpen(true)}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        disabled={isElectionEnded}
+        className={`flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors w-full sm:w-auto ${
+          isElectionEnded
+            ? "bg-muted text-muted-foreground cursor-not-allowed"
+            : "text-foreground bg-background border border-input hover:bg-accent"
+        }`}
       >
         <Upload size={16} />
         <span className="hidden sm:inline">Import CSV</span>
@@ -40,27 +56,38 @@ export default function CandidateActions({
       {/* Add Candidate Button */}
       <button
         onClick={() => setIsAddOpen(true)}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
+        disabled={isElectionEnded}
+        className={`flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors w-full sm:w-auto ${
+          isElectionEnded
+            ? "bg-muted text-muted-foreground cursor-not-allowed"
+            : "text-primary-foreground bg-primary hover:bg-primary/90"
+        }`}
       >
         <UserPlus size={16} />
         <span>Add Candidate</span>
       </button>
 
       {/* --- MODALS --- */}
-      
+
       {/* We pass the state (isOpen) and the closer (onClose) to the modals */}
       <ImportCandidatesModal
         electionId={electionId}
-        positions={positions} // Don't forget positions, the import modal needs them for mapping!
+        positions={positions}
+        partylists={partylists}
         isOpen={isImportOpen}
         onClose={() => setIsImportOpen(false)}
+        onSuccess={onDataChange}
+        disabled={isElectionEnded}
       />
 
       <AddCandidateModal
         electionId={electionId}
         positions={positions}
+        partylists={partylists}
         isOpen={isAddOpen}
         onClose={() => setIsAddOpen(false)}
+        onSuccess={onDataChange}
+        disabled={isElectionEnded}
       />
     </>
   );
