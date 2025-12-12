@@ -1,4 +1,3 @@
-import jsPDF from "jspdf";
 import * as XLSX from "xlsx";
 
 interface CandidateResult {
@@ -26,105 +25,141 @@ interface ExportData {
 }
 
 /**
- * Export election results to PDF
+ * Export election results to PDF using HTML rendering
  */
 export async function exportToPDF(data: ExportData) {
-  const pdf = new jsPDF();
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-  let yPosition = 15;
-
-  // Set font
-  pdf.setFont("helvetica");
-
-  // Title
-  pdf.setFontSize(16);
-  pdf.text(`Election Results: ${data.electionTitle}`, pageWidth / 2, yPosition, {
-    align: "center",
-  });
-  yPosition += 12;
-
-  // Export date
-  pdf.setFontSize(10);
-  pdf.setTextColor(100);
-  pdf.text(
-    `Generated: ${new Date(data.exportDate).toLocaleString()}`,
-    pageWidth / 2,
-    yPosition,
-    { align: "center" }
-  );
-  yPosition += 15;
-
-  // Summary statistics
-  pdf.setTextColor(0);
-  pdf.setFontSize(11);
-  pdf.text("Summary Statistics", 14, yPosition);
-  yPosition += 8;
-
-  pdf.setFontSize(10);
-  const statsData = [
-    `Total Voters: ${data.totalVoters}`,
-    `Votes Cast: ${data.votesCast}`,
-    `Turnout: ${data.turnoutPercentage}`,
-  ];
-
-  statsData.forEach((stat) => {
-    pdf.text(stat, 20, yPosition);
-    yPosition += 7;
-  });
-
-  yPosition += 5;
-
-  // Position results
-  for (const position of data.positions) {
-    // Check if we need a new page
-    if (yPosition > pageHeight - 80) {
-      pdf.addPage();
-      yPosition = 15;
-    }
-
-    // Position name
-    pdf.setFontSize(12);
-    pdf.setFillColor(41, 128, 185); // Blue background
-    pdf.setTextColor(255, 255, 255); // White text
-    pdf.rect(14, yPosition - 5, pageWidth - 28, 8, "F");
-    pdf.text(position.positionName, 16, yPosition + 1);
-    pdf.setTextColor(0); // Reset to black
-    yPosition += 12;
-
-    // Candidates list
-    pdf.setFontSize(9);
-    position.candidates.forEach((candidate, index) => {
-      if (yPosition > pageHeight - 20) {
-        pdf.addPage();
-        yPosition = 15;
-      }
-
-      // Rank and candidate name
-      pdf.text(
-        `${index + 1}. ${candidate.candidateName}`,
-        20,
-        yPosition
-      );
-      yPosition += 6;
-
-      // Partylist and votes
-      pdf.setFontSize(8);
-      pdf.setTextColor(100);
-      pdf.text(
-        `Partylist: ${candidate.partylist || "N/A"} | Votes: ${candidate.voteCount} (${candidate.percentage.toFixed(1)}%)`,
-        25,
-        yPosition
-      );
-      pdf.setTextColor(0);
-      pdf.setFontSize(9);
-      yPosition += 8;
-    });
-
-    yPosition += 5;
+  // Fetch and convert logo to data URL
+  let logoDataUrl = "";
+  try {
+    const logoResponse = await fetch("/logo.svg");
+    const logoBlob = await logoResponse.blob();
+    logoDataUrl = URL.createObjectURL(logoBlob);
+  } catch (error) {
+    console.warn("Could not load logo:", error);
   }
 
-  pdf.save(`${data.electionTitle}-results.pdf`);
+  // Create HTML content for the PDF
+  let htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>${data.electionTitle} - Election Results</title>
+      <style>
+        * { margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; color: #333; }
+        .header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 30px; border-bottom: 3px solid #15803d; padding-bottom: 15px; }
+        .logo-section { flex-shrink: 0; }
+        .logo-section img { height: 80px; width: auto; }
+        .header-content { flex-grow: 1; }
+        .header h1 { color: #15803d; font-size: 28px; margin-bottom: 10px; }
+        .header p { color: #666; font-size: 12px; }
+        .section { margin-bottom: 30px; }
+        .section h2 { background-color: #15803d; color: white; padding: 10px; margin-bottom: 15px; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th { background-color: #166534; color: white; padding: 10px; text-align: left; font-size: 12px; }
+        td { padding: 8px; border-bottom: 1px solid #ddd; font-size: 11px; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .summary-box { display: inline-block; margin-right: 30px; margin-bottom: 15px; }
+        .summary-box strong { display: block; color: #15803d; font-size: 12px; }
+        .summary-box span { display: block; font-size: 24px; font-weight: bold; color: #333; }
+        .page-break { page-break-after: always; }
+        .rank { font-weight: bold; color: #15803d; }
+        @media print {
+          body { padding: 0; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="logo-section">
+          ${logoDataUrl ? `<img src="${logoDataUrl}" alt="Logo">` : ""}
+        </div>
+        <div class="header-content">
+          <h1>Election Results Report</h1>
+          <p><strong>${data.electionTitle}</strong></p>
+          <p>Generated: ${new Date(data.exportDate).toLocaleString()}</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Summary Statistics</h2>
+        <div class="summary-box">
+          <strong>Total Voters</strong>
+          <span>${data.totalVoters}</span>
+        </div>
+        <div class="summary-box">
+          <strong>Votes Cast</strong>
+          <span>${data.votesCast}</span>
+        </div>
+        <div class="summary-box">
+          <strong>Turnout</strong>
+          <span>${data.turnoutPercentage}</span>
+        </div>
+      </div>
+  `;
+
+  // Add position results
+  for (let i = 0; i < data.positions.length; i++) {
+    const position = data.positions[i];
+
+    if (i > 0) {
+      htmlContent += '<div class="page-break"></div>';
+    }
+
+    htmlContent += `
+      <div class="section">
+        <h2>${position.positionName}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Candidate Name</th>
+              <th>Partylist</th>
+              <th>Votes</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+
+    position.candidates.forEach((candidate, index) => {
+      htmlContent += `
+        <tr>
+          <td class="rank">${index + 1}</td>
+          <td>${candidate.candidateName}</td>
+          <td>${candidate.partylist || "N/A"}</td>
+          <td>${candidate.voteCount}</td>
+          <td>${candidate.percentage.toFixed(1)}%</td>
+        </tr>
+      `;
+    });
+
+    htmlContent += `
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  htmlContent += `
+      <div style="text-align: center; margin-top: 50px; color: #999; font-size: 10px;">
+        <p>This document was generated automatically by the Election Management System</p>
+      </div>
+    </body>
+    </html>
+  `;
+
+  // Open in new window and let user print to PDF
+  const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const newWindow = window.open(url, "_blank");
+  
+  if (newWindow) {
+    setTimeout(() => {
+      newWindow.print();
+    }, 500);
+  }
 }
 
 /**
