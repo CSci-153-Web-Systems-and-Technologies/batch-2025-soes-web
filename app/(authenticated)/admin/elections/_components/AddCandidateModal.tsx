@@ -4,7 +4,10 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { X, Loader2, UserPlus } from "lucide-react";
 import { toast } from "sonner";
-import type { PositionOption, PartylistOption } from "../[id]/candidates/_components/CandidatesPageClient";
+import type {
+  PositionOption,
+  PartylistOption,
+} from "../[id]/candidates/_components/CandidatesPageClient";
 
 interface AddCandidateModalProps {
   electionId: string;

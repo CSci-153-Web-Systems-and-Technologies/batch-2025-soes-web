@@ -18,5 +18,10 @@ export default async function CandidatesPage({
 
   const isElectionEnded = election?.status === "ended";
 
-  return <CandidatesPageClient electionId={electionId} isElectionEnded={isElectionEnded} />;
+  return (
+    <CandidatesPageClient
+      electionId={electionId}
+      isElectionEnded={isElectionEnded}
+    />
+  );
 }

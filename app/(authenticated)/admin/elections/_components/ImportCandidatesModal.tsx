@@ -4,7 +4,10 @@ import { useState, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { X, Upload, FileSpreadsheet, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import type { PositionOption, PartylistOption } from "../[id]/candidates/_components/CandidatesPageClient";
+import type {
+  PositionOption,
+  PartylistOption,
+} from "../[id]/candidates/_components/CandidatesPageClient";
 
 interface ImportCandidatesModalProps {
   electionId: string;
