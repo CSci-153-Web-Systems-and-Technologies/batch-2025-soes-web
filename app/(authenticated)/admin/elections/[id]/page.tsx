@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { AlertCircle, CheckCircle2, Zap, Calendar, Clock } from "lucide-react";
+import ElectionSelector from "../_components/ElectionSelector";
 
 export default async function ElectionOverviewPage({
   params,
@@ -15,6 +16,12 @@ export default async function ElectionOverviewPage({
     .select("*")
     .eq("id", id)
     .single();
+
+  // Fetch all elections for the selector
+  const { data: allElections } = await supabase
+    .from("election_sessions")
+    .select("id, title, status")
+    .order("created_at", { ascending: false });
 
   // Fetch counts in parallel
   const [totalVotersReq, votesCastReq, positionsReq, candidatesReq] =
@@ -110,6 +117,30 @@ export default async function ElectionOverviewPage({
 
   return (
     <div className="space-y-6">
+      {/* Election Selector */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {election?.title}
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Monitor and manage your election session
+          </p>
+        </div>
+        {allElections && allElections.length > 1 && (
+          <ElectionSelector
+            currentElectionId={id}
+            elections={
+              allElections as Array<{
+                id: string;
+                title: string;
+                status: string;
+              }>
+            }
+          />
+        )}
+      </div>
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Total Voters Card */}
