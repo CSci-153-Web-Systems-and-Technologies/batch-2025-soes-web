@@ -4,12 +4,7 @@ import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { X, Loader2, UserPlus } from "lucide-react";
 import { toast } from "sonner";
-import { PositionOption } from "../[id]/candidates/page";
-
-interface PartylistOption {
-  id: string;
-  name: string;
-}
+import type { PositionOption, PartylistOption } from "../[id]/candidates/_components/CandidatesPageClient";
 
 interface AddCandidateModalProps {
   electionId: string;
@@ -245,7 +240,7 @@ export default function AddCandidateModal({
             </button>
             <button
               type="submit"
-              disabled={isLoading || positions.length === 0}
+              disabled={isLoading || positions.length === 0 || disabled}
               className="flex-1 px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isLoading ? (

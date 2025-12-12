@@ -4,12 +4,7 @@ import { useState, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { X, Upload, FileSpreadsheet, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { PositionOption } from "../[id]/candidates/page";
-
-interface PartylistOption {
-  id: string;
-  name: string;
-}
+import type { PositionOption, PartylistOption } from "../[id]/candidates/_components/CandidatesPageClient";
 
 interface ImportCandidatesModalProps {
   electionId: string;
@@ -337,7 +332,7 @@ export default function ImportCandidatesModal({
             </button>
             <button
               onClick={handleFileUpload}
-              disabled={!file || isLoading}
+              disabled={!file || isLoading || disabled}
               className="flex-1 px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isLoading ? (
