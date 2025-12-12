@@ -6,6 +6,7 @@ import AddPositionModal from "../../_components/AddPositionModal";
 import PositionCandidates from "../../_components/PositionCandidates";
 import PositionActions from "../../_components/PositionActions";
 import ClearPositionsButton from "../../_components/ClearPositionsButton";
+import ViewPartylistCandidatesModal from "../../_components/ViewPartylistCandidatesModal";
 
 interface PositionRule {
   vote_limit?: number;
@@ -18,6 +19,10 @@ interface Candidate {
   full_name: string;
   description: string | null;
   avatar_url: string | null;
+  partylists?: {
+    id: string;
+    name: string;
+  };
 }
 
 interface Position {
@@ -45,10 +50,12 @@ export default async function ElectionPositionsPage({
 
   const isElectionEnded = election?.status === "ended";
 
-  // 1. Fetch Current Positions for this Election (with candidates)
+  // 1. Fetch Current Positions for this Election (with candidates and partylist info)
   const { data: positionsData } = await supabase
     .from("positions")
-    .select("*, candidates(id, student_id, full_name, description, avatar_url)")
+    .select(
+      "*, candidates(id, student_id, full_name, description, avatar_url, partylists(id, name))"
+    )
     .eq("election_id", electionId)
     .order("rank", { ascending: true });
 
@@ -73,6 +80,14 @@ export default async function ElectionPositionsPage({
       }[],
     })) || [];
 
+  // Collect all candidates from all positions for the partylist viewer
+  const allCandidates: Candidate[] = [];
+  positions.forEach((pos) => {
+    if (pos.candidates) {
+      allCandidates.push(...pos.candidates);
+    }
+  });
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -95,6 +110,8 @@ export default async function ElectionPositionsPage({
             electionId={electionId}
             disabled={positions.length > 0 || isElectionEnded}
           />
+
+          <ViewPartylistCandidatesModal candidates={allCandidates} />
 
           <ClearPositionsButton
             electionId={electionId}
