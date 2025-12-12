@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import VotersPageClient from "./_components/VotersPageClient";
+import VotersPageClient from "../../_components/VotersPageClient";
 
 export default async function VotersPage({
   params,

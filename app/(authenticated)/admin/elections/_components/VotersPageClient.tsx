@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Search, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import VoterActions from "../../../_components/VoterActions";
-import VoterRowActions from "../../../_components/VoterRowActions";
+import VoterActions from "./VoterActions";
+import VoterRowActions from "./VoterRowActions";
 
 interface Voter {
   id: string;
