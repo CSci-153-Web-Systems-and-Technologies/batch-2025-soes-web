@@ -69,18 +69,13 @@ export default function BallotClient({
   };
 
   const handleSubmit = () => {
-    // Check if all positions have selections
-    const allPositionsFilled = positions.every(
-      (position) => selections[position.id]
-    );
-
-    if (!allPositionsFilled) {
-      alert("Please select a candidate for each position.");
-      return;
-    }
-
     setShowConfirmDialog(true);
   };
+
+  // Check if all positions have selections (including abstain)
+  const isVoteComplete = positions.every(
+    (position) => selections[position.id] !== undefined
+  );
 
   const getInitials = (name: string) => {
     return name
@@ -254,7 +249,8 @@ export default function BallotClient({
         <div className="max-w-4xl mx-auto px-4 py-4">
           <Button
             onClick={handleSubmit}
-            className="w-full bg-green-600 hover:bg-green-700 text-white h-12 text-base font-semibold"
+            disabled={!isVoteComplete}
+            className="w-full bg-green-600 hover:bg-green-700 text-white h-12 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Submit My Vote
           </Button>
