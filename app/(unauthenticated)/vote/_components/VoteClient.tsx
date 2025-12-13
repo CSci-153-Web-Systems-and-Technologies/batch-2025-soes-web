@@ -86,6 +86,20 @@ export default function VoteClient({ election }: VoteClientProps) {
           )}
 
           <div className="space-y-2">
+            <Label htmlFor="school_id" className="text-foreground font-medium">
+              Student ID
+            </Label>
+            <Input
+              id="school_id"
+              name="school_id"
+              type="text"
+              required
+              placeholder="Enter your Student ID"
+              className="w-full h-12 text-base"
+            />
+          </div>
+
+          <div className="space-y-2">
             <Label
               htmlFor="access_code"
               className="text-foreground font-medium"
@@ -101,9 +115,6 @@ export default function VoteClient({ election }: VoteClientProps) {
               className="w-full h-12 text-base"
             />
           </div>
-
-          {/* Hidden school_id field - can be removed or made optional based on your needs */}
-          <input name="school_id" type="hidden" value="" />
 
           <Button
             type="submit"
