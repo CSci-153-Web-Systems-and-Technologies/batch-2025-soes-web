@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Share2, Power, Loader2, Copy, Check } from "lucide-react";
+import { Share2, Power, Loader2, Copy, Check, Menu } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,8 +19,14 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
@@ -42,6 +48,7 @@ export default function ElectionHeaderActions({
   const [isToggling, setIsToggling] = useState(false);
   const [isEnding, setIsEnding] = useState(false);
   const [autoEnded, setAutoEnded] = useState(false);
+  const [showEndAlert, setShowEndAlert] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -151,162 +158,208 @@ export default function ElectionHeaderActions({
   };
 
   return (
-    <div className="flex items-center gap-3">
-      {/* Status Toggle Button */}
-      {electionStatus !== "ended" && (
-        <Button
-          onClick={handleToggleStatus}
-          disabled={isToggling}
-          size="sm"
-          className={`gap-2 ${
-            isActive
-              ? "bg-red-600 hover:bg-red-700"
-              : "bg-green-700 hover:bg-green-900"
-          }`}
-        >
-          {isToggling ? (
-            <>
-              <Loader2 size={16} className="animate-spin" />
-              Updating...
-            </>
-          ) : (
-            <>
-              <Power size={16} />
-              {isActive ? "Deactivate" : "Activate"}
-            </>
-          )}
-        </Button>
-      )}
+    <>
+      {/* Desktop Buttons */}
+      <div className="hidden md:flex items-center gap-3">
+        {/* Status Toggle Button */}
+        {electionStatus !== "ended" && (
+          <Button
+            onClick={handleToggleStatus}
+            disabled={isToggling}
+            size="sm"
+            className={`gap-2 ${
+              isActive
+                ? "bg-red-600 hover:bg-red-700"
+                : "bg-green-700 hover:bg-green-900"
+            }`}
+          >
+            {isToggling ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                Updating...
+              </>
+            ) : (
+              <>
+                <Power size={16} />
+                {isActive ? "Deactivate" : "Activate"}
+              </>
+            )}
+          </Button>
+        )}
 
-      {/* Share Button - Only show if active */}
-      {isActive && (
-        <Dialog open={isShareOpen} onOpenChange={setIsShareOpen}>
-          <DialogTrigger asChild>
-            <Button
-              size="sm"
-              variant="outline"
-              className="gap-2 w-full sm:w-auto"
-            >
-              <Share2 size={16} />
-              <span className="hidden sm:inline">Share Your Election</span>
-              <span className="sm:hidden">Share</span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
-            <DialogHeader>
-              <DialogTitle>Share Your Election</DialogTitle>
-              <DialogDescription>
-                Share these links with voters to access the ballot and view live
-                results
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              {/* Ballot Link */}
-              <div>
-                <h4 className="text-sm font-semibold text-foreground mb-2">
-                  Ballot Link
-                </h4>
-                <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="text-xs text-muted-foreground mb-2">
-                    For voters to cast their votes:
-                  </p>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                    <code className="flex-1 text-xs md:text-sm text-blue-900 dark:text-blue-300 font-mono break-all">
-                      {ballotUrl}
-                    </code>
-                    <Button
-                      onClick={() => handleCopyLink(ballotUrl, "Ballot")}
-                      size="sm"
-                      variant="ghost"
-                      className="flex-shrink-0 hover:bg-blue-100 dark:hover:bg-blue-900/20 w-full sm:w-auto"
-                    >
-                      {isCopied === "Ballot" ? (
-                        <Check size={16} className="text-green-600" />
-                      ) : (
-                        <Copy size={16} className="text-blue-600" />
-                      )}
-                    </Button>
+        {/* Share Button - Only show if active */}
+        {isActive && (
+          <Dialog open={isShareOpen} onOpenChange={setIsShareOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" variant="outline" className="gap-2">
+                <Share2 size={16} />
+                <span className="hidden sm:inline">Share Your Election</span>
+                <span className="sm:hidden">Share</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px]">
+              <DialogHeader>
+                <DialogTitle>Share Your Election</DialogTitle>
+                <DialogDescription>
+                  Share these links with voters to access the ballot and view
+                  live results
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                {/* Ballot Link */}
+                <div>
+                  <h4 className="text-sm font-semibold text-foreground mb-2">
+                    Ballot Link
+                  </h4>
+                  <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-xs text-muted-foreground mb-2">
+                      For voters to cast their votes:
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                      <code className="flex-1 text-xs md:text-sm text-blue-900 dark:text-blue-300 font-mono break-all">
+                        {ballotUrl}
+                      </code>
+                      <Button
+                        onClick={() => handleCopyLink(ballotUrl, "Ballot")}
+                        size="sm"
+                        variant="ghost"
+                        className="flex-shrink-0 hover:bg-blue-100 dark:hover:bg-blue-900/20 w-full sm:w-auto"
+                      >
+                        {isCopied === "Ballot" ? (
+                          <Check size={16} className="text-green-600" />
+                        ) : (
+                          <Copy size={16} className="text-blue-600" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Results Link */}
-              <div>
-                <h4 className="text-sm font-semibold text-foreground mb-2">
-                  Live Results Link
-                </h4>
-                <div className="p-3 md:p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <p className="text-xs text-muted-foreground mb-2">
-                    For viewers to see live results:
-                  </p>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                    <code className="flex-1 text-xs md:text-sm text-green-900 dark:text-green-300 font-mono break-all">
-                      {resultsUrl}
-                    </code>
-                    <Button
-                      onClick={() => handleCopyLink(resultsUrl, "Results")}
-                      size="sm"
-                      variant="ghost"
-                      className="flex-shrink-0 hover:bg-green-100 dark:hover:bg-green-900/20 w-full sm:w-auto"
-                    >
-                      {isCopied === "Results" ? (
-                        <Check size={16} className="text-green-600" />
-                      ) : (
-                        <Copy size={16} className="text-green-600" />
-                      )}
-                    </Button>
+                {/* Results Link */}
+                <div>
+                  <h4 className="text-sm font-semibold text-foreground mb-2">
+                    Live Results Link
+                  </h4>
+                  <div className="p-3 md:p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                    <p className="text-xs text-muted-foreground mb-2">
+                      For viewers to see live results:
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                      <code className="flex-1 text-xs md:text-sm text-green-900 dark:text-green-300 font-mono break-all">
+                        {resultsUrl}
+                      </code>
+                      <Button
+                        onClick={() => handleCopyLink(resultsUrl, "Results")}
+                        size="sm"
+                        variant="ghost"
+                        className="flex-shrink-0 hover:bg-green-100 dark:hover:bg-green-900/20 w-full sm:w-auto"
+                      >
+                        {isCopied === "Results" ? (
+                          <Check size={16} className="text-green-600" />
+                        ) : (
+                          <Copy size={16} className="text-green-600" />
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </div>
+
+                <p className="text-xs text-muted-foreground">
+                  ⓘ These links can be shared via email, QR code, messaging, or
+                  direct link.
+                </p>
               </div>
+            </DialogContent>
+          </Dialog>
+        )}
 
-              <p className="text-xs text-muted-foreground">
-                ⓘ These links can be shared via email, QR code, messaging, or
-                direct link.
-              </p>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+        {/* End Session Button - Only show if active */}
+        {isActive && (
+          <Button
+            size="sm"
+            variant="destructive"
+            className="gap-2"
+            onClick={() => setShowEndAlert(true)}
+          >
+            End Session
+          </Button>
+        )}
+      </div>
 
-      {/* End Session Button - Only show if active */}
-      {isActive && (
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              size="sm"
-              variant="destructive"
-              className="gap-2 w-full sm:w-auto"
-            >
-              End Session
+      {/* Mobile Menu */}
+      <div className="md:hidden">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              <Menu className="h-4 w-4" />
             </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>End Election Session?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This will immediately end the election and prevent further
-                voting. You can view results and export reports after ending.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={handleEndSession}
-                className="bg-red-600 hover:bg-red-700"
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            {electionStatus !== "ended" && (
+              <DropdownMenuItem
+                onClick={handleToggleStatus}
+                disabled={isToggling}
               >
-                {isEnding ? (
+                {isToggling ? (
                   <>
-                    <Loader2 size={16} className="animate-spin mr-2" />
-                    Ending...
+                    <Loader2 size={16} className="mr-2 animate-spin" />
+                    Updating...
                   </>
                 ) : (
-                  "End Session"
+                  <>
+                    <Power size={16} className="mr-2" />
+                    {isActive ? "Deactivate" : "Activate"}
+                  </>
                 )}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
-    </div>
+              </DropdownMenuItem>
+            )}
+            {isActive && (
+              <>
+                <DropdownMenuItem onClick={() => setIsShareOpen(true)}>
+                  <Share2 size={16} className="mr-2" />
+                  Share Links
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => setShowEndAlert(true)}
+                  className="text-red-600 dark:text-red-400"
+                >
+                  End Session
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* End Session Alert Dialog (shared by desktop and mobile) */}
+      <AlertDialog open={showEndAlert} onOpenChange={setShowEndAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>End Election Session?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will immediately end the election and prevent further voting.
+              You can view results and export reports after ending.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleEndSession}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isEnding ? (
+                <>
+                  <Loader2 size={16} className="animate-spin mr-2" />
+                  Ending...
+                </>
+              ) : (
+                "End Session"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
