@@ -147,8 +147,8 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar>
-      <SidebarHeader>
+    <Sidebar className="flex flex-col h-full">
+      <SidebarHeader className="shrink-0">
         <div className="pb-2 h-20 w-full inline-flex justify-start items-center gap-2 border-b">
           <Image src={logo} height={45} width={45} alt="logo" />
           <div className="inline-flex flex-col justify-start items-start">
@@ -166,7 +166,7 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="flex-1 overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="flex gap-1">
@@ -197,7 +197,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="shrink-0 mt-auto border-t">
         <SidebarMenu>
           <SidebarMenuItem>
             {/* CONDITIONAL RENDERING TO FIX HYDRATION ERROR */}

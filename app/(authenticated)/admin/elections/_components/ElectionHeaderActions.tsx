@@ -169,8 +169,8 @@ export default function ElectionHeaderActions({
             size="sm"
             className={`gap-2 ${
               isActive
-                ? "bg-red-600 hover:bg-red-700"
-                : "bg-green-700 hover:bg-green-900"
+                ? "bg-red-600 hover:bg-red-700 text-white"
+                : "bg-green-700 hover:bg-green-900 text-white"
             }`}
           >
             {isToggling ? (

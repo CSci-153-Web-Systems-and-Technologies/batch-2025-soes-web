@@ -85,29 +85,7 @@ export default async function ElectionsListPage() {
           </p>
         </div>
 
-        {/* Desktop Button */}
-        <div className="hidden md:flex items-center gap-4">
-          <CreateElectionModal />
-        </div>
-
-        {/* Mobile Menu */}
-        <div className="md:hidden">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full">
-                <MoreVertical className="h-4 w-4 mr-2" />
-                Menu
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem asChild>
-                <div className="w-full">
-                  <CreateElectionModal />
-                </div>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <CreateElectionModal />
       </div>
 
       {/* Table Card */}
@@ -208,19 +186,28 @@ export default async function ElectionsListPage() {
         <div className="md:hidden divide-y divide-border">
           {electionsWithTurnout?.map((election) => (
             <div key={election.id} className="p-3 space-y-2">
-              {/* Title and Status */}
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex-1 min-w-0">
+              {/* Title, Status Badge, and Menu */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
                   <h3 className="text-sm font-medium text-foreground truncate">
                     {election.title}
                   </h3>
-                  <p className="text-[10px] text-muted-foreground font-mono mt-0.5">
-                    ID: {election.id.slice(0, 8)}...
-                  </p>
+                  <span
+                    className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium border whitespace-nowrap ${getStatusColor(
+                      election.status
+                    )}`}
+                  >
+                    {election.status.charAt(0).toUpperCase() +
+                      election.status.slice(1)}
+                  </span>
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 shrink-0"
+                    >
                       <MoreVertical className="h-3.5 w-3.5" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -237,17 +224,10 @@ export default async function ElectionsListPage() {
                 </DropdownMenu>
               </div>
 
-              {/* Status Badge */}
-              <div>
-                <span
-                  className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium border ${getStatusColor(
-                    election.status
-                  )}`}
-                >
-                  {election.status.charAt(0).toUpperCase() +
-                    election.status.slice(1)}
-                </span>
-              </div>
+              {/* ID */}
+              <p className="text-[10px] text-muted-foreground font-mono">
+                ID: {election.id.slice(0, 8)}...
+              </p>
 
               {/* Date Range */}
               <div className="space-y-0.5">
