@@ -1,10 +1,6 @@
-import { Resend } from 'resend';
 import nodemailer from 'nodemailer';
 
-// Create Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Create nodemailer transporter for Gmail fallback
+// Create nodemailer transporter for Gmail
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -244,51 +240,18 @@ export async function sendVoterCredentials(data: VoterEmailData) {
     </html>
   `;
 
+  // Use Gmail SMTP directly (Resend requires domain verification)
   try {
-    // Try Resend first
-    const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'SOES Elections <onboarding@resend.dev>',
+    await transporter.sendMail({
+      from: `"SOES Elections" <${process.env.EMAIL_USER || 'studentorganizationelectionsys@gmail.com'}>`,
       to: email,
       subject: `Your Voting Credentials - ${electionTitle}`,
       html: htmlContent,
     });
-
-    if (error) {
-      console.error('Resend error, falling back to Gmail:', error);
-      
-      // Fallback to Gmail SMTP
-      try {
-        await transporter.sendMail({
-          from: process.env.EMAIL_USER || 'studentorganizationelectionsys@gmail.com',
-          to: email,
-          subject: `Your Voting Credentials - ${electionTitle}`,
-          html: htmlContent,
-        });
-        
-        return { success: true, messageId: 'gmail-sent' };
-      } catch (gmailError) {
-        console.error('Gmail SMTP error:', gmailError);
-        return { success: false, error: gmailError };
-      }
-    }
-
-    return { success: true, messageId: data?.id };
+    
+    return { success: true, messageId: 'gmail-sent' };
   } catch (error) {
     console.error('Email send error:', error);
-    
-    // Try Gmail as fallback
-    try {
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER || 'studentorganizationelectionsys@gmail.com',
-        to: email,
-        subject: `Your Voting Credentials - ${electionTitle}`,
-        html: htmlContent,
-      });
-      
-      return { success: true, messageId: 'gmail-sent' };
-    } catch (gmailError) {
-      console.error('Gmail SMTP fallback error:', gmailError);
-      return { success: false, error: gmailError };
-    }
+    return { success: false, error: String(error) };
   }
 }
