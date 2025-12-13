@@ -28,9 +28,7 @@ export default function PrivacyPolicyModal() {
             <Shield className="h-6 w-6 text-green-600" />
             Privacy Policy
           </DialogTitle>
-          <DialogDescription>
-            Last updated: December 13, 2025
-          </DialogDescription>
+          <DialogDescription>Last updated: December 13, 2025</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
@@ -39,11 +37,14 @@ export default function PrivacyPolicyModal() {
               <div className="flex items-start gap-3">
                 <Database className="h-5 w-5 text-green-600 mt-1 shrink-0" />
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Data Collection</h3>
+                  <h3 className="font-semibold text-lg mb-2">
+                    Data Collection
+                  </h3>
                   <p className="text-sm text-muted-foreground">
-                    We collect only essential information necessary for election administration: 
-                    student IDs, email addresses, and voting records. All data is encrypted and 
-                    stored securely in compliance with educational data protection standards.
+                    We collect only essential information necessary for election
+                    administration: student IDs, email addresses, and voting
+                    records. All data is encrypted and stored securely in
+                    compliance with educational data protection standards.
                   </p>
                 </div>
               </div>
@@ -57,9 +58,10 @@ export default function PrivacyPolicyModal() {
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Data Security</h3>
                   <p className="text-sm text-muted-foreground">
-                    Your votes are encrypted end-to-end and stored anonymously. We implement 
-                    industry-standard security measures including SSL/TLS encryption, secure 
-                    authentication, and regular security audits to protect your information.
+                    Your votes are encrypted end-to-end and stored anonymously.
+                    We implement industry-standard security measures including
+                    SSL/TLS encryption, secure authentication, and regular
+                    security audits to protect your information.
                   </p>
                 </div>
               </div>
@@ -73,9 +75,10 @@ export default function PrivacyPolicyModal() {
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Vote Privacy</h3>
                   <p className="text-sm text-muted-foreground">
-                    Your individual voting choices are completely private and anonymous. No one, 
-                    including administrators, can trace a vote back to a specific voter. We only 
-                    track whether you have voted, not how you voted.
+                    Your individual voting choices are completely private and
+                    anonymous. No one, including administrators, can trace a
+                    vote back to a specific voter. We only track whether you
+                    have voted, not how you voted.
                   </p>
                 </div>
               </div>
@@ -89,9 +92,10 @@ export default function PrivacyPolicyModal() {
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Your Rights</h3>
                   <p className="text-sm text-muted-foreground">
-                    You have the right to access your voter registration data, request corrections, 
-                    and withdraw consent at any time. Contact your election administrator for data 
-                    access requests or privacy concerns.
+                    You have the right to access your voter registration data,
+                    request corrections, and withdraw consent at any time.
+                    Contact your election administrator for data access requests
+                    or privacy concerns.
                   </p>
                 </div>
               </div>
@@ -105,9 +109,10 @@ export default function PrivacyPolicyModal() {
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Data Retention</h3>
                   <p className="text-sm text-muted-foreground">
-                    Election data is retained for audit purposes as required by your institution's 
-                    policies. Voting records are anonymized immediately after voting closes. 
-                    Personal information is deleted according to educational record retention schedules.
+                    Election data is retained for audit purposes as required by
+                    your institution's policies. Voting records are anonymized
+                    immediately after voting closes. Personal information is
+                    deleted according to educational record retention schedules.
                   </p>
                 </div>
               </div>
@@ -116,9 +121,10 @@ export default function PrivacyPolicyModal() {
 
           <div className="mt-6 p-4 bg-muted rounded-lg animate-in fade-in duration-500 delay-500">
             <p className="text-sm text-muted-foreground">
-              <strong>Questions?</strong> If you have any questions about our privacy practices or 
-              how we handle your data, please contact your election administrator or the system 
-              administrator at your institution.
+              <strong>Questions?</strong> If you have any questions about our
+              privacy practices or how we handle your data, please contact your
+              election administrator or the system administrator at your
+              institution.
             </p>
           </div>
         </div>
