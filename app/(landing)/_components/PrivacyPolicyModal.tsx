@@ -110,9 +110,10 @@ export default function PrivacyPolicyModal() {
                   <h3 className="font-semibold text-lg mb-2">Data Retention</h3>
                   <p className="text-sm text-muted-foreground">
                     Election data is retained for audit purposes as required by
-                    your institution's policies. Voting records are anonymized
-                    immediately after voting closes. Personal information is
-                    deleted according to educational record retention schedules.
+                    your institution&apos;s policies. Voting records are
+                    anonymized immediately after voting closes. Personal
+                    information is deleted according to educational record
+                    retention schedules.
                   </p>
                 </div>
               </div>
