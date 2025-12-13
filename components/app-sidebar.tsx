@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Vote,
@@ -78,11 +79,20 @@ const systemitem = {
 };
 
 export function AppSidebar() {
+  const pathname = usePathname();
   // Initialize loading to true to prevent hydration mismatch
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const supabase = createClient();
+
+  // Check if a menu item is active
+  const isActive = (url: string) => {
+    if (url === "/admin/dashboard") {
+      return pathname === url;
+    }
+    return pathname.startsWith(url);
+  };
 
   useEffect(() => {
     const getUserData = async () => {
@@ -174,7 +184,7 @@ export function AppSidebar() {
                 <SidebarGroupLabel>Management</SidebarGroupLabel>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild isActive={isActive(item.url)}>
                       <a href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
@@ -185,7 +195,7 @@ export function AppSidebar() {
               </div>
               <SidebarGroupLabel>System</SidebarGroupLabel>
               <SidebarMenuItem key={systemitem.title}>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton asChild isActive={isActive(systemitem.url)}>
                   <a href={systemitem.url}>
                     <systemitem.icon />
                     <span>{systemitem.title}</span>
