@@ -86,17 +86,18 @@ export default function SendEmailButton({
         disabled={disabled || isSending}
         variant="outline"
         size="sm"
-        className="gap-2"
+        className="gap-1 sm:gap-2 text-xs sm:text-sm"
       >
         {isSending ? (
           <>
-            <Loader2 size={16} className="animate-spin" />
-            Sending...
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span className="hidden sm:inline">Sending...</span>
           </>
         ) : (
           <>
-            <Mail size={16} />
-            Email Voters
+            <Mail className="h-4 w-4" />
+            <span className="hidden sm:inline">Email Voters</span>
+            <span className="sm:hidden">Email</span>
           </>
         )}
       </Button>

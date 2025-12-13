@@ -34,25 +34,25 @@ export default async function SingleElectionLayout({
   if (!election) return notFound();
 
   return (
-    <div className="flex flex-col h-full pt-6 px-8 max-w-8xl mx-full">
-      <div className="mb-4">
+    <div className="flex flex-col h-full pt-4 md:pt-6 px-4 md:px-8 max-w-8xl mx-full">
+      <div className="mb-3 md:mb-4">
         <Link
           href="/admin/elections"
-          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors"
+          className="inline-flex items-center gap-2 text-xs md:text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          <ArrowLeft size={16} />
+          <ArrowLeft size={14} className="md:w-4 md:h-4" />
           Back to All Elections
         </Link>
       </div>
 
       {/* Session Title Header */}
-      <div className="flex items-center justify-between mb-6 gap-4">
-        <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-6 gap-3 md:gap-4">
+        <div className="flex items-center gap-2 md:gap-3 min-w-0">
+          <h1 className="text-lg md:text-3xl font-bold tracking-tight text-foreground truncate">
             {election.title}
           </h1>
           <span
-            className={`px-2.5 py-0.5 text-xs font-semibold rounded-full border ${
+            className={`px-2 py-0.5 text-[10px] md:text-xs font-semibold rounded-full border flex-shrink-0 ${
               election.status === "active"
                 ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800"
                 : election.status === "ended"
@@ -72,8 +72,8 @@ export default async function SingleElectionLayout({
 
       {/* Show message if election is ended */}
       {election.status === "ended" && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-800">
+        <div className="mb-4 md:mb-6 p-3 md:p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <p className="text-xs md:text-sm text-red-800 dark:text-red-300">
             <strong>This election has ended.</strong> You cannot add, edit, or
             delete any data. You can check the results and export reports from
             the Results and Reports pages.
@@ -85,7 +85,7 @@ export default async function SingleElectionLayout({
       <TabNavigation electionId={id} />
 
       {/* The Tab Content */}
-      <div className="flex-1 bg-background border border-t-0 rounded-b-xl shadow-sm p-6 min-h-[500px]">
+      <div className="flex-1 bg-background border border-t-0 rounded-b-xl shadow-sm p-4 md:p-6 min-h-[500px]">
         {children}
       </div>
     </div>

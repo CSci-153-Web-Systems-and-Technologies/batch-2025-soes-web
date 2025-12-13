@@ -192,7 +192,7 @@ export default function EditProfileForm({
       {/* Avatar Section */}
       <div className="flex flex-col sm:flex-row gap-6 items-start">
         <div>
-          <Label className="text-sm font-medium text-gray-700 block mb-3">
+          <Label className="text-sm font-medium block mb-3">
             Profile Picture
           </Label>
           <div className="relative">
@@ -202,7 +202,7 @@ export default function EditProfileForm({
               disabled={isUploadingAvatar}
               className="relative group"
             >
-              <div className="h-24 w-24 flex-shrink-0 rounded-[16px] border-2 border-gray-300 group-hover:border-blue-500 transition-colors overflow-hidden bg-gray-100 flex items-center justify-center">
+              <div className="h-24 w-24 flex-shrink-0 rounded-[16px] border-2 border-border group-hover:border-green-500 transition-colors overflow-hidden bg-muted flex items-center justify-center">
                 {avatarUrl ? (
                   <>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -213,7 +213,7 @@ export default function EditProfileForm({
                     />
                   </>
                 ) : (
-                  <span className="text-2xl font-semibold text-gray-400">
+                  <span className="text-2xl font-semibold text-muted-foreground">
                     {getInitials(fullName)}
                   </span>
                 )}
@@ -247,9 +247,8 @@ export default function EditProfileForm({
               placeholder="John Doe"
               disabled={isLoading}
               required
-              className="border-gray-300"
             />
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               Your name as it will appear in the system
             </p>
           </div>
@@ -258,13 +257,8 @@ export default function EditProfileForm({
             <Label htmlFor="email" className="text-sm font-medium">
               Email Address
             </Label>
-            <Input
-              id="email"
-              value={userEmail}
-              disabled
-              className="border-gray-300 bg-gray-50 text-gray-600"
-            />
-            <p className="text-xs text-gray-500">
+            <Input id="email" value={userEmail} disabled className="bg-muted" />
+            <p className="text-xs text-muted-foreground">
               Contact your administrator to change your email
             </p>
           </div>
@@ -276,7 +270,7 @@ export default function EditProfileForm({
         <Button
           type="submit"
           disabled={isLoading || isUploadingAvatar || (!hasChanges && !isSaved)}
-          className="bg-green-700 hover:bg-green-900 gap-2"
+          className="bg-green-700 hover:bg-green-800 text-white gap-2"
         >
           {isSaved && !hasChanges ? (
             <>

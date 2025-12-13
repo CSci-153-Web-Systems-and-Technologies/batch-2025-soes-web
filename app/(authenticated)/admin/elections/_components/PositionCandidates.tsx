@@ -28,12 +28,12 @@ export default function PositionCandidates({
       {/* Header with expand/collapse */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors py-2"
+        className="w-full flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors py-2"
       >
         {isExpanded ? (
-          <ChevronUp size={16} className="text-gray-600" />
+          <ChevronUp className="h-4 w-4 text-muted-foreground" />
         ) : (
-          <ChevronDown size={16} className="text-gray-600" />
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
         )}
         <span>Candidates ({candidates.length})</span>
       </button>
@@ -42,7 +42,7 @@ export default function PositionCandidates({
       {isExpanded && (
         <div className="space-y-2 pl-6">
           {candidates.length === 0 ? (
-            <div className="py-2 text-sm text-gray-500 italic">
+            <div className="py-2 text-sm text-muted-foreground italic">
               No candidates running for {positionTitle}
             </div>
           ) : (
@@ -50,17 +50,17 @@ export default function PositionCandidates({
               {candidates.map((candidate) => (
                 <div
                   key={candidate.id}
-                  className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100 hover:border-gray-200 hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-between bg-muted p-3 rounded-lg border border-border hover:border-accent hover:bg-accent transition-colors"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-foreground truncate">
                       {candidate.full_name}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       ID: {candidate.student_id}
                     </p>
                     {candidate.description && (
-                      <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                         {candidate.description}
                       </p>
                     )}

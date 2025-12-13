@@ -14,6 +14,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import CreatePartylistModal from "./_components/CreatePartylistModal";
 import ImportPartyleysModal from "./_components/ImportPartyleysModal";
 import EditPartylistModal from "./_components/EditPartylistModal";
@@ -51,6 +61,11 @@ export default function PartylistsPage() {
   const [selectedPartylist, setSelectedPartylist] = useState<Partylist | null>(
     null
   );
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [partylistToDelete, setPartylistToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -120,10 +135,18 @@ export default function PartylistsPage() {
     setIsEditModalOpen(true);
   };
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+  const handleDeleteClick = (id: string, name: string) => {
+    setPartylistToDelete({ id, name });
+    setDeleteDialogOpen(true);
+  };
 
-    const { error } = await supabase.from("partylists").delete().eq("id", id);
+  const handleDelete = async () => {
+    if (!partylistToDelete) return;
+
+    const { error } = await supabase
+      .from("partylists")
+      .delete()
+      .eq("id", partylistToDelete.id);
 
     if (error) {
       toast.error("Failed to delete partylist");
@@ -131,6 +154,8 @@ export default function PartylistsPage() {
       toast.success("Partylist deleted successfully");
       fetchPartylists();
     }
+    setDeleteDialogOpen(false);
+    setPartylistToDelete(null);
   };
 
   // Stats Logic
@@ -243,8 +268,8 @@ export default function PartylistsPage() {
                       <TableCell className="px-4 py-4 text-sm text-muted-foreground hidden md:table-cell">
                         {partylist.description || "-"}
                       </TableCell>
-                      <TableCell className="px-4 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <TableCell className="px-4 py-4 text-center">
+                        <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-transparent text-green-700 dark:text-green-400 border border-green-700 dark:border-green-400">
                           {partylist.members_count}
                         </span>
                       </TableCell>
@@ -266,7 +291,7 @@ export default function PartylistsPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() =>
-                              handleDelete(partylist.id, partylist.name)
+                              handleDeleteClick(partylist.id, partylist.name)
                             }
                             className="text-red-600 hover:text-red-800 hover:bg-red-50"
                           >
@@ -299,6 +324,28 @@ export default function PartylistsPage() {
         onSuccess={fetchPartylists}
         partylist={selectedPartylist || undefined}
       />
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the partylist &quot;
+              {partylistToDelete?.name}&quot; and remove all associated data.
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

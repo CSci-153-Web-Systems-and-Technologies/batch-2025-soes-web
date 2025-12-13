@@ -13,18 +13,35 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { User, Bell, Shield, Database, Mail, Key } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Bell,
+  Shield,
+  Database,
+  Mail,
+  Key,
+  AlertTriangle,
+  Bug,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function SettingsPage() {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [systemNotifications, setSystemNotifications] = useState(true);
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
   const [autoBackup, setAutoBackup] = useState(true);
-
-  const handleSaveProfile = () => {
-    toast.success("Profile settings saved successfully");
-  };
 
   const handleSaveNotifications = () => {
     toast.success("Notification preferences updated");
@@ -42,6 +59,13 @@ export default function SettingsPage() {
     toast.success("Data backup initiated");
   };
 
+  const handleDeleteAccount = async () => {
+    // TODO: Implement account deletion with Supabase
+    toast.error("Account deletion is not yet implemented", {
+      description: "This feature will be available soon.",
+    });
+  };
+
   return (
     <div className="flex flex-col gap-6 p-6">
       {/* Header */}
@@ -51,38 +75,6 @@ export default function SettingsPage() {
           Manage your account settings and preferences
         </p>
       </div>
-
-      {/* Profile Settings */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <User className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Profile Settings</CardTitle>
-          </div>
-          <CardDescription>
-            Update your personal information and profile details
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input id="fullName" placeholder="Enter your full name" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input id="email" type="email" placeholder="your@email.com" />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="organization">Organization</Label>
-            <Input id="organization" placeholder="Your organization name" />
-          </div>
-          <div className="flex justify-end">
-            <Button onClick={handleSaveProfile}>Save Profile</Button>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Notification Settings */}
       <Card>
@@ -122,7 +114,12 @@ export default function SettingsPage() {
             />
           </div>
           <div className="flex justify-end">
-            <Button onClick={handleSaveNotifications}>Save Preferences</Button>
+            <Button
+              onClick={handleSaveNotifications}
+              className="bg-green-700 hover:bg-green-800 text-white"
+            >
+              Save Preferences
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -167,7 +164,12 @@ export default function SettingsPage() {
             </Button>
           </div>
           <div className="flex justify-end">
-            <Button onClick={handleSaveSecurity}>Save Security Settings</Button>
+            <Button
+              onClick={handleSaveSecurity}
+              className="bg-green-700 hover:bg-green-800 text-white"
+            >
+              Save Security Settings
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -227,14 +229,86 @@ export default function SettingsPage() {
               Contact our support team for assistance with the election system
             </p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="flex-1">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button className="flex-1 bg-green-700 hover:bg-green-800 text-white">
+              <Mail className="h-4 w-4 mr-2" />
               Documentation
             </Button>
-            <Button variant="outline" className="flex-1">
+            <Button className="flex-1 bg-green-700 hover:bg-green-800 text-white">
+              <Mail className="h-4 w-4 mr-2" />
               Contact Support
             </Button>
+            <Button
+              className="flex-1 bg-green-700 hover:bg-green-800 text-white"
+              onClick={() => {
+                window.location.href =
+                  "mailto:studentorganizationelectionsys@gmail.com?subject=Bug Report&body=Please describe the bug you encountered:";
+              }}
+            >
+              <Bug className="h-4 w-4 mr-2" />
+              Report a Bug
+            </Button>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Danger Zone */}
+      <Card className="border-red-200 dark:border-red-800">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
+            <CardTitle className="text-red-600 dark:text-red-400">
+              Danger Zone
+            </CardTitle>
+          </div>
+          <CardDescription>
+            Irreversible and destructive actions
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label className="text-red-600 dark:text-red-400">
+              Delete Account
+            </Label>
+            <p className="text-sm text-muted-foreground">
+              Once you delete your account, there is no going back. This will
+              permanently delete your account and remove all your data from our
+              servers.
+            </p>
+          </div>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="w-full sm:w-auto">
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Account
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove all your data from our servers,
+                  including:
+                  <ul className="list-disc list-inside mt-2 space-y-1">
+                    <li>Your profile information</li>
+                    <li>All elections you created</li>
+                    <li>Voting records and results</li>
+                    <li>All settings and preferences</li>
+                  </ul>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDeleteAccount}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  Yes, delete my account
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </CardContent>
       </Card>
     </div>

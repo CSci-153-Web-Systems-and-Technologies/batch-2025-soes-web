@@ -70,7 +70,7 @@ export default function VotersPageClient({
             Manage who is allowed to vote in this session.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 justify-center sm:justify-end w-full sm:w-auto">
           <Button
             onClick={handleRefresh}
             disabled={isLoading}

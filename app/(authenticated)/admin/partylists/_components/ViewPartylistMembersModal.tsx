@@ -37,7 +37,7 @@ export default function ViewPartylistMembersModal({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 w-9 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors"
+        className="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 w-9 border bg-transparent hover:bg-accent transition-colors"
         title={`View ${candidates.length} candidate(s) in ${partylistName}`}
       >
         <Eye size={16} />

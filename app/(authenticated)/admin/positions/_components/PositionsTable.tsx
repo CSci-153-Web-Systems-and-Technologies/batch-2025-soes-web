@@ -57,11 +57,11 @@ export default function PositionsTable({
   const getCategoryStyle = (category: string | null) => {
     switch (category?.toLowerCase()) {
       case "student government":
-        return "bg-green-100 text-green-700 hover:bg-green-100 border-transparent";
+        return "bg-transparent text-green-700 dark:text-green-400 border-green-700 dark:border-green-400";
       case "academic":
-        return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 border-transparent";
+        return "bg-transparent text-emerald-700 dark:text-emerald-400 border-emerald-700 dark:border-emerald-400";
       default:
-        return "bg-gray-100 text-gray-700 hover:bg-gray-100 border-transparent";
+        return "bg-transparent text-muted-foreground border-border";
     }
   };
 
@@ -69,21 +69,23 @@ export default function PositionsTable({
     <div className="rounded-md">
       <Table>
         <TableHeader>
-          <TableRow className="border-b border-gray-100 hover:bg-transparent">
-            <TableHead className="w-[300px] font-medium text-gray-900">
+          <TableRow className="border-b hover:bg-transparent">
+            <TableHead className="w-[300px] font-medium text-foreground">
               Template Name
             </TableHead>
-            <TableHead className="font-medium text-gray-900">
+            <TableHead className="font-medium text-foreground">
               Category
             </TableHead>
-            <TableHead className="font-medium text-gray-900">
+            <TableHead className="font-medium text-foreground">
               Positions
             </TableHead>
-            <TableHead className="font-medium text-gray-900">Status</TableHead>
-            <TableHead className="font-medium text-gray-900">
+            <TableHead className="font-medium text-foreground">
+              Status
+            </TableHead>
+            <TableHead className="font-medium text-foreground">
               Last Modified
             </TableHead>
-            <TableHead className="text-right font-medium text-gray-900">
+            <TableHead className="text-right font-medium text-foreground">
               Act
             </TableHead>
           </TableRow>
@@ -91,7 +93,10 @@ export default function PositionsTable({
         <TableBody>
           {data.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className="h-24 text-center text-gray-500">
+              <TableCell
+                colSpan={7}
+                className="h-24 text-center text-muted-foreground"
+              >
                 No templates found. Create one to get started.
               </TableCell>
             </TableRow>
@@ -99,14 +104,14 @@ export default function PositionsTable({
             data.map((template) => (
               <TableRow
                 key={template.id}
-                className="border-b border-gray-50 hover:bg-gray-50/50"
+                className="border-b hover:bg-accent transition-colors"
               >
                 <TableCell className="py-4">
                   <div className="flex flex-col">
-                    <span className="font-semibold text-gray-900 text-sm">
+                    <span className="font-semibold text-foreground text-sm">
                       {template.name}
                     </span>
-                    <span className="text-xs text-gray-500 truncate max-w-[250px]">
+                    <span className="text-xs text-muted-foreground truncate max-w-[250px]">
                       {template.description || "No description provided"}
                     </span>
                   </div>
@@ -124,8 +129,8 @@ export default function PositionsTable({
                 </TableCell>
 
                 <TableCell>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Users size={16} className="text-gray-400" />
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Users size={16} className="text-muted-foreground" />
                     <span>
                       {template.template_definitions?.length || 0} positions
                     </span>
@@ -147,13 +152,13 @@ export default function PositionsTable({
                       }
                       className="data-[state=checked]:bg-green-700 scale-90"
                     />
-                    <span className="text-sm text-gray-700">
+                    <span className="text-sm text-foreground">
                       {template.status === "active" ? "Active" : "Inactive"}
                     </span>
                   </div>
                 </TableCell>
 
-                <TableCell className="text-gray-500 text-sm">
+                <TableCell className="text-muted-foreground text-sm">
                   {template.updated_at
                     ? format(new Date(template.updated_at), "yyyy-MM-dd")
                     : format(new Date(template.created_at), "yyyy-MM-dd")}
@@ -164,19 +169,22 @@ export default function PositionsTable({
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className="h-8 w-8 p-0 text-gray-500"
+                        className="h-8 w-8 p-0 text-muted-foreground"
                       >
                         <span className="sr-only">Open menu</span>
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => onEdit(template)}>
+                      <DropdownMenuItem
+                        onClick={() => onEdit(template)}
+                        className="cursor-pointer"
+                      >
                         <Pencil className="mr-2 h-4 w-4" /> Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => handleDelete(template.id)}
-                        className="text-red-600 focus:text-red-600"
+                        className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 focus:bg-red-50 dark:focus:bg-red-950"
                       >
                         <Trash2 className="mr-2 h-4 w-4" /> Delete
                       </DropdownMenuItem>

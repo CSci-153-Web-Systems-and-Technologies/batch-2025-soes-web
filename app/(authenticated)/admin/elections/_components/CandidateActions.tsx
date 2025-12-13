@@ -43,28 +43,30 @@ export default function CandidateActions({
       <button
         onClick={() => setIsImportOpen(true)}
         disabled={isElectionEnded}
-        className={`flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors w-full sm:w-auto ${
+        className={`flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors w-full sm:w-auto ${
           isElectionEnded
             ? "bg-muted text-muted-foreground cursor-not-allowed"
             : "text-foreground bg-background border border-input hover:bg-accent"
         }`}
       >
-        <Upload size={16} />
+        <Upload className="h-4 w-4" />
         <span className="hidden sm:inline">Import CSV</span>
+        <span className="sm:hidden">Import</span>
       </button>
 
       {/* Add Candidate Button */}
       <button
         onClick={() => setIsAddOpen(true)}
         disabled={isElectionEnded}
-        className={`flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors w-full sm:w-auto ${
+        className={`flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors w-full sm:w-auto ${
           isElectionEnded
             ? "bg-muted text-muted-foreground cursor-not-allowed"
             : "text-primary-foreground bg-primary hover:bg-primary/90"
         }`}
       >
-        <UserPlus size={16} />
-        <span>Add Candidate</span>
+        <UserPlus className="h-4 w-4" />
+        <span className="hidden sm:inline">Add Candidate</span>
+        <span className="sm:hidden">Add</span>
       </button>
 
       {/* --- MODALS --- */}

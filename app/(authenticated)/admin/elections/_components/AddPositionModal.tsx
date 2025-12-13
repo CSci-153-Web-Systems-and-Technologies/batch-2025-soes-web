@@ -88,12 +88,14 @@ export default function AddPositionModal({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="gap-2"
+          size="sm"
+          className="gap-2 text-xs sm:text-sm"
           disabled={disabled}
           title={disabled ? "Cannot add positions after template import" : ""}
         >
-          <Plus size={16} />
-          Add Manually
+          <Plus className="h-4 w-4" />
+          <span className="hidden sm:inline">Add Manually</span>
+          <span className="sm:hidden">Add</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
@@ -115,7 +117,7 @@ export default function AddPositionModal({
               onChange={(e) => setTitle(e.target.value)}
               disabled={isLoading}
               required
-              className="border-gray-300"
+              className="bg-background border-input focus:ring-green-500/20 focus:border-green-500"
             />
           </div>
 

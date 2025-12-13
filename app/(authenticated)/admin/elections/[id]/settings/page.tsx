@@ -249,8 +249,8 @@ export default async function ElectionSettingsPage({
                 <p className="text-xs text-muted-foreground mb-2">
                   Ballot URL:
                 </p>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                  <code className="flex-1 text-sm text-blue-900 dark:text-blue-300 font-mono break-all w-full">
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 text-sm text-blue-900 dark:text-blue-300 font-mono break-all">
                     {ballotUrl}
                   </code>
                   <CopyBallotLinkButton ballotUrl={ballotUrl} />
@@ -290,8 +290,8 @@ export default async function ElectionSettingsPage({
         <CardContent className="space-y-4">
           <div className="p-4 bg-green-50/50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
             <p className="text-xs text-muted-foreground mb-2">Results URL:</p>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-              <code className="flex-1 text-sm text-green-900 dark:text-green-300 font-mono break-all w-full">
+            <div className="flex items-center gap-2">
+              <code className="flex-1 text-sm text-green-900 dark:text-green-300 font-mono break-all">
                 {resultsUrl}
               </code>
               <CopyBallotLinkButton ballotUrl={resultsUrl} linkType="Results" />

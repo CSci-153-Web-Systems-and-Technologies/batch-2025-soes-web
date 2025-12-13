@@ -65,10 +65,10 @@ export default function ViewPartylistCandidatesModal({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-foreground bg-background border border-input rounded-lg hover:bg-accent transition-colors"
         title="View candidates by partylist"
       >
-        <Eye size={16} />
+        <Eye className="h-4 w-4" />
         <span className="hidden sm:inline">View Partylists</span>
         <span className="sm:hidden">Partylists</span>
       </button>
@@ -82,7 +82,7 @@ export default function ViewPartylistCandidatesModal({
           <div className="space-y-4">
             {partylists.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-500">
+                <p className="text-muted-foreground">
                   No candidates assigned to partylists
                 </p>
               </div>
@@ -90,14 +90,14 @@ export default function ViewPartylistCandidatesModal({
               partylists.map((partylist) => (
                 <div
                   key={partylist.name}
-                  className="border border-gray-200 rounded-lg overflow-hidden"
+                  className="border border-border rounded-lg overflow-hidden"
                 >
                   {/* Partylist Header */}
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3 border-b border-gray-200">
-                    <h3 className="font-semibold text-gray-900">
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 px-4 py-3 border-b border-border">
+                    <h3 className="font-semibold text-foreground">
                       {partylist.name}
                     </h3>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-muted-foreground">
                       {partylist.candidates.length} candidate(s)
                     </p>
                   </div>
@@ -107,7 +107,7 @@ export default function ViewPartylistCandidatesModal({
                     {partylist.candidates.map((candidate) => (
                       <div
                         key={candidate.id}
-                        className="px-4 py-3 hover:bg-gray-50 transition-colors"
+                        className="px-4 py-3 hover:bg-accent transition-colors"
                       >
                         <div className="flex items-start gap-3">
                           {candidate.avatar_url && (
@@ -120,14 +120,14 @@ export default function ViewPartylistCandidatesModal({
                             />
                           )}
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-gray-900 truncate">
+                            <p className="font-medium text-foreground truncate">
                               {candidate.full_name}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-muted-foreground">
                               ID: {candidate.student_id}
                             </p>
                             {candidate.description && (
-                              <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                              <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                                 {candidate.description}
                               </p>
                             )}

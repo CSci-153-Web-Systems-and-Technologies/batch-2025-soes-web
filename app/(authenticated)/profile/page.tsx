@@ -47,12 +47,12 @@ export default async function ProfilePage() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-gray-50">
+    <div className="flex flex-col h-screen w-full bg-background">
       {/* Header with Back Button */}
-      <div className="border-b border-gray-200 bg-white px-6 md:px-8 py-4 sticky top-0 z-10">
+      <div className="border-b bg-card px-6 md:px-8 py-4 sticky top-0 z-10">
         <Link
           href="/admin/dashboard"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft size={16} />
           Back to Dashboard
@@ -64,17 +64,17 @@ export default async function ProfilePage() {
         <div className="w-full px-6 md:px-8 py-6 space-y-6">
           {/* Page Header */}
           <div>
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">
               My Profile
             </h1>
-            <p className="text-gray-600 text-base mt-2">
+            <p className="text-muted-foreground text-base mt-2">
               Manage your personal information and account settings
             </p>
           </div>
 
           {/* Profile Information Card */}
-          <Card className="bg-white border border-gray-200">
-            <CardHeader className="border-b border-gray-100">
+          <Card>
+            <CardHeader className="border-b">
               <CardTitle>Profile Information</CardTitle>
               <CardDescription>
                 Update your name, avatar, and other details
@@ -90,29 +90,29 @@ export default async function ProfilePage() {
           </Card>
 
           {/* Account Details Card */}
-          <Card className="bg-white border border-gray-200">
-            <CardHeader className="border-b border-gray-100">
+          <Card>
+            <CardHeader className="border-b">
               <CardTitle className="text-base">Account Details</CardTitle>
               <CardDescription>Read-only account information</CardDescription>
             </CardHeader>
             <CardContent className="pt-6 space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
+                <label className="text-sm font-medium text-foreground block mb-2">
                   Email Address
                 </label>
-                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-gray-900 text-sm font-mono break-all">
+                <div className="p-4 bg-muted rounded-lg border">
+                  <p className="text-foreground text-sm font-mono break-all">
                     {user.email}
                   </p>
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
+                <label className="text-sm font-medium text-foreground block mb-2">
                   Role
                 </label>
-                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
+                <div className="p-4 bg-muted rounded-lg border">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700">
                     {profileData?.role?.toUpperCase() || "STUDENT"}
                   </span>
                 </div>
@@ -120,11 +120,11 @@ export default async function ProfilePage() {
 
               {profileData?.created_at && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-2">
+                  <label className="text-sm font-medium text-foreground block mb-2">
                     Account Created
                   </label>
-                  <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                    <p className="text-gray-900 text-sm">
+                  <div className="p-4 bg-muted rounded-lg border">
+                    <p className="text-foreground text-sm">
                       {new Date(profileData.created_at).toLocaleDateString(
                         "en-US",
                         {

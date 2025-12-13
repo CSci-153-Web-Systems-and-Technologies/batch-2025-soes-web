@@ -245,14 +245,14 @@ export default function ImportCandidatesModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">
+      <div className="bg-card rounded-xl shadow-xl w-full max-w-lg animate-in fade-in zoom-in-95 duration-200 border border-border">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+          <h3 className="text-lg font-semibold text-foreground">
             Import Candidates (CSV)
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-muted-foreground hover:text-foreground"
           >
             <X size={20} />
           </button>
@@ -260,38 +260,38 @@ export default function ImportCandidatesModal({
 
         <div className="p-6 space-y-6">
           <div className="space-y-3">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-foreground">
               Upload a <strong>.CSV</strong> file with candidate data. Position
               names should match your existing positions. Partylist is optional.
             </p>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <p className="text-xs font-semibold text-blue-900 mb-2">
+            <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+              <p className="text-xs font-semibold text-blue-900 dark:text-blue-300 mb-2">
                 Available Positions:
               </p>
-              <div className="text-xs text-blue-800 font-mono space-y-1">
+              <div className="text-xs text-blue-800 dark:text-blue-400 font-mono space-y-1">
                 {positions.length > 0 ? (
                   positions.map((p) => <div key={p.id}>• {p.title}</div>)
                 ) : (
-                  <div className="text-gray-500 italic">
+                  <div className="text-muted-foreground italic">
                     No positions created yet
                   </div>
                 )}
               </div>
             </div>
             {partylists.length > 0 && (
-              <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                <p className="text-xs font-semibold text-purple-900 mb-2">
+              <div className="bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 rounded-lg p-3">
+                <p className="text-xs font-semibold text-purple-900 dark:text-purple-300 mb-2">
                   Available Partylists:
                 </p>
-                <div className="text-xs text-purple-800 font-mono space-y-1">
+                <div className="text-xs text-purple-800 dark:text-purple-400 font-mono space-y-1">
                   {partylists.map((p) => (
                     <div key={p.id}>• {p.name}</div>
                   ))}
                 </div>
               </div>
             )}
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs font-mono text-gray-600 overflow-x-auto">
-              <div className="font-semibold mb-2 text-gray-900">
+            <div className="bg-muted border border-border rounded-lg p-3 text-xs font-mono text-foreground overflow-x-auto">
+              <div className="font-semibold mb-2 text-foreground">
                 CSV Format Example:
               </div>
               student_id,full_name,nickname,position_title,partylist_name
@@ -310,15 +310,15 @@ export default function ImportCandidatesModal({
               accept=".csv"
               ref={fileInputRef}
               onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+              className="block w-full text-sm text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-700 file:text-white hover:file:bg-green-800 cursor-pointer"
             />
             {file && (
-              <div className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg border border-gray-100">
+              <div className="flex items-center gap-2 text-sm text-foreground bg-muted px-3 py-2 rounded-lg border border-border">
                 <FileSpreadsheet size={16} className="text-green-600" />
                 <span className="truncate flex-1">{file.name}</span>
                 <button
                   onClick={reset}
-                  className="text-gray-400 hover:text-red-500"
+                  className="text-muted-foreground hover:text-destructive"
                 >
                   <X size={16} />
                 </button>
@@ -329,14 +329,14 @@ export default function ImportCandidatesModal({
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="flex-1 px-4 py-2 text-sm font-medium text-foreground bg-muted border border-border rounded-lg hover:bg-accent"
             >
               Cancel
             </button>
             <button
               onClick={handleFileUpload}
               disabled={!file || isLoading || disabled}
-              className="flex-1 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-green-700 hover:bg-green-800 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <Loader2 size={16} className="animate-spin" />

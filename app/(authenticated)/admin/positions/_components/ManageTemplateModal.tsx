@@ -159,14 +159,14 @@ export default function ManageTemplateModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl animate-in fade-in zoom-in-95 duration-200 my-8">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">
+      <div className="bg-card rounded-xl shadow-xl w-full max-w-2xl animate-in fade-in zoom-in-95 duration-200 my-8">
+        <div className="flex items-center justify-between px-6 py-4 border-b">
+          <h3 className="text-lg font-semibold text-foreground">
             {templateToEdit ? "Edit Template" : "Create New Template"}
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-muted-foreground hover:text-foreground"
           >
             <X size={20} />
           </button>
@@ -176,24 +176,24 @@ export default function ManageTemplateModal({
           <div className="p-6 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-foreground">
                   Template Name
                 </label>
                 <input
                   required
                   placeholder="e.g. Standard SSG"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg text-sm bg-background text-foreground focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
                   value={name || ""} // Added fallback here
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-foreground">
                   Description (Optional)
                 </label>
                 <input
                   placeholder="e.g. For main campus elections"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  className="w-full px-3 py-2 border rounded-lg text-sm bg-background text-foreground focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
                   value={description || ""} // Added fallback here
                   onChange={(e) => setDescription(e.target.value)}
                 />
@@ -202,26 +202,26 @@ export default function ManageTemplateModal({
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-gray-900">
+                <label className="text-sm font-medium text-foreground">
                   Positions & Slots
                 </label>
                 <button
                   type="button"
                   onClick={handleAddPositionRow}
-                  className="text-xs flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-xs flex items-center gap-1 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium"
                 >
                   <Plus size={14} /> Add Position
                 </button>
               </div>
 
-              <div className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
+              <div className="bg-muted rounded-lg border overflow-hidden">
                 {positions.length === 0 ? (
-                  <div className="p-4 text-center text-sm text-gray-500">
+                  <div className="p-4 text-center text-sm text-muted-foreground">
                     No positions added yet. Click &quot;Add Position&quot;.
                   </div>
                 ) : (
-                  <div className="divide-y divide-gray-200">
-                    <div className="grid grid-cols-12 px-3 py-2 bg-gray-100 text-xs font-semibold text-gray-500 uppercase">
+                  <div className="divide-y">
+                    <div className="grid grid-cols-12 px-3 py-2 bg-muted text-xs font-semibold text-muted-foreground uppercase">
                       <div className="col-span-1 text-center">#</div>
                       <div className="col-span-8">Position Title</div>
                       <div className="col-span-2 text-center">Slots</div>
@@ -230,9 +230,9 @@ export default function ManageTemplateModal({
                     {positions.map((pos, idx) => (
                       <div
                         key={idx}
-                        className="grid grid-cols-12 items-center gap-2 p-2 bg-white hover:bg-gray-50"
+                        className="grid grid-cols-12 items-center gap-2 p-2 bg-card hover:bg-accent"
                       >
-                        <div className="col-span-1 flex justify-center text-gray-400 cursor-move">
+                        <div className="col-span-1 flex justify-center text-muted-foreground cursor-move">
                           <GripVertical size={16} />
                         </div>
 
@@ -241,7 +241,7 @@ export default function ManageTemplateModal({
                           <input
                             required
                             placeholder="Title (e.g. Senator)"
-                            className="w-full px-3 py-1.5 border border-gray-200 rounded text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                            className="w-full px-3 py-1.5 border rounded text-sm bg-background text-foreground focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
                             value={pos.title || ""} // FIXED: Added || "" fallback
                             onChange={(e) =>
                               handlePositionChange(idx, "title", e.target.value)
@@ -251,17 +251,23 @@ export default function ManageTemplateModal({
 
                         <div className="col-span-2">
                           <input
-                            type="number"
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             min="1"
-                            className="w-full px-2 py-1.5 border border-gray-200 rounded text-sm text-center focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                            className="w-full px-2 py-1.5 border rounded text-sm text-center bg-background text-foreground focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
                             value={pos.slots || 1} // Ensure fallback
-                            onChange={(e) =>
+                            onChange={(e) => {
+                              const value = e.target.value.replace(
+                                /[^0-9]/g,
+                                ""
+                              );
                               handlePositionChange(
                                 idx,
                                 "slots",
-                                parseInt(e.target.value) || 1
-                              )
-                            }
+                                parseInt(value) || 1
+                              );
+                            }}
                           />
                         </div>
 
@@ -269,7 +275,7 @@ export default function ManageTemplateModal({
                           <button
                             type="button"
                             onClick={() => handleRemovePositionRow(idx)}
-                            className="text-gray-400 hover:text-red-500 p-1"
+                            className="text-muted-foreground hover:text-red-500 dark:hover:text-red-400 p-1"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -282,18 +288,18 @@ export default function ManageTemplateModal({
             </div>
           </div>
 
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3 rounded-b-xl">
+          <div className="px-6 py-4 bg-muted border-t flex justify-end gap-3 rounded-b-xl">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+              className="px-4 py-2 text-sm font-medium text-foreground hover:bg-accent rounded-lg"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-lg flex items-center gap-2 disabled:opacity-50"
+              className="px-4 py-2 text-sm font-medium text-white bg-green-700 hover:bg-green-800 rounded-lg flex items-center gap-2 disabled:opacity-50"
             >
               {isLoading ? (
                 <Loader2 size={16} className="animate-spin" />

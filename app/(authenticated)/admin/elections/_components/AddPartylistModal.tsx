@@ -183,10 +183,12 @@ export default function AddPartylistModal({
       <DialogTrigger asChild>
         <Button
           disabled={disabled}
-          className="gap-2 bg-green-700 hover:bg-green-900 disabled:opacity-50 disabled:cursor-not-allowed"
+          size="sm"
+          className="gap-2 bg-green-700 hover:bg-green-900 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
         >
-          <Plus size={18} />
-          Add Partylist
+          <Plus className="h-4 w-4" />
+          <span className="hidden sm:inline">Add Partylist</span>
+          <span className="sm:hidden">Add</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
@@ -218,7 +220,7 @@ export default function AddPartylistModal({
                   onChange={(e) => setName(e.target.value)}
                   disabled={isLoading}
                   required
-                  className="border-gray-300"
+                  className="bg-background border-input focus:ring-green-500/20 focus:border-green-500"
                 />
               </div>
 
@@ -236,7 +238,7 @@ export default function AddPartylistModal({
                   onChange={(e) => setDescription(e.target.value)}
                   disabled={isLoading}
                   rows={4}
-                  className="border-gray-300 resize-none"
+                  className="bg-background border-input focus:ring-green-500/20 focus:border-green-500 resize-none"
                 />
               </div>
 
@@ -275,26 +277,29 @@ export default function AddPartylistModal({
             <div className="space-y-4">
               {isLoadingGlobal ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 size={20} className="animate-spin text-gray-400" />
+                  <Loader2
+                    size={20}
+                    className="animate-spin text-muted-foreground"
+                  />
                 </div>
               ) : availablePartylists.length === 0 ? (
                 <div className="py-8 text-center">
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     No available partylists to include. All global partylists
                     are already added to this election.
                   </p>
                 </div>
               ) : (
                 <>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-foreground">
                     Select partylists from the global list to add to this
                     election:
                   </p>
-                  <div className="space-y-2 max-h-64 overflow-y-auto border border-gray-200 rounded-lg p-4">
+                  <div className="space-y-2 max-h-64 overflow-y-auto border border-border rounded-lg p-4 bg-background">
                     {availablePartylists.map((partylist) => (
                       <label
                         key={partylist.id}
-                        className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+                        className="flex items-start gap-3 p-3 hover:bg-accent rounded-lg cursor-pointer transition-colors"
                       >
                         <input
                           type="checkbox"
@@ -306,11 +311,11 @@ export default function AddPartylistModal({
                           className="mt-1 w-4 h-4 accent-green-700"
                         />
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="text-sm font-medium text-foreground">
                             {partylist.name}
                           </p>
                           {partylist.description && (
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-muted-foreground mt-1">
                               {partylist.description}
                             </p>
                           )}

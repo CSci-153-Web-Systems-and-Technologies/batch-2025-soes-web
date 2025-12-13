@@ -147,18 +147,18 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <div className="pb-2 h-20 w-full inline-flex justify-start items-center gap-2 border-b-1 border-primary/20">
+    <Sidebar className="flex flex-col h-full">
+      <SidebarHeader className="shrink-0">
+        <div className="pb-2 h-20 w-full inline-flex justify-start items-center gap-2 border-b">
           <Image src={logo} height={45} width={45} alt="logo" />
           <div className="inline-flex flex-col justify-start items-start">
             <div className="self-stretch h-6 relative">
-              <h1 className="absolute justify-start font-bold leading-6 text-2xl">
+              <h1 className="absolute justify-start font-bold leading-6 text-2xl text-foreground">
                 SOES
               </h1>
             </div>
             <div className="self-stretch h-4 relative">
-              <h2 className="justify-start text-primary/60 text-[10px] leading-4 font-normal">
+              <h2 className="justify-start text-muted-foreground text-[10px] leading-4 font-normal">
                 Student Organization Election System
               </h2>
             </div>
@@ -166,7 +166,7 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="flex-1 overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="flex gap-1">
@@ -197,7 +197,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="shrink-0 mt-auto border-t">
         <SidebarMenu>
           <SidebarMenuItem>
             {/* CONDITIONAL RENDERING TO FIX HYDRATION ERROR */}
@@ -229,7 +229,7 @@ export function AppSidebar() {
                       <span className="truncate font-semibold">
                         {profile?.full_name || "Unknown User"}
                       </span>
-                      <span className="truncate text-xs text-primary/60">
+                      <span className="truncate text-xs text-muted-foreground">
                         {user?.email || "No Email"}
                       </span>
                     </div>
@@ -237,13 +237,13 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className="w-56 rounded-lg shadow-lg border border-gray-200"
+                  className="w-56 rounded-lg shadow-lg border"
                   side="top"
                   align="start"
                   sideOffset={10}
                 >
                   {/* User Info Section */}
-                  <div className="px-2 py-3 border-b border-gray-100">
+                  <div className="px-2 py-3 border-b">
                     <div className="flex items-center gap-2">
                       <Avatar className="h-10 w-10 rounded-lg">
                         <AvatarImage
@@ -255,10 +255,10 @@ export function AppSidebar() {
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 text-left text-sm">
-                        <p className="font-semibold text-gray-900">
+                        <p className="font-semibold text-foreground">
                           {profile?.full_name || "User"}
                         </p>
-                        <p className="text-xs text-gray-500 truncate">
+                        <p className="text-xs text-muted-foreground truncate">
                           {user?.email || "No Email"}
                         </p>
                       </div>
@@ -273,14 +273,14 @@ export function AppSidebar() {
                     </a>
                   </DropdownMenuItem>
 
-                  <div className="my-1 border-t border-gray-100" />
+                  <div className="my-1 border-t" />
 
                   <DropdownMenuItem
                     onClick={async () => {
                       await supabase.auth.signOut();
                       window.location.href = "/";
                     }}
-                    className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600"
+                    className="cursor-pointer text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-950 focus:text-red-600 dark:focus:text-red-400"
                   >
                     <LogOut size={16} />
                     <span>Log out</span>
