@@ -111,7 +111,14 @@ export default function AddPartylistModal({
       });
 
       if (error) {
-        toast.error("Failed to create partylist: " + error.message);
+        if (error.code === "23505") {
+          // Unique constraint violation
+          toast.error(
+            "A partylist with this name already exists in this election"
+          );
+        } else {
+          toast.error("Failed to create partylist: " + error.message);
+        }
         return;
       }
 

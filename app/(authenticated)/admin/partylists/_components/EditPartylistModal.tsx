@@ -79,7 +79,17 @@ export default function EditPartylistModal({
         })
         .eq("id", partylist.id);
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === "23505") {
+          // Unique constraint violation
+          toast.error(
+            "A partylist with this name already exists in this election"
+          );
+        } else {
+          throw error;
+        }
+        return;
+      }
 
       toast.success("Partylist updated successfully");
       onClose();
