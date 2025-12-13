@@ -1,0 +1,155 @@
+import { createClient } from "@/utils/supabase/server";
+import { Users, LayoutTemplate } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import ImportTemplateModalWrapper from "../../_components/ImportTemplateModalWrapper";
+import AddPositionModal from "../../_components/AddPositionModal";
+import PositionCandidates from "../../_components/PositionCandidates";
+import PositionActions from "../../_components/PositionActions";
+import ClearPositionsButton from "../../_components/ClearPositionsButton";
+import ViewPartylistCandidatesModal from "../../_components/ViewPartylistCandidatesModal";
+import { Position, Candidate } from "@/types/types";
+
+export default async function ElectionPositionsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>; // In Next.js 15, params is a Promise
+}) {
+  const { id: electionId } = await params;
+  const supabase = await createClient();
+
+  // Get election status
+  const { data: election } = await supabase
+    .from("election_sessions")
+    .select("status")
+    .eq("id", electionId)
+    .single();
+
+  const isElectionEnded = election?.status === "ended";
+
+  // 1. Fetch Current Positions for this Election (with candidates and partylist info)
+  const { data: positionsData } = await supabase
+    .from("positions")
+    .select(
+      "*, candidates(id, student_id, full_name, description, avatar_url, partylists(id, name))"
+    )
+    .eq("election_id", electionId)
+    .order("rank", { ascending: true });
+
+  // Cast the data to our interface (Supabase returns JSONB as any/unknown usually)
+  const positions = (positionsData as unknown as Position[]) || [];
+
+  // 2. Fetch Available Templates (active only)
+  const { data: templatesData } = await supabase
+    .from("position_templates")
+    .select("id, name")
+    .eq("status", "active");
+
+  // Transform/Cast data to match the Modal's expected type
+  const templates =
+    templatesData?.map((t) => ({
+      id: t.id,
+      name: t.name,
+    })) || [];
+
+  // Collect all candidates from all positions for the partylist viewer
+  const allCandidates: Candidate[] = [];
+  positions.forEach((pos) => {
+    if (pos.candidates) {
+      allCandidates.push(...pos.candidates);
+    }
+  });
+
+  return (
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 className="text-lg font-semibold text-foreground">Positions</h2>
+          <p className="text-sm text-muted-foreground">
+            Manage the positions candidates can run for.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-end w-full sm:w-auto">
+          {/* Wrapper handles the client-side modal state */}
+          <ImportTemplateModalWrapper
+            electionId={electionId}
+            templates={templates}
+            disabled={positions.length > 0 || isElectionEnded}
+          />
+
+          <AddPositionModal
+            electionId={electionId}
+            disabled={positions.length > 0 || isElectionEnded}
+          />
+
+          <ViewPartylistCandidatesModal candidates={allCandidates} />
+
+          <ClearPositionsButton
+            electionId={electionId}
+            disabled={isElectionEnded}
+          />
+        </div>
+      </div>
+
+      {/* Positions List */}
+      {positions.length === 0 ? (
+        <Card className="bg-card border border-border">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <div className="flex flex-col items-center justify-center space-y-3">
+              <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+                <LayoutTemplate className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <div className="text-center">
+                <p className="font-medium text-foreground">No positions yet</p>
+                <p className="text-muted-foreground text-sm mt-1 max-w-sm mx-auto">
+                  You can manually add positions or import them from a template
+                  to get started quickly.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-3">
+          {positions.map((pos) => (
+            <Card
+              key={pos.id}
+              className="bg-card border border-border overflow-hidden"
+            >
+              <CardHeader className="pb-0">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-4">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-mono text-muted-foreground">
+                        #{pos.rank}
+                      </span>
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {pos.title}
+                      </h3>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-medium">
+                        <Users size={14} className="mr-1.5" />
+                        {pos.rules?.vote_limit || 1} Seat(s)
+                      </span>
+                    </div>
+                  </div>
+                  <PositionActions
+                    positionId={pos.id}
+                    positionTitle={pos.title}
+                  />
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <PositionCandidates
+                  positionTitle={pos.title}
+                  candidates={pos.candidates || []}
+                />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

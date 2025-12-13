@@ -1,0 +1,319 @@
+import { createClient } from "@/utils/supabase/server";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Info } from "lucide-react";
+import DeleteElectionDialog from "../../_components/DeleteElectionDialog";
+import CopyBallotLinkButton from "../../_components/CopyBallotLinkButton";
+import ToggleElectionStatusButton from "../../_components/ToggleElectionStatusButton";
+import EditElectionDetailsModal from "../../_components/EditElectionDetailsModal";
+import EndElectionButton from "../../_components/EndElectionButton";
+import { ElectionSession } from "@/types/types";
+
+export default async function ElectionSettingsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id: electionId } = await params;
+  const supabase = await createClient();
+
+  // Fetch election session details
+  const { data: electionData } = await supabase
+    .from("election_sessions")
+    .select("*")
+    .eq("id", electionId)
+    .single();
+
+  const election = (electionData as unknown as ElectionSession) || null;
+
+  // Fetch related counts
+  const [
+    { count: positionCount },
+    { count: candidateCount },
+    { count: voterCount },
+    { count: votesCastCount },
+  ] = await Promise.all([
+    supabase
+      .from("positions")
+      .select("*", { count: "exact", head: true })
+      .eq("election_id", electionId),
+    supabase
+      .from("candidates")
+      .select("*", { count: "exact", head: true })
+      .eq("election_id", electionId),
+    supabase
+      .from("eligible_voters")
+      .select("*", { count: "exact", head: true })
+      .eq("election_id", electionId),
+    supabase
+      .from("eligible_voters")
+      .select("*", { count: "exact", head: true })
+      .eq("election_id", electionId)
+      .eq("has_voted", true),
+  ]);
+
+  const ballotUrl = `${
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  }/vote?election=${electionId}`;
+  const resultsUrl = `${
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  }/results/${electionId}`;
+  const createdDate = election?.created_at
+    ? new Date(election.created_at).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "N/A";
+
+  return (
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div>
+        <h2 className="text-lg font-semibold text-foreground">
+          Election Settings
+        </h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Manage your election session, view details, and access the ballot
+          link.
+        </p>
+      </div>
+
+      {/* Election Information Card */}
+      <Card className="bg-card border border-border">
+        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <CardTitle>Election Information</CardTitle>
+            <CardDescription>
+              Basic details about this election session
+            </CardDescription>
+          </div>
+          <EditElectionDetailsModal
+            electionId={electionId}
+            currentTitle={election?.title || ""}
+            currentDescription={election?.description}
+          />
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Title */}
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              Election Title
+            </label>
+            <div className="p-4 bg-muted rounded-lg border border-border">
+              <p className="text-foreground font-medium">
+                {election?.title || "N/A"}
+              </p>
+            </div>
+          </div>
+
+          {/* Description */}
+          {election?.description && (
+            <div>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Description
+              </label>
+              <div className="p-4 bg-muted rounded-lg border border-border">
+                <p className="text-foreground text-sm">
+                  {election.description}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Status */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Status
+              </label>
+              <div className="p-4 bg-muted rounded-lg border border-border">
+                <span
+                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                    election?.status === "active"
+                      ? "bg-green-50/50 dark:bg-green-950/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-300 border"
+                      : election?.status === "ended"
+                      ? "bg-muted text-muted-foreground border border-border"
+                      : "bg-yellow-50/50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300 border"
+                  }`}
+                >
+                  {election?.status?.charAt(0).toUpperCase() +
+                    election?.status?.slice(1) || "N/A"}
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Created Date
+              </label>
+              <div className="p-4 bg-muted rounded-lg border border-border">
+                <p className="text-foreground text-sm">{createdDate}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Status Toggle Button */}
+          {election?.status !== "ended" && (
+            <div className="pt-2 flex flex-wrap gap-4">
+              <ToggleElectionStatusButton
+                electionId={electionId}
+                currentStatus={election?.status || "draft"}
+              />
+              {election?.status === "active" && (
+                <EndElectionButton
+                  electionId={electionId}
+                  electionStatus={election.status}
+                  electionTitle={election.title}
+                />
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Election Statistics Card */}
+      <Card className="bg-card border border-border">
+        <CardHeader>
+          <CardTitle>Election Statistics</CardTitle>
+          <CardDescription>
+            Overview of positions, candidates, and voters
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="text-center p-4 bg-blue-50/50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                {positionCount || 0}
+              </p>
+              <p className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1">
+                Positions
+              </p>
+            </div>
+            <div className="text-center p-4 bg-purple-50/50 dark:bg-purple-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
+              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                {candidateCount || 0}
+              </p>
+              <p className="text-xs text-purple-600 dark:text-purple-400 font-medium mt-1">
+                Candidates
+              </p>
+            </div>
+            <div className="text-center p-4 bg-green-50/50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                {voterCount || 0}
+              </p>
+              <p className="text-xs text-green-600 dark:text-green-400 font-medium mt-1">
+                Voters
+              </p>
+            </div>
+            <div className="text-center p-4 bg-yellow-50/50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+              <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+                {votesCastCount || 0}
+              </p>
+              <p className="text-xs text-yellow-600 dark:text-yellow-400 font-medium mt-1">
+                Votes Cast
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Ballot Link Card */}
+      <Card className="bg-card border border-border">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Info size={18} className="text-blue-600 dark:text-blue-400" />
+            Ballot Link
+          </CardTitle>
+          <CardDescription>
+            Share this link with voters to access the ballot
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {election?.status === "active" ? (
+            <>
+              <div className="p-4 bg-blue-50/50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p className="text-xs text-muted-foreground mb-2">
+                  Ballot URL:
+                </p>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 text-sm text-blue-900 dark:text-blue-300 font-mono break-all">
+                    {ballotUrl}
+                  </code>
+                  <CopyBallotLinkButton ballotUrl={ballotUrl} />
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                ⓘ Voters can access the ballot using this link. It can be shared
+                via email, QR code, or direct link.
+              </p>
+            </>
+          ) : (
+            <div className="p-4 bg-yellow-50/50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+              <p className="text-sm text-yellow-800 dark:text-yellow-300 font-medium">
+                ⚠️ Activate the election session first
+              </p>
+              <p className="text-xs text-yellow-700 dark:text-yellow-400 mt-2">
+                The ballot link will be available once you activate this
+                election session. This ensures voters can only access the ballot
+                when the election is running.
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Live Results Link Card */}
+      <Card className="bg-card border border-border">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Info size={18} className="text-green-600 dark:text-green-400" />
+            Live Results Link
+          </CardTitle>
+          <CardDescription>
+            Share this link with voters to view live election results
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="p-4 bg-green-50/50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+            <p className="text-xs text-muted-foreground mb-2">Results URL:</p>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 text-sm text-green-900 dark:text-green-300 font-mono break-all">
+                {resultsUrl}
+              </code>
+              <CopyBallotLinkButton ballotUrl={resultsUrl} linkType="Results" />
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            ⓘ Results update automatically every 30 minutes. Voters can view
+            live results without logging in.
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Danger Zone */}
+      <Card className="bg-card border border-red-600">
+        <CardHeader>
+          <CardTitle className="text-red-600">Danger Zone</CardTitle>
+          <CardDescription>Irreversible actions</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Deleting this election session will permanently remove all
+            associated data including positions, candidates, voters, and votes.
+            This action cannot be undone.
+          </p>
+          <DeleteElectionDialog
+            electionId={electionId}
+            electionTitle={election?.title || "Election"}
+          />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
