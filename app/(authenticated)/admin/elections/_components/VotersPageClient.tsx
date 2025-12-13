@@ -2,18 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Search, RefreshCw } from "lucide-react";
+import { RefreshCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import VoterActions from "./VoterActions";
 import VoterRowActions from "./VoterRowActions";
-
-interface Voter {
-  id: string;
-  school_id: string;
-  full_name: string;
-  email: string | null;
-  has_voted: boolean;
-}
+import { Voter } from "@/types/types";
 
 interface VotersPageClientProps {
   electionId: string;

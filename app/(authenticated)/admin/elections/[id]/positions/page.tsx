@@ -7,31 +7,7 @@ import PositionCandidates from "../../_components/PositionCandidates";
 import PositionActions from "../../_components/PositionActions";
 import ClearPositionsButton from "../../_components/ClearPositionsButton";
 import ViewPartylistCandidatesModal from "../../_components/ViewPartylistCandidatesModal";
-
-interface PositionRule {
-  vote_limit?: number;
-  allow_abstain?: boolean;
-}
-
-interface Candidate {
-  id: string;
-  student_id: string;
-  full_name: string;
-  description: string | null;
-  avatar_url: string | null;
-  partylists?: {
-    id: string;
-    name: string;
-  };
-}
-
-interface Position {
-  id: string;
-  rank: number;
-  title: string;
-  rules: PositionRule | null; // JSONB can be null
-  candidates?: Candidate[];
-}
+import { Position, Candidate } from "@/types/types";
 
 export default async function ElectionPositionsPage({
   params,

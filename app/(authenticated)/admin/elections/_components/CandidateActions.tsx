@@ -4,17 +4,7 @@ import { useState } from "react";
 import { Upload, UserPlus } from "lucide-react";
 import AddCandidateModal from "./AddCandidateModal";
 import ImportCandidatesModal from "./ImportCandidatesModal";
-
-// Interface for the positions passed from the page
-interface PositionOption {
-  id: string;
-  title: string;
-}
-
-interface PartylistOption {
-  id: string;
-  name: string;
-}
+import { PositionOption, PartylistOption } from "@/types/types";
 
 interface CandidateActionsProps {
   electionId: string;
