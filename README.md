@@ -512,7 +512,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Vercel** for Next.js and deployment platform
 - **Supabase** for the backend infrastructure
 - **Radix UI** for accessible component primitives
-- All contributors who have helped improve this project
+- **Kerby** because he did this all (bars)
 
 ---
 
