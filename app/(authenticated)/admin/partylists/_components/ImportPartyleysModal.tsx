@@ -123,14 +123,14 @@ export default function ImportPartyleysModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">
+      <div className="bg-card rounded-xl shadow-xl w-full max-w-lg animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between px-6 py-4 border-b">
+          <h3 className="text-lg font-semibold text-foreground">
             Import Partylists (CSV)
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-muted-foreground hover:text-foreground"
           >
             <X size={20} />
           </button>
@@ -138,11 +138,11 @@ export default function ImportPartyleysModal({
 
         <div className="p-6 space-y-6">
           <div className="space-y-3">
-            <p className="text-sm text-gray-600">
-              Upload a <strong>.CSV</strong> file with partylist data.
+            <p className="text-sm text-muted-foreground">
+              Upload a <strong>CSV</strong> file with partylist data.
             </p>
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs font-mono text-gray-600 overflow-x-auto">
-              <div className="font-semibold mb-2 text-gray-900">
+            <div className="bg-muted border rounded-lg p-3 text-xs font-mono text-muted-foreground overflow-x-auto">
+              <div className="font-semibold mb-2 text-foreground">
                 CSV Format Example:
               </div>
               name,description
@@ -159,15 +159,18 @@ export default function ImportPartyleysModal({
               accept=".csv"
               ref={fileInputRef}
               onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+              className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 dark:file:bg-green-900 file:text-green-700 dark:file:text-green-300 hover:file:bg-green-100 dark:hover:file:bg-green-800 cursor-pointer"
             />
             {file && (
-              <div className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg border border-gray-100">
-                <FileSpreadsheet size={16} className="text-green-600" />
+              <div className="flex items-center gap-2 text-sm text-foreground bg-muted px-3 py-2 rounded-lg border">
+                <FileSpreadsheet
+                  size={16}
+                  className="text-green-600 dark:text-green-400"
+                />
                 <span className="truncate flex-1">{file.name}</span>
                 <button
                   onClick={reset}
-                  className="text-gray-400 hover:text-red-500"
+                  className="text-muted-foreground hover:text-red-500 dark:hover:text-red-400"
                 >
                   <X size={16} />
                 </button>
@@ -178,14 +181,14 @@ export default function ImportPartyleysModal({
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="flex-1 px-4 py-2 text-sm font-medium text-foreground bg-background border rounded-lg hover:bg-accent"
             >
               Cancel
             </button>
             <button
               onClick={handleFileUpload}
               disabled={!file || isLoading}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-green-700 hover:bg-green-800 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <Loader2 size={16} className="animate-spin" />
