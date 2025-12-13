@@ -21,8 +21,8 @@ export default function VoterActions({
   return (
     <>
       <div className="flex gap-2">
-        {/* Send Email Button */}
-        <SendEmailButton electionId={electionId} disabled={disabled} />
+        {/* Send Email Button - Always active to allow status notifications */}
+        <SendEmailButton electionId={electionId} disabled={false} />
 
         {/* Import CSV Button */}
         <button
