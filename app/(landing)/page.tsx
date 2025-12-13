@@ -289,18 +289,12 @@ const Page = () => {
               efficient elections.
             </p>
 
-            <div className="flex items-center justify-center gap-10 flex-wrap">
+            <div className="flex items-center justify-center">
               <Button
                 className="bg-background px-10 font-bold text-foreground hover:bg-background/70"
                 onClick={() => router.push("/signup")}
               >
                 Setup Now
-              </Button>
-              <Button
-                className="bg-background px-10 font-bold text-foreground hover:bg-background/70"
-                onClick={() => router.push("/vote")}
-              >
-                Vote Now
               </Button>
             </div>
           </div>
