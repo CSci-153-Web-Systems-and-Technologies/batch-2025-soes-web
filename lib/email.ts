@@ -1,10 +1,6 @@
-import { Resend } from 'resend';
 import nodemailer from 'nodemailer';
 
-// Create Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Create nodemailer transporter for Gmail fallback
+// Create nodemailer transporter for Gmail
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
