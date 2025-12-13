@@ -188,11 +188,13 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarSeparator />
+      <div className="px-2">
+        <SidebarSeparator className="mx-0" />
+      </div>
       <SidebarContent className="flex-1 overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="flex gap-1">
+            <SidebarMenu className="flex flex-col gap-2">
               <div className="mb-10">
                 <SidebarGroupLabel>Management</SidebarGroupLabel>
                 {items.map((item) => (
