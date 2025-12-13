@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Vote,
@@ -25,6 +26,8 @@ import {
   SidebarMenuItem,
   SidebarGroupLabel,
   SidebarFooter,
+  SidebarSeparator,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -78,11 +81,21 @@ const systemitem = {
 };
 
 export function AppSidebar() {
+  const pathname = usePathname();
+  const { open } = useSidebar();
   // Initialize loading to true to prevent hydration mismatch
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const supabase = createClient();
+
+  // Check if a menu item is active
+  const isActive = (url: string) => {
+    if (url === "/admin/dashboard") {
+      return pathname === url;
+    }
+    return pathname.startsWith(url);
+  };
 
   useEffect(() => {
     const getUserData = async () => {
@@ -147,34 +160,46 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className="flex flex-col h-full">
+    <Sidebar className="flex flex-col h-full" collapsible="icon">
       <SidebarHeader className="shrink-0">
-        <div className="pb-2 h-20 w-full inline-flex justify-start items-center gap-2 border-b">
-          <Image src={logo} height={45} width={45} alt="logo" />
-          <div className="inline-flex flex-col justify-start items-start">
-            <div className="self-stretch h-6 relative">
-              <h1 className="absolute justify-start font-bold leading-6 text-2xl text-foreground">
-                SOES
-              </h1>
-            </div>
-            <div className="self-stretch h-4 relative">
-              <h2 className="justify-start text-muted-foreground text-[10px] leading-4 font-normal">
-                Student Organization Election System
-              </h2>
-            </div>
-          </div>
-        </div>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <a href="/admin/dashboard" className="flex items-center gap-2">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <Image
+                    src={logo}
+                    height={32}
+                    width={32}
+                    alt="logo"
+                    className="shrink-0"
+                  />
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold text-foreground">
+                    SOES
+                  </span>
+                  <span className="truncate text-[10px] text-muted-foreground">
+                    Student Organization Election System
+                  </span>
+                </div>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
-
+      <div className="px-2">
+        <SidebarSeparator className="mx-0" />
+      </div>
       <SidebarContent className="flex-1 overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="flex gap-1">
+            <SidebarMenu className="flex flex-col gap-2">
               <div className="mb-10">
                 <SidebarGroupLabel>Management</SidebarGroupLabel>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild isActive={isActive(item.url)}>
                       <a href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
@@ -185,7 +210,7 @@ export function AppSidebar() {
               </div>
               <SidebarGroupLabel>System</SidebarGroupLabel>
               <SidebarMenuItem key={systemitem.title}>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton asChild isActive={isActive(systemitem.url)}>
                   <a href={systemitem.url}>
                     <systemitem.icon />
                     <span>{systemitem.title}</span>
