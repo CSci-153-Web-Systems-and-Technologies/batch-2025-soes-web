@@ -61,12 +61,12 @@ export default function ElectionReportView({
       // Get candidates with partylist info
       const { data: candidates } = await supabase
         .from("candidates")
-        .select("id, name, partylist_id, partylists(id, name)")
+        .select("id, full_name, partylist_id, partylists(id, name)")
         .eq("election_id", electionId);
 
       interface CandidateFromDB {
         id: string;
-        name: string;
+        full_name: string;
         partylist_id?: string;
         partylists?:
           | { id: string; name: string }[]
@@ -82,7 +82,7 @@ export default function ElectionReportView({
 
         candidateMap.set(candidate.id, {
           id: candidate.id,
-          name: candidate.name,
+          name: candidate.full_name,
           partylist: partylistName,
         });
       });
@@ -90,9 +90,9 @@ export default function ElectionReportView({
       // Get positions
       const { data: positions } = await supabase
         .from("positions")
-        .select("id, name")
+        .select("id, title")
         .eq("election_id", electionId)
-        .order("order", { ascending: true });
+        .order("rank", { ascending: true });
 
       // Get voter stats
       const { count: totalVoters } = await supabase
@@ -159,7 +159,7 @@ export default function ElectionReportView({
 
         positionResults.push({
           positionId: position.id,
-          positionName: position.name,
+          positionName: position.title,
           candidates: candidatesResults,
           totalVotes: positionTotalVotes,
         });
