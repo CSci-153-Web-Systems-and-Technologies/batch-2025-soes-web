@@ -57,11 +57,11 @@ export default function PositionsTable({
   const getCategoryStyle = (category: string | null) => {
     switch (category?.toLowerCase()) {
       case "student government":
-        return "bg-green-100 text-green-700 hover:bg-green-100 border-transparent";
+        return "bg-transparent text-green-700 dark:text-green-400 border-green-700 dark:border-green-400";
       case "academic":
-        return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 border-transparent";
+        return "bg-transparent text-emerald-700 dark:text-emerald-400 border-emerald-700 dark:border-emerald-400";
       default:
-        return "bg-gray-100 text-gray-700 hover:bg-gray-100 border-transparent";
+        return "bg-transparent text-muted-foreground border-border";
     }
   };
 
