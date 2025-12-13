@@ -9,22 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-interface Candidate {
-  id: string;
-  student_id: string;
-  full_name: string;
-  description: string | null;
-  avatar_url: string | null;
-  partylists?: {
-    id: string;
-    name: string;
-  };
-  positions?: {
-    id: string;
-    title: string;
-  };
-}
+import { Candidate } from "@/types/types";
 
 interface ViewPartylistCandidatesModalProps {
   candidates: Candidate[];
