@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Trash2, RotateCcw, Loader2, CheckCircle } from "lucide-react";
+import { Trash2, RotateCcw, Loader2, CheckCircle, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -20,17 +20,24 @@ import {
 interface VoterRowActionsProps {
   voterId: string;
   hasVoted: boolean;
+  voterEmail?: string;
+  voterName?: string;
+  electionId: string;
   disabled?: boolean;
 }
 
 export default function VoterRowActions({
   voterId,
   hasVoted,
+  voterEmail,
+  voterName,
+  electionId,
   disabled,
 }: VoterRowActionsProps) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   // 1. Logic to Delete Voter
   const handleDelete = async () => {
@@ -85,8 +92,61 @@ export default function VoterRowActions({
     }
   };
 
+  // 3. Logic to Send Email to Individual Voter
+  const handleSendEmail = async () => {
+    if (!voterEmail) {
+      toast.error("This voter doesn't have an email address.");
+      return;
+    }
+
+    setIsSendingEmail(true);
+
+    try {
+      const response = await fetch("/api/send-voter-emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          electionId,
+          voterIds: [voterId],
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success && data.sent > 0) {
+        toast.success(`Email sent successfully to ${voterName || voterEmail}!`);
+      } else if (data.failed > 0) {
+        toast.error(`Failed to send email to ${voterName || voterEmail}.`);
+      } else {
+        toast.error(data.error || "Failed to send email");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error("An error occurred while sending email");
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
   return (
     <div className="flex justify-end gap-2">
+      {/* Email Button */}
+      <button
+        onClick={handleSendEmail}
+        disabled={isSendingEmail || disabled || !voterEmail}
+        title={voterEmail ? "Send Credentials Email" : "No email address"}
+        className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isSendingEmail ? (
+          <Loader2 size={16} className="animate-spin" />
+        ) : (
+          <Mail size={16} />
+        )}
+      </button>
+
+      {/* Toggle Vote Status Button */}
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <button

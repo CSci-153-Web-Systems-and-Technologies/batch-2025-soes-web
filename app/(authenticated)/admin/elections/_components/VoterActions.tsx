@@ -4,6 +4,7 @@ import { useState } from "react";
 import { UserPlus, Upload } from "lucide-react";
 import AddVoterModal from "./AddVoterModal";
 import ImportVotersModal from "./ImportVotersModal";
+import SendEmailButton from "./SendEmailButton";
 
 export default function VoterActions({
   electionId,
@@ -20,6 +21,9 @@ export default function VoterActions({
   return (
     <>
       <div className="flex gap-2">
+        {/* Send Email Button - Always active to allow status notifications */}
+        <SendEmailButton electionId={electionId} disabled={false} />
+
         {/* Import CSV Button */}
         <button
           onClick={() => setIsImportOpen(true)}

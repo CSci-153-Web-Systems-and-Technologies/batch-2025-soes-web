@@ -156,6 +156,9 @@ export default function VotersPageClient({
                     <VoterRowActions
                       voterId={voter.id}
                       hasVoted={voter.has_voted}
+                      voterEmail={voter.email || undefined}
+                      voterName={voter.full_name}
+                      electionId={electionId}
                       disabled={isElectionEnded}
                     />
                   </td>
