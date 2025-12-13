@@ -109,14 +109,14 @@ export default function ElectionReportsSelector({
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-2">
+              <label className="text-sm font-medium text-foreground block mb-2">
                 Election Session
               </label>
               <Select
                 value={selectedElectionId}
                 onValueChange={setSelectedElectionId}
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-background">
                   <SelectValue placeholder="Select an election" />
                 </SelectTrigger>
                 <SelectContent>
@@ -131,11 +131,11 @@ export default function ElectionReportsSelector({
 
             {selectedElection && (
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
+                <label className="text-sm font-medium text-foreground block mb-2">
                   Status
                 </label>
-                <div className="px-3 py-2 bg-gray-100 rounded-md border border-gray-200">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
+                <div className="px-3 py-2 bg-muted rounded-md border border-border">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent text-accent-foreground">
                     {selectedElection.status.charAt(0).toUpperCase() +
                       selectedElection.status.slice(1)}
                   </span>
@@ -147,27 +147,35 @@ export default function ElectionReportsSelector({
               <Button
                 onClick={handleDownloadPDF}
                 variant="outline"
-                className="gap-2 flex-1"
+                size="sm"
+                className="gap-2 flex-1 text-xs sm:text-sm"
                 disabled={!selectedElection || !reportData || isExporting}
               >
                 <Download className="w-4 h-4" />
-                {isExporting ? "Exporting..." : "PDF"}
+                <span className="hidden sm:inline">
+                  {isExporting ? "Exporting..." : "Download PDF"}
+                </span>
+                <span className="sm:hidden">PDF</span>
               </Button>
               <Button
                 onClick={handleExportExcel}
                 variant="outline"
-                className="gap-2 flex-1"
+                size="sm"
+                className="gap-2 flex-1 text-xs sm:text-sm"
                 disabled={!selectedElection || !reportData || isExporting}
               >
                 <Download className="w-4 h-4" />
-                {isExporting ? "Exporting..." : "Excel"}
+                <span className="hidden sm:inline">
+                  {isExporting ? "Exporting..." : "Download Excel"}
+                </span>
+                <span className="sm:hidden">Excel</span>
               </Button>
             </div>
           </div>
 
           {selectedElection?.description && (
-            <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <p className="text-sm text-blue-900">
+            <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-blue-900 dark:text-blue-100">
                 {selectedElection.description}
               </p>
             </div>
