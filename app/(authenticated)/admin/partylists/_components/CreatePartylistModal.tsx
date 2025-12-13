@@ -59,7 +59,17 @@ export default function CreatePartylistModal({
         election_id: electionId || null,
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === "23505") {
+          // Unique constraint violation
+          toast.error(
+            "A partylist with this name already exists in this election"
+          );
+        } else {
+          throw error;
+        }
+        return;
+      }
 
       toast.success("Partylist created successfully");
       setFormData({ name: "", description: "" });

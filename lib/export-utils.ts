@@ -6,6 +6,7 @@ interface CandidateResult {
   partylist?: string;
   voteCount: number;
   percentage: number;
+  isWinner?: boolean;
 }
 
 interface PositionResult {
@@ -13,6 +14,7 @@ interface PositionResult {
   positionName: string;
   candidates: CandidateResult[];
   totalVotes: number;
+  winnerCount?: number; // Number of winners for this position
 }
 
 interface ExportData {
@@ -97,6 +99,54 @@ export async function exportToPDF(data: ExportData) {
           <span>${data.turnoutPercentage}</span>
         </div>
       </div>
+
+      <div class="section">
+        <h2>🏆 Election Winners</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Winner(s)</th>
+              <th>Partylist</th>
+              <th>Votes Received</th>
+            </tr>
+          </thead>
+          <tbody>
+  `;
+
+  // Add winners summary table
+  for (const position of data.positions) {
+    const maxVotes = position.candidates.length > 0 
+      ? Math.max(...position.candidates.map(c => c.voteCount))
+      : 0;
+    
+    const winners = position.candidates.filter(c => c.voteCount === maxVotes && maxVotes > 0);
+
+    if (winners.length > 0) {
+      winners.forEach((winner, index) => {
+        htmlContent += `
+          <tr style="background-color: #f0fdf4;">
+            <td>${index === 0 ? position.positionName : ''}</td>
+            <td><strong>${winner.candidateName}</strong>${winners.length > 1 ? ' <em>(TIED)</em>' : ''}</td>
+            <td>${winner.partylist || "N/A"}</td>
+            <td><strong>${winner.voteCount}</strong> (${winner.percentage.toFixed(1)}%)</td>
+          </tr>
+        `;
+      });
+    } else {
+      htmlContent += `
+        <tr>
+          <td>${position.positionName}</td>
+          <td colspan="3" style="text-align: center; color: #999;">No votes cast</td>
+        </tr>
+      `;
+    }
+  }
+
+  htmlContent += `
+          </tbody>
+        </table>
+      </div>
   `;
 
   // Add position results
@@ -107,9 +157,28 @@ export async function exportToPDF(data: ExportData) {
       htmlContent += '<div class="page-break"></div>';
     }
 
+    // Determine winners (candidates with highest vote count)
+    const maxVotes = position.candidates.length > 0 
+      ? Math.max(...position.candidates.map(c => c.voteCount))
+      : 0;
+    
+    const winners = position.candidates.filter(c => c.voteCount === maxVotes && maxVotes > 0);
+
     htmlContent += `
       <div class="section">
         <h2>${position.positionName}</h2>
+        ${winners.length > 0 ? `
+          <div style="background-color: #dcfce7; border: 2px solid #16a34a; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+            <h3 style="color: #15803d; margin-bottom: 10px; font-size: 14px;">🏆 ${winners.length > 1 ? 'Winners (Tied)' : 'Winner'}</h3>
+            ${winners.map(w => `
+              <div style="margin-bottom: 5px;">
+                <strong>${w.candidateName}</strong>
+                ${w.partylist ? `<span style="color: #666;"> - ${w.partylist}</span>` : ''}
+                <span style="color: #15803d; font-weight: bold;"> (${w.voteCount} votes, ${w.percentage.toFixed(1)}%)</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
         <table>
           <thead>
             <tr>
@@ -118,19 +187,22 @@ export async function exportToPDF(data: ExportData) {
               <th>Partylist</th>
               <th>Votes</th>
               <th>Percentage</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
     `;
 
     position.candidates.forEach((candidate, index) => {
+      const isWinner = candidate.voteCount === maxVotes && maxVotes > 0;
       htmlContent += `
-        <tr>
+        <tr ${isWinner ? 'style="background-color: #f0fdf4; font-weight: bold;"' : ''}>
           <td class="rank">${index + 1}</td>
           <td>${candidate.candidateName}</td>
           <td>${candidate.partylist || "N/A"}</td>
           <td>${candidate.voteCount}</td>
           <td>${candidate.percentage.toFixed(1)}%</td>
+          <td>${isWinner ? '<span style="color: #15803d;">✓ WINNER</span>' : ''}</td>
         </tr>
       `;
     });
@@ -187,16 +259,67 @@ export async function exportToExcel(data: ExportData) {
 
   XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
 
+  // Winners Summary sheet
+  const winnersData: (string | number)[][] = [
+    ["STUDENT ORGANIZATION ELECTION SYSTEM"],
+    ["ELECTION WINNERS SUMMARY"],
+    [],
+    ["Position", "Winner(s)", "Partylist", "Votes Received"],
+  ];
+
+  for (const position of data.positions) {
+    // Determine winner(s)
+    const maxVotes = position.candidates.length > 0 
+      ? Math.max(...position.candidates.map(c => c.voteCount))
+      : 0;
+    
+    const winners = position.candidates.filter(c => c.voteCount === maxVotes && maxVotes > 0);
+
+    if (winners.length > 0) {
+      winners.forEach((winner, index) => {
+        winnersData.push([
+          index === 0 ? position.positionName : "", // Only show position name on first winner
+          winner.candidateName + (winners.length > 1 ? " (TIED)" : ""),
+          winner.partylist || "N/A",
+          `${winner.voteCount} (${winner.percentage.toFixed(1)}%)`,
+        ]);
+      });
+    } else {
+      winnersData.push([
+        position.positionName,
+        "No votes cast",
+        "",
+        "0",
+      ]);
+    }
+  }
+
+  const winnersSheet = XLSX.utils.aoa_to_sheet(winnersData);
+  winnersSheet["!cols"] = [
+    { wch: 30 },
+    { wch: 30 },
+    { wch: 20 },
+    { wch: 20 },
+  ];
+
+  XLSX.utils.book_append_sheet(workbook, winnersSheet, "Winners Summary");
+
   // Detailed results sheet
   const resultsData: (string | number)[][] = [
     ["STUDENT ORGANIZATION ELECTION SYSTEM"],
     ["ELECTION RESULTS - DETAILED BREAKDOWN"],
     [],
-    ["Position", "Rank", "Candidate Name", "Partylist", "Votes", "Percentage"],
+    ["Position", "Rank", "Candidate Name", "Partylist", "Votes", "Percentage", "Status"],
   ];
 
   for (const position of data.positions) {
+    // Determine winner(s)
+    const maxVotes = position.candidates.length > 0 
+      ? Math.max(...position.candidates.map(c => c.voteCount))
+      : 0;
+
     position.candidates.forEach((candidate, index) => {
+      const isWinner = candidate.voteCount === maxVotes && maxVotes > 0;
       resultsData.push([
         position.positionName,
         index + 1,
@@ -204,6 +327,7 @@ export async function exportToExcel(data: ExportData) {
         candidate.partylist || "N/A",
         candidate.voteCount,
         `${candidate.percentage.toFixed(1)}%`,
+        isWinner ? "✓ WINNER" : "",
       ]);
     });
     resultsData.push([]);
@@ -217,26 +341,48 @@ export async function exportToExcel(data: ExportData) {
     { wch: 20 },
     { wch: 12 },
     { wch: 15 },
+    { wch: 15 },
   ];
 
   XLSX.utils.book_append_sheet(workbook, resultsSheet, "Detailed Results");
 
   // Add individual sheets for each position
   for (const position of data.positions) {
+    // Determine winner(s)
+    const maxVotes = position.candidates.length > 0 
+      ? Math.max(...position.candidates.map(c => c.voteCount))
+      : 0;
+    
+    const winners = position.candidates.filter(c => c.voteCount === maxVotes && maxVotes > 0);
+
     const positionData: (string | number)[][] = [
       ["STUDENT ORGANIZATION ELECTION SYSTEM"],
       [`${position.positionName.toUpperCase()} - RESULTS`],
       [],
-      ["Rank", "Candidate Name", "Partylist", "Votes", "Percentage"],
     ];
 
+    // Add winner section if there are winners
+    if (winners.length > 0) {
+      positionData.push([`🏆 ${winners.length > 1 ? 'WINNERS (TIED)' : 'WINNER'}:`]);
+      winners.forEach(w => {
+        positionData.push([
+          `${w.candidateName}${w.partylist ? ` - ${w.partylist}` : ''} (${w.voteCount} votes, ${w.percentage.toFixed(1)}%)`
+        ]);
+      });
+      positionData.push([]);
+    }
+
+    positionData.push(["Rank", "Candidate Name", "Partylist", "Votes", "Percentage", "Status"]);
+
     position.candidates.forEach((candidate, index) => {
+      const isWinner = candidate.voteCount === maxVotes && maxVotes > 0;
       positionData.push([
         index + 1,
         candidate.candidateName,
         candidate.partylist || "N/A",
         candidate.voteCount,
         `${candidate.percentage.toFixed(1)}%`,
+        isWinner ? "✓ WINNER" : "",
       ]);
     });
 
@@ -246,6 +392,7 @@ export async function exportToExcel(data: ExportData) {
       { wch: 25 },
       { wch: 20 },
       { wch: 12 },
+      { wch: 15 },
       { wch: 15 },
     ];
 

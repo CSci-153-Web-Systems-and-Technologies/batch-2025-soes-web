@@ -66,7 +66,17 @@ export default function AddCandidateModal({
         platform: formData.platform || null,
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === "23505") {
+          // Unique constraint violation - candidate already in a partylist
+          toast.error(
+            "This candidate is already assigned to a partylist in this election"
+          );
+        } else {
+          throw error;
+        }
+        return;
+      }
 
       toast.success("Candidate added successfully!");
       setFormData({
