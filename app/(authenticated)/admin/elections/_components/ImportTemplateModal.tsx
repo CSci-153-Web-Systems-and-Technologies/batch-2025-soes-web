@@ -114,7 +114,7 @@ export default function ImportTemplateModal({
           <Button
             onClick={handleImport}
             disabled={!selectedTemplate || isLoading}
-            className="bg-gray-900 text-white"
+            className="bg-green-700 hover:bg-green-800 text-white"
           >
             {isLoading ? (
               <Loader2 className="animate-spin mr-2 h-4 w-4" />

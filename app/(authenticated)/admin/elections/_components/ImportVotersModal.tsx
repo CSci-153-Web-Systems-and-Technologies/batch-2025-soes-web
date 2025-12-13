@@ -161,14 +161,14 @@ export default function ImportVotersModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">
+      <div className="bg-card rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-border">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+          <h3 className="text-lg font-semibold text-foreground">
             Import Voters (CSV)
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <X size={20} />
           </button>
@@ -177,19 +177,19 @@ export default function ImportVotersModal({
         <div className="p-6">
           {status === "success" && (
             <div className="flex flex-col items-center justify-center text-center py-6">
-              <div className="h-12 w-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
+              <div className="h-12 w-12 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mb-4">
                 <CheckCircle2 size={32} />
               </div>
-              <h4 className="text-lg font-semibold text-gray-900">
+              <h4 className="text-lg font-semibold text-foreground">
                 Import Successful!
               </h4>
-              <p className="text-gray-500 mt-1">{message}</p>
+              <p className="text-muted-foreground mt-1">{message}</p>
               <button
                 onClick={() => {
                   reset();
                   onClose();
                 }}
-                className="mt-6 px-6 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90"
+                className="mt-6 px-6 py-2 bg-green-700 text-white rounded-lg text-sm font-medium hover:bg-green-800"
               >
                 Done
               </button>
@@ -209,10 +209,10 @@ export default function ImportVotersModal({
               )}
 
               <div className="mb-6 space-y-3">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-foreground">
                   Upload a <strong>.CSV</strong> file. All fields are required.
                 </p>
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs font-mono text-gray-600">
+                <div className="bg-muted border border-border rounded-lg p-3 text-xs font-mono text-foreground">
                   school_id, full_name, email
                   <br />
                   2023-001, Juan Dela Cruz, juan@school.edu
@@ -225,15 +225,15 @@ export default function ImportVotersModal({
                   accept=".csv"
                   ref={fileInputRef}
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                  className="block w-full text-sm text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-700 file:text-white hover:file:bg-green-800 cursor-pointer"
                 />
                 {file && (
-                  <div className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg border border-gray-100">
+                  <div className="flex items-center gap-2 text-sm text-foreground bg-muted px-3 py-2 rounded-lg border border-border">
                     <FileSpreadsheet size={16} className="text-green-600" />
                     <span className="truncate flex-1">{file.name}</span>
                     <button
                       onClick={reset}
-                      className="text-gray-400 hover:text-red-500"
+                      className="text-muted-foreground hover:text-destructive"
                     >
                       <X size={16} />
                     </button>
@@ -244,14 +244,14 @@ export default function ImportVotersModal({
               <div className="mt-8 flex gap-3">
                 <button
                   onClick={onClose}
-                  className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 text-sm font-medium text-foreground bg-muted border border-border rounded-lg hover:bg-accent"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleFileUpload}
                   disabled={!file || isLoading}
-                  className="flex-1 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2 text-sm font-medium text-white bg-green-700 hover:bg-green-800 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <Loader2 size={16} className="animate-spin" />

@@ -105,7 +105,7 @@ export default function CandidatesPageClient({
             Manage the official candidates running for positions.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 justify-center sm:justify-end w-full sm:w-auto">
           <Button
             onClick={handleRefresh}
             disabled={isLoading}

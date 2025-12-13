@@ -24,13 +24,15 @@ export default function ImportTemplateModalWrapper({
       <Button
         onClick={() => setIsOpen(true)}
         disabled={disabled}
-        className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+        size="sm"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
         title={
           disabled ? "Cannot import after template is already imported" : ""
         }
       >
-        <LayoutTemplate size={16} />
-        Use Template
+        <LayoutTemplate className="h-4 w-4" />
+        <span className="hidden sm:inline">Use Template</span>
+        <span className="sm:hidden">Template</span>
       </Button>
 
       <ImportTemplateModal

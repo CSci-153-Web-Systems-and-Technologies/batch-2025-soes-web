@@ -28,28 +28,30 @@ export default function VoterActions({
         <button
           onClick={() => setIsImportOpen(true)}
           disabled={disabled}
-          className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+          className={`inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
             disabled
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+              ? "bg-muted text-muted-foreground cursor-not-allowed"
+              : "bg-background text-foreground border border-input hover:bg-accent"
           }`}
         >
-          <Upload size={16} />
-          Import CSV
+          <Upload className="h-4 w-4" />
+          <span className="hidden sm:inline">Import CSV</span>
+          <span className="sm:hidden">Import</span>
         </button>
 
         {/* Add Manually Button */}
         <button
           onClick={() => setIsAddOpen(true)}
           disabled={disabled}
-          className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+          className={`inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${
             disabled
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-gray-900 text-white hover:bg-gray-800"
+              ? "bg-muted text-muted-foreground cursor-not-allowed"
+              : "bg-green-700 text-white hover:bg-green-800"
           }`}
         >
-          <UserPlus size={16} />
-          Add Voter
+          <UserPlus className="h-4 w-4" />
+          <span className="hidden sm:inline">Add Voter</span>
+          <span className="sm:hidden">Add</span>
         </button>
       </div>
 

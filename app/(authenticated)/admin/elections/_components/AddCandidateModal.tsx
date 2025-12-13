@@ -113,8 +113,8 @@ export default function AddCandidateModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md animate-in fade-in zoom-in-95 duration-200 my-8">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+      <div className="bg-card rounded-xl shadow-xl w-full max-w-md animate-in fade-in zoom-in-95 duration-200 my-8 border border-border">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border">
           <h3 className="text-lg font-semibold text-foreground">
             Add New Candidate
           </h3>
@@ -128,12 +128,12 @@ export default function AddCandidateModal({
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-foreground">
               Running For Position <span className="text-red-500">*</span>
             </label>
             <select
               required
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+              className="w-full px-3 py-2 border border-input bg-background rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
               value={formData.position_id}
               onChange={(e) =>
                 setFormData({ ...formData, position_id: e.target.value })
@@ -163,7 +163,7 @@ export default function AddCandidateModal({
             <input
               required
               type="text"
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-input bg-background rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
               value={formData.student_id}
               onChange={(e) =>
                 setFormData({ ...formData, student_id: e.target.value })
@@ -178,7 +178,7 @@ export default function AddCandidateModal({
             <input
               required
               type="text"
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-input bg-background rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
               value={formData.full_name}
               onChange={(e) =>
                 setFormData({ ...formData, full_name: e.target.value })
@@ -187,13 +187,15 @@ export default function AddCandidateModal({
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-foreground">
               Nickname{" "}
-              <span className="text-gray-400 font-normal">(Optional)</span>
+              <span className="text-muted-foreground font-normal">
+                (Optional)
+              </span>
             </label>
             <input
               type="text"
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-input bg-background rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
               value={formData.nickname}
               onChange={(e) =>
                 setFormData({ ...formData, nickname: e.target.value })
@@ -209,7 +211,7 @@ export default function AddCandidateModal({
               </span>
             </label>
             <select
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
+              className="w-full px-3 py-2 border border-input bg-background rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
               value={formData.partylist_id}
               onChange={(e) =>
                 setFormData({ ...formData, partylist_id: e.target.value })
@@ -231,13 +233,15 @@ export default function AddCandidateModal({
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-foreground">
               Platform / Statement{" "}
-              <span className="text-gray-400 font-normal">(Optional)</span>
+              <span className="text-muted-foreground font-normal">
+                (Optional)
+              </span>
             </label>
             <textarea
               rows={3}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none"
+              className="w-full px-3 py-2 border border-input bg-background rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 resize-none"
               value={formData.platform}
               onChange={(e) =>
                 setFormData({ ...formData, platform: e.target.value })
@@ -256,7 +260,7 @@ export default function AddCandidateModal({
             <button
               type="submit"
               disabled={isLoading || positions.length === 0 || disabled}
-              className="flex-1 px-4 py-2 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-green-700 hover:bg-green-800 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isLoading ? (
                 <Loader2 size={16} className="animate-spin" />

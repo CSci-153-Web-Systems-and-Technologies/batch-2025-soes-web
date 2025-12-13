@@ -93,7 +93,7 @@ export default async function ElectionPositionsPage({
             Manage the positions candidates can run for.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-end w-full sm:w-auto">
           {/* Wrapper handles the client-side modal state */}
           <ImportTemplateModalWrapper
             electionId={electionId}
