@@ -257,12 +257,7 @@ export default function EditProfileForm({
             <Label htmlFor="email" className="text-sm font-medium">
               Email Address
             </Label>
-            <Input
-              id="email"
-              value={userEmail}
-              disabled
-              className="bg-muted"
-            />
+            <Input id="email" value={userEmail} disabled className="bg-muted" />
             <p className="text-xs text-muted-foreground">
               Contact your administrator to change your email
             </p>
