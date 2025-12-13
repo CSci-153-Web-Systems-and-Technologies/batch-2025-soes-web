@@ -6,7 +6,7 @@
 
 **Streamline your student organization elections with a secure, transparent, and modern platform**
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.5.6-black?logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1.0-blue?logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.x-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
@@ -87,7 +87,7 @@
 
 ### Frontend
 
-- **Framework**: [Next.js 15.5.6](https://nextjs.org/) with App Router
+- **Framework**: [Next.js 16.0.10](https://nextjs.org/) with App Router
 - **UI Library**: [React 19.1.0](https://reactjs.org/)
 - **Styling**: [Tailwind CSS 4.x](https://tailwindcss.com/)
 - **Components**: [Radix UI](https://www.radix-ui.com/) + [shadcn/ui](https://ui.shadcn.com/)
@@ -100,7 +100,7 @@
 - **Database**: [Supabase](https://supabase.com/) (PostgreSQL)
 - **Authentication**: Supabase Auth with OTP
 - **API**: Next.js API Routes + Server Actions
-- **Email**: [Resend](https://resend.com/) / [Nodemailer](https://nodemailer.com/)
+- **Email**: [Gmail SMTP](https://nodemailer.com/) via Nodemailer
 
 ### Development Tools
 
@@ -160,19 +160,15 @@ Create a `.env.local` file in the root directory:
 ```env
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
-# Email Configuration (Resend or Nodemailer)
-RESEND_API_KEY=your_resend_api_key
-
-# Optional: Email Configuration for Nodemailer
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_password
+# Email Configuration (Gmail SMTP)
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
 
 # Application URL
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 ```
 
 ### Running the Application
