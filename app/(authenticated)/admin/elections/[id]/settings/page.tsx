@@ -12,15 +12,7 @@ import CopyBallotLinkButton from "../../_components/CopyBallotLinkButton";
 import ToggleElectionStatusButton from "../../_components/ToggleElectionStatusButton";
 import EditElectionDetailsModal from "../../_components/EditElectionDetailsModal";
 import EndElectionButton from "../../_components/EndElectionButton";
-
-interface ElectionSession {
-  id: string;
-  title: string;
-  description: string | null;
-  status: string;
-  created_at: string;
-  updated_at: string;
-}
+import { ElectionSession } from "@/types/types";
 
 export default async function ElectionSettingsPage({
   params,

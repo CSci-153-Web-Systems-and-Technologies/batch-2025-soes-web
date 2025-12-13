@@ -4,25 +4,10 @@ import { useState, useMemo } from "react";
 import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CandidateRowActions from "./CandidateRowActions";
-
-interface CandidateData {
-  id: string;
-  student_id: string;
-  full_name: string;
-  description: string | null;
-  avatar_url: string | null;
-  positions: {
-    id: string;
-    title: string;
-  } | null;
-  partylists: {
-    id: string;
-    name: string;
-  } | null;
-}
+import { Candidate } from "@/types/types";
 
 interface CandidateSearchProps {
-  candidates: CandidateData[];
+  candidates: Candidate[];
   allCandidatesCount: number;
 }
 

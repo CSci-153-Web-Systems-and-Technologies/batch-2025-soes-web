@@ -10,14 +10,7 @@ import {
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import EditProfileForm from "./_components/EditProfileForm";
-
-interface ProfileData {
-  id: string;
-  full_name: string | null;
-  avatar_url: string | null;
-  role: string | null;
-  created_at: string | null;
-}
+import { ProfileData } from "@/types/types";
 
 export default async function ProfilePage() {
   const supabase = await createClient();

@@ -6,33 +6,7 @@ import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CandidateActions from "../../../_components/CandidateActions";
 import CandidateSearch from "../../../_components/CandidateSearch";
-
-export interface PositionOption {
-  id: string;
-  title: string;
-}
-
-export interface PartylistOption {
-  id: string;
-  name: string;
-}
-
-interface CandidateData {
-  id: string;
-  student_id: string;
-  full_name: string;
-  description: string | null;
-  avatar_url: string | null;
-  partylist_id: string | null;
-  positions: {
-    id: string;
-    title: string;
-  } | null;
-  partylists: {
-    id: string;
-    name: string;
-  } | null;
-}
+import { Candidate, PositionOption, PartylistOption } from "@/types/types";
 
 interface CandidatesPageClientProps {
   electionId: string;
@@ -43,7 +17,7 @@ export default function CandidatesPageClient({
   electionId,
   isElectionEnded,
 }: CandidatesPageClientProps) {
-  const [candidates, setCandidates] = useState<CandidateData[]>([]);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [positions, setPositions] = useState<PositionOption[]>([]);
   const [partylists, setPartylists] = useState<PartylistOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -79,7 +53,7 @@ export default function CandidatesPageClient({
       ]);
 
       if (!candidatesRes.error && candidatesRes.data) {
-        setCandidates(candidatesRes.data as unknown as CandidateData[]);
+        setCandidates(candidatesRes.data as unknown as Candidate[]);
       }
       if (!positionsRes.error && positionsRes.data) {
         setPositions(positionsRes.data as PositionOption[]);
