@@ -1,7 +1,13 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
-// Create Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Create nodemailer transporter for Gmail
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 
 interface VoterEmailData {
   email: string;
@@ -234,22 +240,18 @@ export async function sendVoterCredentials(data: VoterEmailData) {
     </html>
   `;
 
+  // Use Gmail SMTP directly (Resend requires domain verification)
   try {
-    const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'SOES Elections <onboarding@resend.dev>',
+    await transporter.sendMail({
+      from: `"SOES Elections" <${process.env.EMAIL_USER || 'studentorganizationelectionsys@gmail.com'}>`,
       to: email,
       subject: `Your Voting Credentials - ${electionTitle}`,
       html: htmlContent,
     });
-
-    if (error) {
-      console.error('Email send error:', error);
-      return { success: false, error: error };
-    }
-
-    return { success: true, messageId: data?.id };
+    
+    return { success: true, messageId: 'gmail-sent' };
   } catch (error) {
     console.error('Email send error:', error);
-    return { success: false, error: error };
+    return { success: false, error: String(error) };
   }
 }
