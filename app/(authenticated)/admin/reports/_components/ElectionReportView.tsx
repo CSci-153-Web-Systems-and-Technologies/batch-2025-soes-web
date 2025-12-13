@@ -170,19 +170,22 @@ export default function ElectionReportView({
           label: "Total Voters",
           value: totalVoters || 0,
           icon: <Users className="w-5 h-5" />,
-          color: "bg-blue-50 text-blue-700 border-blue-200",
+          color:
+            "bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800",
         },
         {
           label: "Votes Cast",
           value: votesCast || 0,
           icon: <Vote className="w-5 h-5" />,
-          color: "bg-green-50 text-green-700 border-green-200",
+          color:
+            "bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800",
         },
         {
           label: "Turnout",
           value: `${turnout}%`,
           icon: <TrendingUp className="w-5 h-5" />,
-          color: "bg-purple-50 text-purple-700 border-purple-200",
+          color:
+            "bg-purple-50 dark:bg-purple-950/20 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-800",
         },
       ];
 
@@ -208,8 +211,8 @@ export default function ElectionReportView({
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-2" />
-          <p className="text-gray-500">Loading report data...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-green-600 dark:text-green-400 mx-auto mb-2" />
+          <p className="text-muted-foreground">Loading report data...</p>
         </div>
       </div>
     );
@@ -219,7 +222,9 @@ export default function ElectionReportView({
     return (
       <Card>
         <CardContent className="pt-8 text-center">
-          <p className="text-gray-500">No data available for this election</p>
+          <p className="text-muted-foreground">
+            No data available for this election
+          </p>
         </CardContent>
       </Card>
     );
@@ -230,14 +235,18 @@ export default function ElectionReportView({
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {reportData.stats.map((stat, idx) => (
-          <Card key={idx} className={`border ${stat.color.split(" ").pop()}`}>
+          <Card key={idx}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
-                  <p className="text-3xl font-bold">{stat.value}</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {stat.label}
+                  </p>
+                  <p className="text-2xl sm:text-3xl font-bold text-foreground">
+                    {stat.value}
+                  </p>
                 </div>
-                <div className={`p-3 rounded-lg ${stat.color}`}>
+                <div className={`p-3 rounded-lg bg-transparent ${stat.color}`}>
                   {stat.icon}
                 </div>
               </div>
@@ -249,16 +258,20 @@ export default function ElectionReportView({
       {/* Position Results */}
       <div className="space-y-6">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-gray-700" />
-          <h2 className="text-xl font-bold">Final Results by Position</h2>
+          <BarChart3 className="w-5 h-5 text-foreground" />
+          <h2 className="text-lg sm:text-xl font-bold text-foreground">
+            Final Results by Position
+          </h2>
         </div>
 
         {reportData.positionResults.map((position) => (
           <Card key={position.positionId}>
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>{position.positionName}</span>
-                <span className="text-sm font-normal text-gray-500">
+              <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <span className="text-base sm:text-lg">
+                  {position.positionName}
+                </span>
+                <span className="text-sm font-normal text-muted-foreground">
                   {position.totalVotes} vote
                   {position.totalVotes !== 1 ? "s" : ""}
                 </span>
@@ -266,43 +279,43 @@ export default function ElectionReportView({
             </CardHeader>
             <CardContent>
               {position.candidates.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">
+                <p className="text-muted-foreground text-center py-8">
                   No votes for this position
                 </p>
               ) : (
                 <div className="space-y-4">
                   {position.candidates.map((candidate, idx) => (
                     <div key={candidate.candidateId} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="font-semibold text-gray-900">
+                            <span className="font-semibold text-foreground shrink-0">
                               #{idx + 1}
                             </span>
-                            <div>
-                              <p className="font-semibold text-gray-900">
+                            <div className="min-w-0">
+                              <p className="font-semibold text-foreground truncate">
                                 {candidate.candidateName}
                               </p>
                               {candidate.partylist && (
-                                <p className="text-sm text-gray-500">
+                                <p className="text-sm text-muted-foreground truncate">
                                   {candidate.partylist}
                                 </p>
                               )}
                             </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-lg font-bold text-gray-900">
+                        <div className="text-right shrink-0">
+                          <p className="text-base sm:text-lg font-bold text-foreground">
                             {candidate.voteCount}
                           </p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-xs sm:text-sm text-muted-foreground">
                             {candidate.percentage}%
                           </p>
                         </div>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="w-full bg-muted rounded-full h-2">
                         <div
-                          className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300"
+                          className="bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${candidate.percentage}%` }}
                         />
                       </div>

@@ -64,11 +64,11 @@ export default async function ElectionsListPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800";
+        return "bg-transparent text-green-700 dark:text-green-400 border-green-700 dark:border-green-400";
       case "ended":
-        return "bg-gray-100 text-gray-700 border-gray-200";
+        return "bg-transparent text-red-700 dark:text-red-400 border-red-700 dark:border-red-400";
       default:
-        return "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800";
+        return "bg-transparent text-yellow-700 dark:text-yellow-400 border-yellow-700 dark:border-yellow-400";
     }
   };
 
