@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     // Fetch voters
     let votersQuery = supabaseAdmin
       .from('eligible_voters')
-      .select('id, school_id, email, access_code')
+      .select('id, school_id, email, access_code, emailed_at')
       .eq('election_id', electionId);
 
     // If specific voter IDs provided, filter by them
@@ -78,6 +78,8 @@ export async function POST(request: NextRequest) {
           };
         }
 
+        const isInitialEmail = !voter.emailed_at;
+
         const result = await sendVoterCredentials({
           email: voter.email,
           voterName: voter.school_id,
@@ -87,7 +89,16 @@ export async function POST(request: NextRequest) {
           ballotUrl,
           resultsUrl,
           electionStatus: election.status,
+          isInitialEmail,
         });
+
+        // Update emailed_at timestamp if email was successful
+        if (result.success) {
+          await supabaseAdmin
+            .from('eligible_voters')
+            .update({ emailed_at: new Date().toISOString() })
+            .eq('id', voter.id);
+        }
 
         return {
           voterId: voter.id,

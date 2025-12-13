@@ -12,6 +12,7 @@ interface VoterEmailData {
   ballotUrl: string;
   resultsUrl: string;
   electionStatus: string;
+  isInitialEmail?: boolean;
 }
 
 export async function sendVoterCredentials(data: VoterEmailData) {
@@ -24,6 +25,7 @@ export async function sendVoterCredentials(data: VoterEmailData) {
     ballotUrl,
     resultsUrl,
     electionStatus,
+    isInitialEmail = true,
   } = data;
 
   const isActive = electionStatus === 'active';
@@ -146,40 +148,60 @@ export async function sendVoterCredentials(data: VoterEmailData) {
       </head>
       <body>
         <div class="header">
-          <h1 style="margin: 0; font-size: 24px;">Your Voting Credentials</h1>
+          <h1 style="margin: 0; font-size: 24px;">${isInitialEmail ? 'Your Voting Credentials' : (isActive ? 'Election Now Active!' : hasEnded ? 'Election Results Available' : 'Election Update')}</h1>
           <p style="margin: 10px 0 0 0;">${electionTitle}</p>
         </div>
         
         <div class="content">
           <p>Hello <strong>${voterName}</strong>,</p>
           
-          <p>You are registered to vote in <strong>${electionTitle}</strong>. Below are your unique voting credentials and instructions.</p>
-          
-          ${electionDescription ? `<p><em>${electionDescription}</em></p>` : ''}
+          ${isInitialEmail ? `
+            <p>You are registered to vote in <strong>${electionTitle}</strong>. Below are your unique voting credentials and instructions.</p>
+            
+            ${electionDescription ? `<p><em>${electionDescription}</em></p>` : ''}
 
-          <div class="status-box">
-            ${isActive ? '✅ <strong>Election is Active:</strong> You can vote now!' : ''}
-            ${hasEnded ? '🔒 <strong>Election has Ended:</strong> Voting is now closed. You can view the results.' : ''}
-            ${!isActive && !hasEnded ? 'ℹ️ <strong>Election Status:</strong> The election is not yet active. You will be notified when voting begins.' : ''}
-          </div>
-          
-          <div class="credentials-box">
-            <div class="credential-item">
-              <div class="credential-label">Your Student ID</div>
-              <div class="credential-value">${voterName}</div>
+            <div class="status-box">
+              ${isActive ? '✅ <strong>Election is Active:</strong> You can vote now!' : ''}
+              ${hasEnded ? '🔒 <strong>Election has Ended:</strong> Voting is now closed. You can view the results.' : ''}
+              ${!isActive && !hasEnded ? 'ℹ️ <strong>Election Status:</strong> The election is not yet active. You will be notified when voting begins.' : ''}
             </div>
             
-            <div class="credential-item">
-              <div class="credential-label">One-Time Voting Code</div>
-              <div class="credential-value">${accessCode}</div>
+            <div class="credentials-box">
+              <div class="credential-item">
+                <div class="credential-label">Your Student ID</div>
+                <div class="credential-value">${voterName}</div>
+              </div>
+              
+              <div class="credential-item">
+                <div class="credential-label">One-Time Voting Code</div>
+                <div class="credential-value">${accessCode}</div>
+              </div>
             </div>
-          </div>
 
-          <div class="info-box">
-            ⚠️ <strong>Important:</strong> Keep this code secure. You can only vote once. Do not share your code with anyone.
-          </div>
+            <div class="info-box">
+              ⚠️ <strong>Important:</strong> Keep this code secure. You can only vote once. Do not share your code with anyone.
+            </div>
+          ` : `
+            ${isActive ? `
+              <div class="status-box">
+                ✅ <strong>Voting is Now Open!</strong>
+              </div>
+              
+              <p>The election <strong>${electionTitle}</strong> is now active and you can cast your vote.</p>
+              
+              <p>Use your previously sent credentials (Student ID and Access Code) to access the ballot.</p>
+            ` : hasEnded ? `
+              <div class="status-box">
+                🔒 <strong>Election Has Ended</strong>
+              </div>
+              
+              <p>The election <strong>${electionTitle}</strong> has concluded. Voting is now closed.</p>
+              
+              <p>You can now view the final election results.</p>
+            ` : ''}
+          `}
 
-          ${isActive ? `
+          ${isInitialEmail && isActive ? `
           <div class="steps">
             <h3>How to Vote:</h3>
             <div class="step">Click the "Cast Your Vote" button below</div>
