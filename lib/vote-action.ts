@@ -15,7 +15,7 @@ export async function verifyVoter(schoolId: string, accessCode: string) {
   const { data: voter } = await supabaseAdmin
     .from('eligible_voters')
     .select('*')
-    .eq('school_id', schoolId)
+    .eq('student_id', schoolId)
     .eq('access_code', accessCode)
     .single()
 

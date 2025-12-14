@@ -47,7 +47,7 @@ export default function VotersPageClient({
     const term = searchTerm.toLowerCase();
     return (
       voter.full_name.toLowerCase().includes(term) ||
-      voter.school_id.toLowerCase().includes(term)
+      voter.student_id.toLowerCase().includes(term)
     );
   });
 
@@ -91,7 +91,7 @@ export default function VotersPageClient({
         </div>
         <input
           type="text"
-          placeholder="Search by name or school ID..."
+          placeholder="Search by name or student ID..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-10 pr-4 py-2 border border-border rounded-lg w-full sm:w-80 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -103,7 +103,7 @@ export default function VotersPageClient({
         <table className="w-full text-sm text-left">
           <thead className="bg-muted text-muted-foreground font-medium border-b border-border">
             <tr>
-              <th className="px-4 sm:px-6 py-3">School ID</th>
+              <th className="px-4 sm:px-6 py-3">Student ID</th>
               <th className="px-4 sm:px-6 py-3">Full Name</th>
               <th className="px-4 sm:px-6 py-3 hidden md:table-cell">Status</th>
               <th className="px-4 sm:px-6 py-3 text-right">Actions</th>
@@ -128,7 +128,7 @@ export default function VotersPageClient({
                   className="hover:bg-muted/50 transition-colors"
                 >
                   <td className="px-4 sm:px-6 py-3 font-mono text-muted-foreground">
-                    {voter.school_id}
+                    {voter.student_id}
                   </td>
                   <td className="px-4 sm:px-6 py-3 font-medium text-foreground">
                     {voter.full_name}

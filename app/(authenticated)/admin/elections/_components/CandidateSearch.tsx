@@ -69,7 +69,7 @@ export default function CandidateSearch({
                   <th className="px-6 py-3">Candidate</th>
                   <th className="px-6 py-3">Running For</th>
                   <th className="px-6 py-3">Partylist</th>
-                  <th className="px-6 py-3">School ID</th>
+                  <th className="px-6 py-3">Student ID</th>
                   <th className="px-6 py-3 text-right">Actions</th>
                 </tr>
               </thead>

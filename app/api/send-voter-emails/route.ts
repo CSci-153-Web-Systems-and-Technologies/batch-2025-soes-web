@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     // Fetch voters
     let votersQuery = supabaseAdmin
       .from('eligible_voters')
-      .select('id, school_id, email, access_code, emailed_at')
+      .select('id, student_id, email, access_code, emailed_at')
       .eq('election_id', electionId);
 
     // If specific voter IDs provided, filter by them
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         if (!voter.email) {
           return {
             voterId: voter.id,
-            voterName: voter.school_id,
+            voterName: voter.student_id,
             email: voter.email || '',
             success: false,
             error: 'No email address',

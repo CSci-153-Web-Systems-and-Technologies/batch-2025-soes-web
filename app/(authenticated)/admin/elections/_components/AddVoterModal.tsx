@@ -92,14 +92,14 @@ export default function AddVoterModal({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div className="space-y-1">
+          <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">
-              School ID / Student No.
+              Student ID
             </label>
             <input
               required
               type="text"
-              placeholder="e.g. 2021-00123"
+              placeholder="e.g., 2021-12345"
               className="w-full px-3 py-2 border border-input bg-background rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500"
               value={formData.school_id}
               onChange={(e) =>
