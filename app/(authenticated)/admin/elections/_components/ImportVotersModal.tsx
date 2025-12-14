@@ -77,7 +77,7 @@ export default function ImportVotersModal({
       headers.forEach((header, index) => {
         const value = values[index]?.trim().replace(/^"|"$/g, "") || "";
 
-        if (header === "student_id") entry.school_id = value;
+        if (header === "student_id") entry.student_id = value;
         if (header === "full_name") entry.full_name = value;
         if (header === "email") entry.email = value; // 3. Capture email strictly
       });

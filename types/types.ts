@@ -143,6 +143,7 @@ export interface Voter {
   email: string | null;
   has_voted: boolean;
   election_id?: string;
+  emailed_at?: string | null;
 }
 
 export interface VoterImportData {

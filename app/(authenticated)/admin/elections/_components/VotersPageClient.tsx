@@ -106,6 +106,9 @@ export default function VotersPageClient({
               <th className="px-4 sm:px-6 py-3">Student ID</th>
               <th className="px-4 sm:px-6 py-3">Full Name</th>
               <th className="px-4 sm:px-6 py-3 hidden md:table-cell">Status</th>
+              <th className="px-4 sm:px-6 py-3 hidden lg:table-cell">
+                Email Status
+              </th>
               <th className="px-4 sm:px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -113,7 +116,7 @@ export default function VotersPageClient({
             {!filteredVoters || filteredVoters.length === 0 ? (
               <tr>
                 <td
-                  colSpan={4}
+                  colSpan={5}
                   className="px-4 sm:px-6 py-12 text-center text-muted-foreground"
                 >
                   {voters.length === 0
@@ -144,6 +147,17 @@ export default function VotersPageClient({
                       </span>
                     )}
                   </td>
+                  <td className="px-4 sm:px-6 py-3 hidden lg:table-cell">
+                    {voter.emailed_at ? (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-300 border">
+                        ✓ Emailed
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-50/50 dark:bg-gray-950/20 border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-300 border">
+                        Not Sent
+                      </span>
+                    )}
+                  </td>
 
                   <td className="px-4 sm:px-6 py-3 text-right">
                     <VoterRowActions
@@ -153,6 +167,9 @@ export default function VotersPageClient({
                       voterName={voter.full_name}
                       electionId={electionId}
                       disabled={isElectionEnded}
+                      emailedAt={voter.emailed_at || undefined}
+                      voterFullName={voter.full_name}
+                      onDataChange={() => fetchVoters()}
                     />
                   </td>
                 </tr>

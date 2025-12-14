@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { Trash2, RotateCcw, Loader2, CheckCircle, Mail } from "lucide-react";
+import {
+  Trash2,
+  RotateCcw,
+  Loader2,
+  CheckCircle,
+  Mail,
+  Edit2,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -16,6 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import EditVoterModal from "./EditVoterModal";
 
 interface VoterRowActionsProps {
   voterId: string;
@@ -24,6 +32,9 @@ interface VoterRowActionsProps {
   voterName?: string;
   electionId: string;
   disabled?: boolean;
+  emailedAt?: string;
+  voterFullName?: string;
+  onDataChange?: () => void;
 }
 
 export default function VoterRowActions({
@@ -33,11 +44,15 @@ export default function VoterRowActions({
   voterName,
   electionId,
   disabled,
+  emailedAt,
+  voterFullName,
+  onDataChange,
 }: VoterRowActionsProps) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // 1. Logic to Delete Voter
   const handleDelete = async () => {
@@ -131,119 +146,144 @@ export default function VoterRowActions({
   };
 
   return (
-    <div className="flex justify-end gap-2">
-      {/* Email Button */}
-      <button
-        onClick={handleSendEmail}
-        disabled={isSendingEmail || disabled || !voterEmail}
-        title={voterEmail ? "Send Credentials Email" : "No email address"}
-        className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isSendingEmail ? (
-          <Loader2 size={16} className="animate-spin" />
-        ) : (
-          <Mail size={16} />
-        )}
-      </button>
+    <>
+      <div className="flex justify-end gap-2">
+        {/* Edit Button */}
+        <button
+          onClick={() => setIsEditModalOpen(true)}
+          disabled={disabled}
+          title="Edit Voter"
+          className="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Edit2 size={16} />
+        </button>
 
-      {/* Toggle Vote Status Button */}
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <button
-            disabled={isToggling || disabled}
-            title={hasVoted ? "Reset Vote Status" : "Mark as Voted (Manual)"}
-            className={`p-1.5 rounded-md transition-colors disabled:opacity-50 ${
-              hasVoted
-                ? "text-gray-400 hover:text-orange-600 hover:bg-orange-50" // Style for Reset
-                : "text-gray-300 hover:text-green-600 hover:bg-green-50" // Style for Mark Done
-            }`}
-          >
-            {isToggling ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : hasVoted ? (
-              <RotateCcw size={16} /> // Icon: Reset
-            ) : (
-              <CheckCircle size={16} /> // Icon: Mark Done
-            )}
-          </button>
-        </AlertDialogTrigger>
+        {/* Email Button */}
+        <button
+          onClick={handleSendEmail}
+          disabled={isSendingEmail || disabled || !voterEmail}
+          title={voterEmail ? "Send Credentials Email" : "No email address"}
+          className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSendingEmail ? (
+            <Loader2 size={16} className="animate-spin" />
+          ) : (
+            <Mail size={16} />
+          )}
+        </button>
 
-        <AlertDialogContent className="bg-white">
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {hasVoted ? "Reset Vote Status?" : "Manually Mark as Voted?"}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {hasVoted ? (
-                // Message if resetting
-                <span>
-                  This will change the status to{" "}
-                  <strong className="text-orange-600">Not Voted</strong>. The
-                  student will be able to log in and cast a vote again.
-                </span>
-              ) : (
-                // Message if marking as voted
-                <span>
-                  This will change the status to{" "}
-                  <strong className="text-green-600">Voted</strong>. The student
-                  will be blocked from casting a vote. Use this if they voted
-                  manually/offline.
-                </span>
-              )}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleToggleStatus}
-              disabled={disabled}
-              className={
+        {/* Toggle Vote Status Button */}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button
+              disabled={isToggling || disabled}
+              title={hasVoted ? "Reset Vote Status" : "Mark as Voted (Manual)"}
+              className={`p-1.5 rounded-md transition-colors disabled:opacity-50 ${
                 hasVoted
-                  ? "bg-orange-600 hover:bg-orange-700"
-                  : "bg-green-600 hover:bg-green-700"
-              }
+                  ? "text-gray-400 hover:text-orange-600 hover:bg-orange-50" // Style for Reset
+                  : "text-gray-300 hover:text-green-600 hover:bg-green-50" // Style for Mark Done
+              }`}
             >
-              {hasVoted ? "Confirm Reset" : "Confirm Mark Voted"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+              {isToggling ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : hasVoted ? (
+                <RotateCcw size={16} /> // Icon: Reset
+              ) : (
+                <CheckCircle size={16} /> // Icon: Mark Done
+              )}
+            </button>
+          </AlertDialogTrigger>
 
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <button
-            disabled={isDeleting || disabled}
-            title="Remove Voter"
-            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50"
-          >
-            {isDeleting ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <Trash2 size={16} />
-            )}
-          </button>
-        </AlertDialogTrigger>
+          <AlertDialogContent className="bg-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                {hasVoted ? "Reset Vote Status?" : "Manually Mark as Voted?"}
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                {hasVoted ? (
+                  // Message if resetting
+                  <span>
+                    This will change the status to{" "}
+                    <strong className="text-orange-600">Not Voted</strong>. The
+                    student will be able to log in and cast a vote again.
+                  </span>
+                ) : (
+                  // Message if marking as voted
+                  <span>
+                    This will change the status to{" "}
+                    <strong className="text-green-600">Voted</strong>. The
+                    student will be blocked from casting a vote. Use this if
+                    they voted manually/offline.
+                  </span>
+                )}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleToggleStatus}
+                disabled={disabled}
+                className={
+                  hasVoted
+                    ? "bg-orange-600 hover:bg-orange-700"
+                    : "bg-green-600 hover:bg-green-700"
+                }
+              >
+                {hasVoted ? "Confirm Reset" : "Confirm Mark Voted"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
-        <AlertDialogContent className="bg-white">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete this voter?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently remove the
-              voter from the eligible list and revoke their access code.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={disabled}
-              className="bg-red-600 hover:bg-red-700 text-white border-0"
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button
+              disabled={isDeleting || disabled}
+              title="Remove Voter"
+              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50"
             >
-              Delete Voter
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+              {isDeleting ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Trash2 size={16} />
+              )}
+            </button>
+          </AlertDialogTrigger>
+
+          <AlertDialogContent className="bg-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete this voter?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently remove the
+                voter from the eligible list and revoke their access code.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                disabled={disabled}
+                className="bg-red-600 hover:bg-red-700 text-white border-0"
+              >
+                Delete Voter
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+
+      {/* Edit Voter Modal */}
+      <EditVoterModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        voterId={voterId}
+        initialFullName={voterFullName || voterName || ""}
+        initialEmail={voterEmail}
+        onSuccess={() => {
+          onDataChange?.();
+          router.refresh();
+        }}
+      />
+    </>
   );
 }
