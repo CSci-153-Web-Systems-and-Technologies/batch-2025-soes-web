@@ -41,7 +41,7 @@ export default function VoteClient({ election }: VoteClientProps) {
     const accessCode = formData.get("access_code") as string;
 
     // Call Server Action
-    const result = await verifyVoter(schoolId, accessCode);
+    const result = await verifyVoter(studentId, accessCode);
 
     if (result.success) {
       // Redirect to the actual ballot page with the encrypted voter session
