@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers'
 import { createClient } from '@supabase/supabase-js' // Use standard JS client for Admin access
 
-export async function verifyVoter(schoolId: string, accessCode: string) {
+export async function verifyVoter(studentId: string, accessCode: string) {
   // 1. Create a SUPABASE ADMIN Client (Bypasses RLS)
   // We cannot use the standard createServerClient here because the student isn't "logged in"
   const supabaseAdmin = createClient(
@@ -15,7 +15,7 @@ export async function verifyVoter(schoolId: string, accessCode: string) {
   const { data: voter } = await supabaseAdmin
     .from('eligible_voters')
     .select('*')
-    .eq('school_id', schoolId)
+    .eq('student_id', studentId)
     .eq('access_code', accessCode)
     .single()
 

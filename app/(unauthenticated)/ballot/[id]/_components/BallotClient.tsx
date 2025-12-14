@@ -38,7 +38,7 @@ interface Election {
 
 interface Voter {
   id: string;
-  school_id: string;
+  student_id: string;
   full_name: string;
 }
 
@@ -138,7 +138,7 @@ export default function BallotClient({
             Select one candidate for each position below
           </p>
           <p className="text-xs text-muted-foreground text-center mt-1">
-            Voting as: <span className="font-semibold">{voter.school_id}</span>
+            Voting as: <span className="font-semibold">{voter.student_id}</span>
           </p>
         </div>
       </div>

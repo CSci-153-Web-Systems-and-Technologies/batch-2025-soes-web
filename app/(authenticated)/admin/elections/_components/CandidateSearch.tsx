@@ -4,16 +4,22 @@ import { useState, useMemo } from "react";
 import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CandidateRowActions from "./CandidateRowActions";
-import { Candidate } from "@/types/types";
+import { Candidate, PositionOption, PartylistOption } from "@/types/types";
 
 interface CandidateSearchProps {
   candidates: Candidate[];
   allCandidatesCount: number;
+  positions: PositionOption[];
+  partylists: PartylistOption[];
+  onDataChange?: () => void;
 }
 
 export default function CandidateSearch({
   candidates,
   allCandidatesCount,
+  positions,
+  partylists,
+  onDataChange,
 }: CandidateSearchProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -69,7 +75,7 @@ export default function CandidateSearch({
                   <th className="px-6 py-3">Candidate</th>
                   <th className="px-6 py-3">Running For</th>
                   <th className="px-6 py-3">Partylist</th>
-                  <th className="px-6 py-3">School ID</th>
+                  <th className="px-6 py-3">Student ID</th>
                   <th className="px-6 py-3 text-right">Actions</th>
                 </tr>
               </thead>
@@ -92,28 +98,28 @@ export default function CandidateSearch({
                       className="hover:bg-muted/50 transition-colors"
                     >
                       <td className="px-6 py-4">
-                        <div className="flex items-start gap-3">
-                          <Avatar className="h-10 w-10 border border-border mt-1">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-10 w-10 border border-border shrink-0">
                             <AvatarImage src={candidate.avatar_url || ""} />
                             <AvatarFallback className="bg-muted text-muted-foreground">
                               {getInitials(candidate.full_name)}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="flex flex-col">
-                            <div className="font-medium text-foreground">
+                          <div className="flex flex-col min-w-0">
+                            <div className="font-medium text-foreground truncate">
                               {candidate.full_name}
                             </div>
 
                             {/* Render Description */}
                             {candidate.description && (
-                              <p className="text-xs text-muted-foreground mt-1 line-clamp-2 max-w-[240px] leading-relaxed">
+                              <p className="text-xs text-muted-foreground mt-1 line-clamp-2 max-w-xs leading-relaxed">
                                 {candidate.description}
                               </p>
                             )}
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 align-top pt-5">
+                      <td className="px-6 py-4">
                         {candidate.positions ? (
                           <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-transparent text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400">
                             {candidate.positions.title}
@@ -124,7 +130,7 @@ export default function CandidateSearch({
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 align-top pt-5">
+                      <td className="px-6 py-4">
                         {candidate.partylists ? (
                           <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-transparent text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400">
                             {candidate.partylists.name}
@@ -135,11 +141,23 @@ export default function CandidateSearch({
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 align-top pt-5 font-mono text-foreground">
+                      <td className="px-6 py-4 font-mono text-foreground">
                         {candidate.student_id}
                       </td>
-                      <td className="px-6 py-4 align-top pt-5 text-right">
-                        <CandidateRowActions candidateId={candidate.id} />
+                      <td className="px-6 py-4 text-right">
+                        <CandidateRowActions
+                          candidateId={candidate.id}
+                          candidateData={{
+                            full_name: candidate.full_name,
+                            nickname: candidate.nickname,
+                            position_id: candidate.position_id,
+                            partylist_id: candidate.partylist_id,
+                            platform: candidate.platform,
+                          }}
+                          positions={positions}
+                          partylists={partylists}
+                          onDataChange={onDataChange}
+                        />
                       </td>
                     </tr>
                   ))

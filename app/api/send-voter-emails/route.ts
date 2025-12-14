@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     // Fetch voters
     let votersQuery = supabaseAdmin
       .from('eligible_voters')
-      .select('id, school_id, email, access_code, emailed_at')
+      .select('id, student_id, full_name, email, access_code, emailed_at')
       .eq('election_id', electionId);
 
     // If specific voter IDs provided, filter by them
@@ -52,8 +52,9 @@ export async function POST(request: NextRequest) {
     const { data: voters, error: votersError } = await votersQuery;
 
     if (votersError) {
+      console.error('Voters fetch error:', votersError);
       return NextResponse.json(
-        { error: 'Failed to fetch voters' },
+        { error: 'Failed to fetch voters', details: votersError.message },
         { status: 500 }
       );
     }
@@ -71,7 +72,7 @@ export async function POST(request: NextRequest) {
         if (!voter.email) {
           return {
             voterId: voter.id,
-            voterName: voter.school_id,
+            voterName: voter.student_id,
             email: voter.email || '',
             success: false,
             error: 'No email address',
@@ -82,7 +83,8 @@ export async function POST(request: NextRequest) {
 
         const result = await sendVoterCredentials({
           email: voter.email,
-          voterName: voter.school_id,
+          voterName: voter.full_name,
+          studentId: voter.student_id,
           accessCode: voter.access_code,
           electionTitle: election.title,
           electionDescription: election.description || undefined,
@@ -102,7 +104,7 @@ export async function POST(request: NextRequest) {
 
         return {
           voterId: voter.id,
-          voterName: voter.school_id,
+          voterName: voter.full_name,
           email: voter.email,
           ...result,
         };
