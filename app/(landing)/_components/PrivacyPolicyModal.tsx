@@ -22,7 +22,7 @@ export default function PrivacyPolicyModal() {
           Privacy Policy
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto [&_button[data-slot='dialog-close']]:border-0">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
             <Shield className="h-6 w-6 text-green-600" />
