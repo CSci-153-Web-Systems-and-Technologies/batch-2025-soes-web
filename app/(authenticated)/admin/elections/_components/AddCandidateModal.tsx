@@ -155,7 +155,7 @@ export default function AddCandidateModal({
 
           <div className="space-y-1">
             <label className="text-sm font-medium text-foreground">
-              Position <span className="text-red-500">*</span>
+              Student ID Number <span className="text-red-500">*</span>
             </label>
             <input
               required

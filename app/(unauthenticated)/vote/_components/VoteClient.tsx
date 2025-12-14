@@ -40,11 +40,11 @@ export default function VoteClient({ election }: VoteClientProps) {
     setLoading(true);
     setError("");
 
-    const schoolId = formData.get("school_id") as string;
+    const studentId = formData.get("student_id") as string;
     const accessCode = formData.get("access_code") as string;
 
     // Call Server Action
-    const result = await verifyVoter(schoolId, accessCode);
+    const result = await verifyVoter(studentId, accessCode);
 
     if (result.success) {
       // Redirect to the actual ballot page with the encrypted voter session
@@ -86,12 +86,12 @@ export default function VoteClient({ election }: VoteClientProps) {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="school_id" className="text-foreground font-medium">
+            <Label htmlFor="student_id" className="text-foreground font-medium">
               Student ID
             </Label>
             <Input
-              id="school_id"
-              name="school_id"
+              id="student_id"
+              name="student_id"
               type="text"
               required
               placeholder="Enter your Student ID"

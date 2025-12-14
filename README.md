@@ -285,7 +285,7 @@ batch-2025-soes-web/
 
 ### 4. Voter Management
 
-- Import voters from CSV (school_id, full_name, email)
+- Import voters from CSV (student_id, full_name, email)
 - Send email invitations with ballot links
 - Track voting status (voted/not voted)
 - Prevent duplicate voters

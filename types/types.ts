@@ -138,15 +138,16 @@ export interface CandidateImportData {
 
 export interface Voter {
   id: string;
-  school_id: string;
+  student_id: string;
   full_name: string;
   email: string | null;
   has_voted: boolean;
   election_id?: string;
+  emailed_at?: string | null;
 }
 
 export interface VoterImportData {
-  school_id: string;
+  student_id: string;
   full_name: string;
   email?: string;
 }

@@ -104,6 +104,9 @@ export default function CandidatesPageClient({
       <CandidateSearch
         candidates={candidates}
         allCandidatesCount={candidates.length}
+        positions={positions}
+        partylists={partylists}
+        onDataChange={() => fetchCandidatesData()}
       />
     </div>
   );

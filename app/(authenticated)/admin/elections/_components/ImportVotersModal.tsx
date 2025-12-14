@@ -14,7 +14,7 @@ import {
 
 interface VoterImportData {
   election_id: string;
-  school_id: string;
+  student_id: string;
   full_name: string;
   email: string;
   access_code: string;
@@ -53,11 +53,11 @@ export default function ImportVotersModal({
 
     // 2. Updated Validation: Check for 'email' column
     if (
-      !headers.includes("school_id") ||
+      !headers.includes("student_id") ||
       !headers.includes("full_name") ||
       !headers.includes("email")
     ) {
-      throw new Error("Missing required columns: school_id, full_name, email");
+      throw new Error("Missing required columns: student_id, full_name, email");
     }
 
     const result: VoterImportData[] = [];
@@ -77,14 +77,14 @@ export default function ImportVotersModal({
       headers.forEach((header, index) => {
         const value = values[index]?.trim().replace(/^"|"$/g, "") || "";
 
-        if (header === "school_id") entry.school_id = value;
+        if (header === "student_id") entry.student_id = value;
         if (header === "full_name") entry.full_name = value;
         if (header === "email") entry.email = value; // 3. Capture email strictly
       });
 
       // 4. Strict Check: Ensure email is present
       if (
-        entry.school_id &&
+        entry.student_id &&
         entry.full_name &&
         entry.email &&
         entry.election_id &&
@@ -213,7 +213,7 @@ export default function ImportVotersModal({
                   Upload a <strong>.CSV</strong> file. All fields are required.
                 </p>
                 <div className="bg-muted border border-border rounded-lg p-3 text-xs font-mono text-foreground">
-                  school_id, full_name, email
+                  student_id, full_name, email
                   <br />
                   2023-001, Juan Dela Cruz, juan@school.edu
                 </div>

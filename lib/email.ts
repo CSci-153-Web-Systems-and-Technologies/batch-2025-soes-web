@@ -12,6 +12,7 @@ const transporter = nodemailer.createTransport({
 interface VoterEmailData {
   email: string;
   voterName: string;
+  studentId: string;
   accessCode: string;
   electionTitle: string;
   electionDescription?: string;
@@ -25,6 +26,7 @@ export async function sendVoterCredentials(data: VoterEmailData) {
   const {
     email,
     voterName,
+    studentId,
     accessCode,
     electionTitle,
     electionDescription,
@@ -175,7 +177,7 @@ export async function sendVoterCredentials(data: VoterEmailData) {
             <div class="credentials-box">
               <div class="credential-item">
                 <div class="credential-label">Your Student ID</div>
-                <div class="credential-value">${voterName}</div>
+                <div class="credential-value">${studentId}</div>
               </div>
               
               <div class="credential-item">

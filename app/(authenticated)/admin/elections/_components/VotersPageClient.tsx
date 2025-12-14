@@ -47,7 +47,7 @@ export default function VotersPageClient({
     const term = searchTerm.toLowerCase();
     return (
       voter.full_name.toLowerCase().includes(term) ||
-      voter.school_id.toLowerCase().includes(term)
+      voter.student_id.toLowerCase().includes(term)
     );
   });
 
@@ -91,7 +91,7 @@ export default function VotersPageClient({
         </div>
         <input
           type="text"
-          placeholder="Search by name or school ID..."
+          placeholder="Search by name or student ID..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-10 pr-4 py-2 border border-border rounded-lg w-full sm:w-80 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -103,9 +103,12 @@ export default function VotersPageClient({
         <table className="w-full text-sm text-left">
           <thead className="bg-muted text-muted-foreground font-medium border-b border-border">
             <tr>
-              <th className="px-4 sm:px-6 py-3">School ID</th>
+              <th className="px-4 sm:px-6 py-3">Student ID</th>
               <th className="px-4 sm:px-6 py-3">Full Name</th>
               <th className="px-4 sm:px-6 py-3 hidden md:table-cell">Status</th>
+              <th className="px-4 sm:px-6 py-3 hidden lg:table-cell">
+                Email Status
+              </th>
               <th className="px-4 sm:px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -113,7 +116,7 @@ export default function VotersPageClient({
             {!filteredVoters || filteredVoters.length === 0 ? (
               <tr>
                 <td
-                  colSpan={4}
+                  colSpan={5}
                   className="px-4 sm:px-6 py-12 text-center text-muted-foreground"
                 >
                   {voters.length === 0
@@ -128,7 +131,7 @@ export default function VotersPageClient({
                   className="hover:bg-muted/50 transition-colors"
                 >
                   <td className="px-4 sm:px-6 py-3 font-mono text-muted-foreground">
-                    {voter.school_id}
+                    {voter.student_id}
                   </td>
                   <td className="px-4 sm:px-6 py-3 font-medium text-foreground">
                     {voter.full_name}
@@ -144,6 +147,17 @@ export default function VotersPageClient({
                       </span>
                     )}
                   </td>
+                  <td className="px-4 sm:px-6 py-3 hidden lg:table-cell">
+                    {voter.emailed_at ? (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-300 border">
+                        ✓ Emailed
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-50/50 dark:bg-gray-950/20 border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-300 border">
+                        Not Sent
+                      </span>
+                    )}
+                  </td>
 
                   <td className="px-4 sm:px-6 py-3 text-right">
                     <VoterRowActions
@@ -153,6 +167,9 @@ export default function VotersPageClient({
                       voterName={voter.full_name}
                       electionId={electionId}
                       disabled={isElectionEnded}
+                      emailedAt={voter.emailed_at || undefined}
+                      voterFullName={voter.full_name}
+                      onDataChange={() => fetchVoters()}
                     />
                   </td>
                 </tr>
